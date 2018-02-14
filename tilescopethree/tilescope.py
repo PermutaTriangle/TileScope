@@ -1,22 +1,20 @@
 """
- .--------'      .            .-.               .--------'
-(_)   /   .-.   /       .--.-'                 (_)   /..-.     .-.  .--.    .-
-     /    `-'  /   .-. (  (_).-.  .-._..-.   .-.    /    )   (    /    )`-'
-    /    /    /  ./.-'_ `-. (    (   ) /  )./.-'_  /    /     \  /    /
- .-/.__.(__._/_.-(__.'_    ) `---'`-' /`-' (__.'.-/._  (   .   )(    /
-(_/  `-              (_.--'          /         (_/  `-  `-' `-'  `-.'
+,--,--'.                          ,--,--'.
+`- | . |  ,-. ,-. ,-. ,-. ,-. ,-. `- |   |-. ,-. ,-. ,-.
+ , | | |  |-' `-. |   | | | | |-'  , |   | | |   |-' |-'
+ `-' ' `' `-' `-' `-' `-' |-' `-'  `-'   ' ' '   `-' `-'
+                          |
+                          '
 """
-from collections import Iterable
-
 from comb_spec_searcher import CombinatorialSpecificationSearcher
 from comb_spec_searcher.objectqueue import ObjectQueue
 from grids_two import Obstruction, Tiling
 from permuta import Perm
 from permuta.descriptors import Basis
-from tilescopetwo.strategies import is_empty_strategy
+from tilescopethree.strategies import is_empty_strategy
 
 
-class TileScopeTWO(CombinatorialSpecificationSearcher):
+class TileScopeTHREE(CombinatorialSpecificationSearcher):
     """
     An instance of TileScope is used to build up knowledge about tilings with
     respect to the given basis.

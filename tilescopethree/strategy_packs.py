@@ -1,15 +1,15 @@
-from tilescopetwo.strategies import *
-from comb_spec_searcher import StrategyPack
 from functools import partial
-from permuta import Perm
+
+from comb_spec_searcher import StrategyPack
+from tilescopethree.strategies import *
 
 # WARNING: To use full subobstruction inferral need strategy
 # 'subobstruction_inferral_rec' but it is a lot slower. The function
 # 'subobstruction_inferral' is a subset of the work.
 
-################################################################################
-###################### STRATEGY PACKS FOR RUN 15/11/2017 #######################
-################################################################################
+###############################################################################
+###################### STRATEGY PACKS FOR RUN 15/11/2017 ######################
+###############################################################################
 
 forced_patterns_3 = StrategyPack(
         eq_strats=[],
