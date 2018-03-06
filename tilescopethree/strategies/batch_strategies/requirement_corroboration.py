@@ -1,17 +1,17 @@
 """
-    Module containing the requirement insertion strategy.
+    Module containing the requirement corroboration strategy.
 """
 from comb_spec_searcher import Strategy
 from grids_three import Obstruction, Tiling
 
 
-def requirement_insertion(tiling, basis, **kwargs):
+def requirement_corroboration(tiling, basis, **kwargs):
     """
-    The requirement insertion strategy.
+    The requirement corroboration strategy.
 
-    The requirement insertion strategy is a batch strategy that considers each
-    requirement of each requirement list. For each of these requirements, the
-    strategy returns two tilings; one where the requirement has been turned
+    The requirement corrobation strategy is a batch strategy that considers
+    each requirement of each requirement list. For each of these requirements,
+    the strategy returns two tilings; one where the requirement has been turned
     into an obstruction and another where the requirement has been singled out
     and a new requirement list added with only the requirement. This new
     requirement list contains only the singled out requirement.
