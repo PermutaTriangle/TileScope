@@ -101,3 +101,5 @@ ENV/
 devtest.py
 atrapv2/devtest.py
 
+# Pytest cache
+.pytest_cache
