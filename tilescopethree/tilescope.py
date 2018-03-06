@@ -8,7 +8,7 @@
 """
 from comb_spec_searcher import CombinatorialSpecificationSearcher
 from comb_spec_searcher.objectqueue import ObjectQueue
-from grids_two import Obstruction, Tiling
+from grids_three import Obstruction, Tiling
 from permuta import Perm
 from permuta.descriptors import Basis
 from tilescopethree.strategies import is_empty_strategy
@@ -44,7 +44,6 @@ class TileScopeTHREE(CombinatorialSpecificationSearcher):
             else:
                 self.basis = Basis(basis)
             start_tiling = Tiling(
-                possibly_empty=[(0, 0)],
                 obstructions=[Obstruction.single_cell(patt, (0, 0))
                               for patt in self.basis])
         else:
