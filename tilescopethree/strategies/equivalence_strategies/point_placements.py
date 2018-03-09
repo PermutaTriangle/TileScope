@@ -1,7 +1,10 @@
+from itertools import chain
+
+from comb_spec_searcher import EquivalenceStrategy
 from grids_three import Obstruction, Requirement, Tiling
 from permuta import Perm
-from permuta.misc import DIR_EAST, DIR_NONE, DIR_NORTH, DIR_SOUTH, DIR_WEST
-from itertools import chain
+from permuta.misc import (DIR_EAST, DIR_NONE, DIR_NORTH, DIR_SOUTH, DIR_WEST,
+                          DIRS)
 
 
 def opposite_dir(DIR):
@@ -65,6 +68,23 @@ def requirement_placement(tiling, **kwargs):
     points of the requirement. The strategy then returns all tilings where the
     point has been placed with a force.
     """
+    point_cells = tiling.point_cells
+    point_only = kwargs.get('point_only')
+    for ri, reqs in enumerate(tiling.requirements):
+        if len(reqs) > 1:
+            continue
+        if reqs[0].is_point_perm() in point_cells:
+            continue
+        if point_only and reqs[0].is_point_perm() is None:
+            continue
+        for i in range(len(reqs[0])):
+            for DIR in DIRS:
+                placedtiling = place_point_of_requirement(tiling, ri, i, DIR)
+                yield EquivalenceStrategy(
+                    formal_step=("Placing point {} of requirement {} with "
+                                 "force {}").format(
+                                     (i, reqs[0].patt[i]), reqs[0], DIR),
+                    tiling=placedtiling)
 
 
 def point_placement(tiling, **kwargs):
