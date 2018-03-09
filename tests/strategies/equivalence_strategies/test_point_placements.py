@@ -1,9 +1,8 @@
-import pytest
 from grids_three import Obstruction, Requirement, Tiling
 from permuta import Perm
-from permuta.misc import (DIR_EAST, DIR_NONE, DIR_NORTH, DIR_SOUTH, DIR_WEST,
+from permuta.misc import (DIR_EAST, DIR_NORTH, DIR_SOUTH, DIR_WEST,
                           DIRS)
-from tilescopethree.strategies import point_placement
+from tilescopethree.strategies import point_placement, requirement_placement
 from tilescopethree.strategies.equivalence_strategies.point_placements import \
     place_point_of_requirement
 
@@ -15,11 +14,14 @@ pytest_plugins = [
 ]
 
 
-@pytest.mark.xfail
-def test_point_placement(diverse_tiling):
-    strats = point_placement(diverse_tiling)
+def test_point_placement(diverse_tiling, no_point_tiling):
+    strats = list(point_placement(diverse_tiling))
+    assert len(strats) == 1 * len(DIRS)
+
+    strats = list(requirement_placement(no_point_tiling))
     assert len(strats) == 3 * len(DIRS)
-    # strats = sorted(strats, key=lambda obj: obj.formal_step)
+    strats = list(point_placement(no_point_tiling))
+    assert len(strats) == 0
 
 
 def test_place_point_of_requirement_point_only(diverse_tiling):
