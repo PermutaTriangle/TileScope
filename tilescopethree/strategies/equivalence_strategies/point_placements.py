@@ -32,16 +32,13 @@ def place_point_of_requirement(tiling, req_index, point_index, force_dir):
     other_reqs = [tiling.requirements[i]
                   for i in range(len(tiling.requirements))
                   if i != req_index]
-    # The gridded permutations corresponding to the forced occurrence of the
-    # requirement and the rest of the requirement
-    inserted_gp = requirement.place_point(
-        cell, opposite_dir(force_dir))
-    forced_obstructions = [Obstruction(gp.patt, gp.pos) for gp in inserted_gp
-                           if len(gp) == len(requirement)]
-    new_req = [gp for gp in inserted_gp if len(gp) < len(requirement)]
+    # Placing the forced occurrence of the point in the requirement
+    new_req, forced_obstructions = requirement.place_forced_point(
+        point_index, force_dir)
     assert len(new_req) == 1
     # New indices of the point
     point_cell = (cell[0] + 1, cell[1] + 1)
+
     # The set of new obstructions, consisting of the forced obstructions, other
     # obstructions where the point placement has been taken into account and
     # the 12, 21 in the cell.
@@ -68,7 +65,6 @@ def requirement_placement(tiling, **kwargs):
     points of the requirement. The strategy then returns all tilings where the
     point has been placed with a force.
     """
-    pass
 
 
 def point_placement(tiling, **kwargs):
