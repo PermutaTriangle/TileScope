@@ -26,10 +26,22 @@ def all_cell_insertions(tiling, **kwargs):
     active = tiling.active_cells
     positive = tiling.positive_cells
     bdict = tiling.cell_basis()
-    for length in range(1, maxreqlen + 1):
-        for cell in (active - positive):
+    for cell in (active - positive):
+        for length in range(1, maxreqlen + 1):
             for patt in Av(bdict[cell][0]).of_length(length):
                 yield BatchStrategy(
                     formal_step="Insert {} into cell {}.".format(patt, cell),
                     tilings=[tiling.add_single_cell_obstruction(patt, cell),
                              tiling.add_single_cell_requirement(patt, cell)])
+
+
+def root_requirement_insertion(tiling, **kwargs):
+    """The cell insertion strategy performed only on 1 by 1 tilings."""
+    if tiling.dimensions != (1, 1) or tiling.requirements != []:
+        return
+    yield from all_cell_insertions(tiling, **kwargs)
+
+
+def all_point_insertions(tiling, **kwargs):
+    """The cell insertion strategy using only points."""
+    yield from all_cell_insertions(tiling, maxreqlen=1, **kwargs)
