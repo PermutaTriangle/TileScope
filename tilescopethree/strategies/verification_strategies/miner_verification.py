@@ -2,9 +2,12 @@ from comb_spec_searcher import VerificationStrategy
 from permuta import Perm
 from permuta.descriptors import Basis
 
+
 def miner_verified(tiling, basis, **kwargs):
+    """The Miner verification strategy."""
+    # TODO: document all these magic constant scattered all over the function.
     if ((tiling.dimensions[0] is 1 and tiling.dimensions[1] is 2) or
-        (tiling.dimensions[0] is 2 and tiling.dimensions[1] is 1)):
+            (tiling.dimensions[0] is 2 and tiling.dimensions[1] is 1)):
         top = []
         bottom = []
         topbool = None
@@ -59,11 +62,13 @@ def miner_verified(tiling, basis, **kwargs):
                     return None
         if topbool is not None:
             topbasis = Basis(top)
-            if ((topbool == 0 and topbasis == Basis([Perm((0, 1, 2))]))
-                or (topbool == 1 and topbasis == Basis([Perm((2, 1, 0))]))):
+            if ((topbool == 0 and topbasis == Basis([Perm((0, 1, 2))])) or
+                    (topbool == 1 and topbasis == Basis([Perm((2, 1, 0))]))):
                 return VerificationStrategy("Miner verified!")
         elif bottombool is not None:
             bottombasis = Basis(bottom)
-            if ((bottombool == 0 and Basis(bottom) == Basis([Perm((0, 1, 2))]))
-                or (bottombool == 1 and bottombasis == Basis([Perm((2, 1, 0))]))):
+            if ((bottombool == 0 and
+                 Basis(bottom) == Basis([Perm((0, 1, 2))])) or
+                    (bottombool == 1 and
+                     bottombasis == Basis([Perm((2, 1, 0))]))):
                 return VerificationStrategy("Miner verified!")
