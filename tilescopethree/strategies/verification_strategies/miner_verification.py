@@ -12,7 +12,7 @@ def miner_verified(tiling, basis, **kwargs):
         bottom = []
         topbool = None
         bottombool = None
-        for ob in tiling:
+        for ob in tiling.obstructions:
             if ob.is_single_cell():
                 if ob.pos[0] == (0, 0):
                     bottom.append(ob.patt)
