@@ -1,10 +1,19 @@
 """An inferral function that tries to separate cells in rows and columns."""
 from collections import defaultdict
-from grids_three import Tiling, Obstruction
 from comb_spec_searcher import InferralStrategy
+from grids_three import Tiling
 
 
 def row_and_column_inequalities_of_tiling(tiling):
+    """Computes the inequalities based on length 2 obstructions.
+
+    A cell (x_0, y_0) is 'less' than (x_1, y_1) in the column order if x_0 =
+    x_1 and there exists an obstruction (Perm((0, 1)), [(x_1, y_1), (x_0,
+    y_0)]). The function returns a tuple of dictionaries, one for the rows and
+    one for the columns. Each key in the dictionaries is a row(column) with
+    dictionaries as values, where the keys are the cells and values are the set
+    of cells which the cell is 'less' than in the respective ordering.
+    """
     smaller_than_row = defaultdict(dict)
     smaller_than_col = defaultdict(dict)
     for ob in tiling.obstructions:
@@ -12,29 +21,29 @@ def row_and_column_inequalities_of_tiling(tiling):
             if ob.is_single_cell():
                 continue
             c1, c2 = ob.pos
+            # If the two points are in the same column
             if c1[0] == c2[0]:
                 col = c1[0]
                 if col not in smaller_than_col:
                     smaller_than_col[col] = {
                         cell: set() for cell in tiling.cells_in_col(col)}
-                # then they are in the same column
                 if ob.patt[0] == 0:
-                    # then the obstruction is 01, so c2 < c1 (further left)
+                    # the obstruction is 01, so c2 < c1 (further right)
                     smaller_than_col[col][c2].add(c1)
                 else:
                     # the obstruction is 10, so c1 < c2 (further left)
-                    smaller_than_col[col][c2].add(c1)
+                    smaller_than_col[col][c1].add(c2)
+            # If the two points are in the same row
             elif c1[1] == c2[1]:
                 row = c1[1]
                 if row not in smaller_than_row:
                     smaller_than_row[row] = {
                         cell: set() for cell in tiling.cells_in_row(row)}
-                # then they are in the same row
                 if ob.patt[0] == 0:
-                    # then the obstruction is 01, so c2 < c1 (further left)
+                    # the obstruction is 01, so c2 < c1 (further up)
                     smaller_than_row[row][c2].add(c1)
                 else:
-                    # the obstruction is 10, so c1 < c2 (further left)
+                    # the obstruction is 10, so c1 < c2 (further down)
                     smaller_than_row[row][c1].add(c2)
         elif len(ob) > 2:
             # obstructions are ordered by length
@@ -52,8 +61,8 @@ def separations(inequalities, unprocessed_cells=None,
     the same part must be on the the same row/column as one another. A part to
     the left of another must be below/further to the left than the other. For
     example in the tiling given by (0,0):Av(132), (1,1): Point, (2,0) Av(132)
-    the separations of the first row will look like [ [(2,0)] [(0,0)]] ] and [
-    [(0,0), (2,0)] ]. The second is the trivial solution and is always
+    the separations of the first row will look like [ [(2,0)] [(0,0)]] ] and
+    [ [(0,0), (2,0)] ]. The second is the trivial solution and is always
     returned.
     """
     if current_state is None:
@@ -193,6 +202,7 @@ def row_and_column_separation(tiling, **kwargs):
     # First we calculate the set of inequalities for all the rows and columns
     row_ineqs, col_ineqs = row_and_column_inequalities_of_tiling(tiling)
 
+    separated_rows, separated_cols = [], []
     # When creating the new tiling, we need to keep track of the shifted cell
     # we add, in case a cell appears on a separated row and column
     inferred = False
@@ -202,24 +212,10 @@ def row_and_column_separation(tiling, **kwargs):
         inequalities = row_ineqs[row]
         if inequalities:
             # Calculate the separation, described in the function
-            row_separations = separations(inequalities)
-            if len(row_separations) == 1:
-                # This must be the trivial solution
-                separation = row_separations[0]
-            # sort them by length, i.e. number of parts in the separation
-            row_separations.sort(key=len)
-            if len(row_separations) == 1:
-                # This must be the trivial solution
-                separation = row_separations[0]
-            else:
-                # pick the one with most
-                separation = row_separations[-1]
-                second_last = row_separations[-2]
-                if len(separation) == len(second_last):
-                    # only use it if it is the unique longest
-                    separation = row_separations[0]
-                else:
-                    inferred = True
+            row_separations = sorted(separations(inequalities),
+                                     key=lambda x: (len(x), x))
+            separation = row_separations[-1]
+            inferred = True if len(row_separations) == 1 else inferred
         else:
             separation = [[c for c in tiling.cells_in_row(row)]]
 
@@ -227,6 +223,8 @@ def row_and_column_separation(tiling, **kwargs):
             for cell in cells:
                 row_map[cell] = cell[1] + shift + index
         shift += len(separation) - 1
+        if len(separation):
+            separated_rows.append(row)
 
     col_map = {}
     shift = 0
@@ -234,21 +232,11 @@ def row_and_column_separation(tiling, **kwargs):
         # Calculate the separation, described in the function
         inequalities = col_ineqs[col]
         if inequalities:
-            column_separations = separations(inequalities)
             # sort them by length, i.e. number of parts in the separation
-            column_separations.sort(key=len)
-            if len(column_separations) == 1:
-                # This must be the trivial solution
-                separation = column_separations[0]
-            else:
-                # pick the one with most
-                separation = column_separations[-1]
-                second_last = column_separations[-2]
-                if len(separation) == len(second_last):
-                    # only use it if it is the unique longest
-                    separation = column_separations[0]
-                else:
-                    inferred = True
+            column_separations = sorted(separations(inequalities),
+                                        key=lambda x: (len(x), x))
+            separation = column_separations[-1]
+            inferred = True if len(column_separations) == 1 else inferred
         else:
             separation = [[c for c in tiling.cells_in_col(col)]]
 
@@ -256,39 +244,22 @@ def row_and_column_separation(tiling, **kwargs):
             for cell in cells:
                 col_map[cell] = cell[0] + shift + index
         shift += len(separation) - 1
+        if len(separation):
+            separated_cols.append(col)
 
     if inferred:
         def cell_map(c):
             return (col_map[c], row_map[c])
 
-        point_cells = [cell_map(c) for c in tiling.point_cells]
-        possibly_empty = [cell_map(c) for c in tiling.possibly_empty]
-        positive_cells = [cell_map(c) for c in tiling.positive_cells]
+        obstructions = [ob.minimize(cell_map) for ob in tiling.obstructions
+                        if not ob.is_point_perm()]
+        requirements = [[req.minimize(cell_map) for req in reqs]
+                        for reqs in tiling.requirements]
 
-        obstructions = []
-        for ob in tiling.obstructions:
-            if len(ob) != 2:
-                obstructions.append(Obstruction(ob.patt,
-                                                [cell_map(c) for c in ob.pos]))
-            else:
-                c1, c2 = ob.pos
-                new_c1 = cell_map(c1)
-                new_c2 = cell_map(c2)
-                if new_c2[0] < new_c1[0]:
-                    continue
-                elif ob.patt[0] == 0:
-                    if new_c2[1] < new_c1[1]:
-                        continue
-                elif new_c2[1] > new_c1[1]:
-                    continue
-                obstructions.append(Obstruction(ob.patt,
-                                                [new_c1, new_c2]))
-
-        separated_tiling = Tiling(point_cells=point_cells,
-                                  possibly_empty=possibly_empty,
-                                  positive_cells=positive_cells,
-                                  obstructions=obstructions)
+        separated_tiling = Tiling(obstructions=obstructions,
+                                  requirements=requirements)
         # we only return it if it is different
-        # TODO: add the rows and columns separated to the formal_step
-        formal_step = "Separated the rows and columns"
+        formal_step = "Separated rows [{}] and columns [{}]".format(
+            ", ".join(map(str, separated_rows)),
+            ", ".join(map(str, separated_cols)))
         return InferralStrategy(formal_step, separated_tiling)
