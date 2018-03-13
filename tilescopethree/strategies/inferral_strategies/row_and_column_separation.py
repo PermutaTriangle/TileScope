@@ -1,6 +1,6 @@
 """An inferral function that tries to separate cells in rows and columns."""
 from collections import defaultdict
-from grids_two import Tiling, Obstruction
+from grids_three import Tiling, Obstruction
 from comb_spec_searcher import InferralStrategy
 
 
