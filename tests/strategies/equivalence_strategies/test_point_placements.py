@@ -90,6 +90,12 @@ def test_place_point_of_requirement_point_only(diverse_tiling):
             [Requirement(Perm((1, 0)), [(0, 4), (0, 3)]),
              Requirement(Perm((0, 2, 1)), [(0, 3), (0, 4), (1, 4)])]])
 
+    tiling = Tiling(requirements=[[Requirement(Perm((0,)), [(0, 0)])]])
+    assert place_point_of_requirement(tiling, 0, 0, DIR_SOUTH) == Tiling(
+        obstructions=[Obstruction(Perm((0, 1)), [(0, 0), (0, 0)]),
+                      Obstruction(Perm((1, 0)), [(0, 0), (0, 0)])],
+        requirements=[[Requirement(Perm((0,)), [(0, 0)])]])
+
 
 def test_place_point_of_requirement(no_point_tiling):
     tiling = place_point_of_requirement(no_point_tiling, 2, 1, DIR_WEST)
