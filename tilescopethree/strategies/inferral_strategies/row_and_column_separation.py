@@ -215,7 +215,7 @@ def row_and_column_separation(tiling, **kwargs):
             row_separations = sorted(separations(inequalities),
                                      key=lambda x: (len(x), x))
             separation = row_separations[-1]
-            inferred = True if len(row_separations) == 1 else inferred
+            inferred = True if len(row_separations) != 1 else inferred
         else:
             separation = [[c for c in tiling.cells_in_row(row)]]
 
@@ -236,7 +236,7 @@ def row_and_column_separation(tiling, **kwargs):
             column_separations = sorted(separations(inequalities),
                                         key=lambda x: (len(x), x))
             separation = column_separations[-1]
-            inferred = True if len(column_separations) == 1 else inferred
+            inferred = True if len(column_separations) != 1 else inferred
         else:
             separation = [[c for c in tiling.cells_in_col(col)]]
 
