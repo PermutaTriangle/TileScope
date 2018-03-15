@@ -1,7 +1,7 @@
 """A strategy for checking if a tiling is a subset of the class."""
 
 from comb_spec_searcher import VerificationStrategy
-from grids_two import Tiling, Obstruction
+from grids_three import Tiling, Obstruction
 from permuta import Perm
 
 database = {
