@@ -6,6 +6,29 @@ from permuta import Perm
 def empty_cell_inferral(tiling, **kwargs):
     """The empty cell inferral strategy.
 
+    The strategy considers each active but non-positive cell and inserts a
+    point requirement. If the resulting tiling is empty, then a point
+    obstruction can be added into the cell, i.e. the cell is empty."""
+    if tiling.empty():
+        return Tiling(obstructions=[Obstruction.empty_perm()])
+    active = set(tiling.active_cells)
+    positive = set(tiling.positive_cells)
+    empty_cells = []
+    for cell in active - positive:
+        reqtil = tiling.insert_cell(cell)
+        if reqtil.empty():
+            empty_cells.append(cell)
+    newobs = [Obstruction.single_cell(Perm((0,)), cell)
+              for cell in empty_cells]
+    return InferralStrategy(
+        "The cells {} are empty".format(", ".join(empty_cells)),
+        Tiling(obstructions=tiling.obstructions + tuple(newobs),
+               requirements=tiling.requirements))
+
+
+def empty_cell_inferral_old(tiling, **kwargs):
+    """The old empty cell inferral strategy.
+
     The strategy checks for each active non-positive cell whether a point
     obstruction can be added into the cell and returns a new tiling with the
     new obstructions.
