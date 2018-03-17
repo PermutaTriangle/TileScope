@@ -21,7 +21,7 @@ def empty_cell_inferral(tiling, **kwargs):
     newobs = [Obstruction.single_cell(Perm((0,)), cell)
               for cell in empty_cells]
     return InferralStrategy(
-        "The cells {} are empty".format(", ".join(empty_cells)),
+        "The cells {} are empty".format(", ".join(map(str, empty_cells))),
         Tiling(obstructions=tiling.obstructions + tuple(newobs),
                requirements=tiling.requirements))
 
