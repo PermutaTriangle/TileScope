@@ -27,12 +27,8 @@ def row_and_column_inequalities_of_tiling(tiling):
                 if col not in smaller_than_col:
                     smaller_than_col[col] = {
                         cell: set() for cell in tiling.cells_in_col(col)}
-                if ob.patt[0] == 0:
-                    # the obstruction is 01, so c2 < c1 (further right)
-                    smaller_than_col[col][c2].add(c1)
-                else:
-                    # the obstruction is 10, so c1 < c2 (further left)
-                    smaller_than_col[col][c1].add(c2)
+                # whether the obstruction is 01 or 10, c2 < c1
+                smaller_than_col[col][c2].add(c1)
             # If the two points are in the same row
             elif c1[1] == c2[1]:
                 row = c1[1]
@@ -201,6 +197,9 @@ def separations(inequalities, unprocessed_cells=None,
 def row_and_column_separation(tiling, **kwargs):
     # First we calculate the set of inequalities for all the rows and columns
     row_ineqs, col_ineqs = row_and_column_inequalities_of_tiling(tiling)
+
+    print(row_ineqs)
+    print(col_ineqs)
 
     separated_rows, separated_cols = [], []
     # When creating the new tiling, we need to keep track of the shifted cell
