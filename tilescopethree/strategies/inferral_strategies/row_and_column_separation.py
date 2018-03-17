@@ -198,9 +198,6 @@ def row_and_column_separation(tiling, **kwargs):
     # First we calculate the set of inequalities for all the rows and columns
     row_ineqs, col_ineqs = row_and_column_inequalities_of_tiling(tiling)
 
-    print(row_ineqs)
-    print(col_ineqs)
-
     separated_rows, separated_cols = [], []
     # When creating the new tiling, we need to keep track of the shifted cell
     # we add, in case a cell appears on a separated row and column
@@ -251,7 +248,8 @@ def row_and_column_separation(tiling, **kwargs):
             return (col_map[c], row_map[c])
 
         obstructions = [ob.minimize(cell_map) for ob in tiling.obstructions
-                        if not ob.is_point_perm()]
+                        if not ob.is_point_perm() and
+                        not ob.minimize(cell_map).contradictory()]
         requirements = [[req.minimize(cell_map) for req in reqs]
                         for reqs in tiling.requirements]
 
