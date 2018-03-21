@@ -6,6 +6,7 @@ pytest_plugins = [
     'tests.fixtures.positive_one_by_one'
 ]
 
+
 def test_insertion_encoding(positive_one_by_one):
     strats = [s.objects for s in insertion_encoding(positive_one_by_one)]
     assert len(strats) == 1
