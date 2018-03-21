@@ -67,7 +67,7 @@ def factor(tiling, **kwargs):
     component_cells = list(set(cells) for cells in all_components.values())
 
     # If the tiling is a single connected component
-    if len(component_cells) == 1:
+    if len(component_cells) <= 1:
         return
 
     # Collect the factors of the tiling
@@ -88,6 +88,7 @@ def factor(tiling, **kwargs):
         work = [True for _ in strategy]
     else:
         work = [False for _ in strategy]
+
 
     yield Strategy("The factors of the tiling.", strategy, workable=work,
                    back_maps=[t.back_map for t in strategy])
