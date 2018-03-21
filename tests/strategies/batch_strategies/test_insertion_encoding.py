@@ -22,10 +22,9 @@ def test_insertion_encoding(positive_one_by_one):
                       Obstruction(Perm((0,)), ((2, 0),)),
                       Obstruction(Perm((0, 1)), ((1, 0), (1, 0))),
                       Obstruction(Perm((1, 0)), ((1, 0), (1, 0))),
+                      Obstruction(Perm((1, 0)), ((2, 1), (2, 1))),
                       Obstruction(Perm((0, 2, 1)), ((0, 1), (0, 1), (0, 1))),
-                      Obstruction(Perm((0, 2, 1)), ((0, 1), (0, 1), (2, 1))),
-                      Obstruction(Perm((0, 2, 1)), ((0, 1), (2, 1), (2, 1))),
-                      Obstruction(Perm((0, 2, 1)), ((2, 1), (2, 1), (2, 1)))),
+                      Obstruction(Perm((0, 2, 1)), ((0, 1), (0, 1), (2, 1)))),
         requirements=((Requirement(Perm((0,)), ((0, 1),)),),
                       (Requirement(Perm((0,)), ((1, 0),)),),
                       (Requirement(Perm((0,)), ((2, 1),)),)))
@@ -36,7 +35,7 @@ def test_insertion_encoding(positive_one_by_one):
                       Obstruction(Perm((0,)), ((1, 0),)),
                       Obstruction(Perm((0, 1)), ((0, 0), (0, 0))),
                       Obstruction(Perm((1, 0)), ((0, 0), (0, 0))),
-                      Obstruction(Perm((0, 2, 1)), ((1, 1), (1, 1), (1, 1)))),
+                      Obstruction(Perm((1, 0)), ((1, 1), (1, 1)))),
         requirements=((Requirement(Perm((0,)), ((0, 0),)),),
                       (Requirement(Perm((0,)), ((1, 1),)),)))
 

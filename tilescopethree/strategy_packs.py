@@ -1,9 +1,10 @@
 from comb_spec_searcher import StrategyPack
+from functools import partial
 from tilescopethree.strategies import (all_cell_insertions, database_verified,
                                        empty_cell_inferral, factor,
                                        globally_verified, is_empty_strategy,
                                        obstruction_transitivity,
-                                       point_placement,
+                                       point_placement, verify_points,
                                        requirement_corroboration,
                                        row_and_column_separation,
                                        subset_verified, insertion_encoding)
@@ -20,7 +21,7 @@ point_placement_only = StrategyPack(
 
 regular_insertion_encoding = StrategyPack(
         eq_strats=[],
-        ver_strats=[],
+        ver_strats=[subset_verified],
         inf_strats=[],
         other_strats=[[factor], [all_cell_insertions], [insertion_encoding]],
         name="regular_insertion_encoding"

@@ -26,7 +26,7 @@ def insertion_encoding(tiling, **kwargs):
     slots = []
     for req in tiling.requirements:
         if len(req) > 1 or len(req[0]) > 1:
-            raise ValueError("The insertion encoding can not handle" +
+            raise ValueError("The insertion encoding can not handle"
                              "requirements that are not points")
         slots.append(req[0].pos[0])
 
@@ -35,6 +35,20 @@ def insertion_encoding(tiling, **kwargs):
         x, y = slot
         obstructions = []
         for ob in tiling.obstructions:
+            if ob.occupies((x, y)):
+                mindex = ob.forced_point_index((x, y), DIR_SOUTH)
+                if ob.patt[mindex] == 0:
+                    patt = Perm.to_standard([ob.patt[i]
+                                             for i in range(len(ob.patt))
+                                             if i != mindex])
+                    pos = []
+                    for ind, (i, j) in enumerate(ob.pos):
+                        if ind < mindex:
+                            pos.append((i, j + 2))
+                        elif ind > mindex:
+                            pos.append((i + 2, j + 2))
+                    obstructions.append(Obstruction(patt, pos))
+
             obstructions.extend(ob.place_point((x, y - 10), DIR_SOUTH))
         obstructions.extend([Obstruction.single_cell(Perm((0, 1)),
                                                      (x + 1, y + 1)),
