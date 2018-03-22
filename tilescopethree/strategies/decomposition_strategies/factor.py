@@ -89,7 +89,6 @@ def factor(tiling, **kwargs):
     else:
         work = [False for _ in strategy]
 
-
     yield Strategy("The factors of the tiling.", strategy, workable=work,
                    back_maps=[t.back_map for t in strategy])
 

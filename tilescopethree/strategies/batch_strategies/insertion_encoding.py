@@ -63,25 +63,25 @@ def insertion_encoding(tiling, **kwargs):
         strategy.extend(
             [Tiling(obstructions=obstructions,
                     requirements=(
-                        requirements
-                        + [[Requirement(Perm((0, )), ((x, y + 1),))],
-                           [Requirement(Perm((0, )), ((x + 2, y + 1),))]])),
+                           requirements + 
+                           [[Requirement(Perm((0, )), ((x, y + 1),))],
+                            [Requirement(Perm((0, )), ((x + 2, y + 1),))]])),
              Tiling(obstructions=(
-                           obstructions
-                           + [Obstruction(Perm((0, )), ((x, y + 1),))]),
+                           obstructions +
+                           [Obstruction(Perm((0, )), ((x, y + 1),))]),
                     requirements=(
-                           requirements
-                           + [[Requirement(Perm((0, )), ((x + 2, y + 1),))]])),
+                           requirements +
+                           [[Requirement(Perm((0, )), ((x + 2, y + 1),))]])),
              Tiling(obstructions=(
-                           obstructions
-                           + [Obstruction(Perm((0, )), ((x + 2, y + 1),))]),
+                           obstructions +
+                           [Obstruction(Perm((0, )), ((x + 2, y + 1),))]),
                     requirements=(
-                           requirements
-                           + [[Requirement(Perm((0, )), ((x, y + 1),))]])),
+                           requirements +
+                           [[Requirement(Perm((0, )), ((x, y + 1),))]])),
              Tiling(obstructions=(
-                           obstructions
-                           + [Obstruction(Perm((0, )), ((x, y + 1),)),
-                              Obstruction(Perm((0, )), ((x + 2, y + 1),))]),
+                           obstructions +
+                           [Obstruction(Perm((0, )), ((x, y + 1),)),
+                            Obstruction(Perm((0, )), ((x + 2, y + 1),))]),
                     requirements=requirements)])
 
     yield BatchStrategy(formal_step="Place next maximum into slots",
