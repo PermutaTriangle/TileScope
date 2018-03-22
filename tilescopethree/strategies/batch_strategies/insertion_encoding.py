@@ -1,7 +1,8 @@
 from permuta.misc import DIR_SOUTH
-from comb_spec_searcher import Strategy
+from comb_spec_searcher import BatchStrategy
 from grids_three import Tiling, Obstruction, Requirement
 from permuta import Perm
+from tilescopethree.strategies.batch_strategies import cell_insertion
 
 
 def insertion_encoding(tiling, **kwargs):
@@ -22,6 +23,13 @@ def insertion_encoding(tiling, **kwargs):
              right and left of it in this cell.
     """
     if not tiling.requirements:
+        if tiling.dimensions == (1, 1):
+            yield BatchStrategy(
+                formal_step="Insert {} into (0, 0).",
+                tilings=[tiling.add_single_cell_obstruction(Perm((0, )),
+                                                            (0, 0)),
+                         tiling.add_single_cell_requirement(Perm((0, )),
+                                                            (0, 0))])
         return
     slots = []
     for req in tiling.requirements:
@@ -35,57 +43,46 @@ def insertion_encoding(tiling, **kwargs):
         x, y = slot
         obstructions = []
         for ob in tiling.obstructions:
-            if ob.occupies((x, y)):
-                mindex = ob.forced_point_index((x, y), DIR_SOUTH)
-                if ob.patt[mindex] == 0:
-                    patt = Perm.to_standard([ob.patt[i]
-                                             for i in range(len(ob.patt))
-                                             if i != mindex])
-                    pos = []
-                    for ind, (i, j) in enumerate(ob.pos):
-                        if ind < mindex:
-                            pos.append((i, j + 2))
-                        elif ind > mindex:
-                            pos.append((i + 2, j + 2))
-                    obstructions.append(Obstruction(patt, pos))
+            obstructions.extend(ob.insertion_encoding(slot))
 
-            obstructions.extend(ob.place_point((x, y - 10), DIR_SOUTH))
         obstructions.extend([Obstruction.single_cell(Perm((0, 1)),
-                                                     (x + 1, y + 1)),
+                                                     (x + 1, y)),
                              Obstruction.single_cell(Perm((1, 0)),
-                                                     (x + 1, y + 1))])
-        requirements = [[Requirement(Perm((0, )), ((x + 1, y + 1),))]]
+                                                     (x + 1, y))])
+        requirements = [[Requirement(Perm((0, )), ((x + 1, y),))]]
+
         for i, j in slots:
             if x == i:
                 continue
             if i > x:
                 i += 2
-            requirements.append([Requirement(Perm((0, )), ((i, j + 2),))])
+            if j >= y:
+                j += 1
+            requirements.append([Requirement(Perm((0, )), ((i, j),))])
 
         strategy.extend(
             [Tiling(obstructions=obstructions,
                     requirements=(
                         requirements
-                        + [[Requirement(Perm((0, )), ((x, y + 2),))],
-                           [Requirement(Perm((0, )), ((x + 2, y + 2),))]])),
+                        + [[Requirement(Perm((0, )), ((x, y + 1),))],
+                           [Requirement(Perm((0, )), ((x + 2, y + 1),))]])),
              Tiling(obstructions=(
                            obstructions
-                           + [Obstruction(Perm((0, )), ((x, y + 2),))]),
+                           + [Obstruction(Perm((0, )), ((x, y + 1),))]),
                     requirements=(
                            requirements
-                           + [[Requirement(Perm((0, )), ((x + 2, y + 2),))]])),
+                           + [[Requirement(Perm((0, )), ((x + 2, y + 1),))]])),
              Tiling(obstructions=(
                            obstructions
-                           + [Obstruction(Perm((0, )), ((x + 2, y + 2),))]),
+                           + [Obstruction(Perm((0, )), ((x + 2, y + 1),))]),
                     requirements=(
                            requirements
-                           + [[Requirement(Perm((0, )), ((x, y + 2),))]])),
+                           + [[Requirement(Perm((0, )), ((x, y + 1),))]])),
              Tiling(obstructions=(
                            obstructions
-                           + [Obstruction(Perm((0, )), ((x, y + 2),)),
-                              Obstruction(Perm((0, )), ((x + 2, y + 2),))]),
+                           + [Obstruction(Perm((0, )), ((x, y + 1),)),
+                              Obstruction(Perm((0, )), ((x + 2, y + 1),))]),
                     requirements=requirements)])
 
-    yield Strategy(formal_step="Place next maximum into slots",
-                   objects=strategy,
-                   workable=[True for _ in strategy])
+    yield BatchStrategy(formal_step="Place next maximum into slots",
+                        tilings=strategy)

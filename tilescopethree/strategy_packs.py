@@ -21,8 +21,16 @@ point_placement_only = StrategyPack(
 
 regular_insertion_encoding = StrategyPack(
         eq_strats=[],
-        ver_strats=[subset_verified],
+        ver_strats=[verify_points],
         inf_strats=[],
-        other_strats=[[factor], [all_cell_insertions], [insertion_encoding]],
+        other_strats=[[factor], [insertion_encoding]],
+        name="regular_insertion_encoding"
+)
+
+better_insertion_encoding = StrategyPack(
+        eq_strats=[],
+        ver_strats=[verify_points],
+        inf_strats=[obstruction_transitivity, row_and_column_separation],
+        other_strats=[[factor], [insertion_encoding]],
         name="regular_insertion_encoding"
 )
