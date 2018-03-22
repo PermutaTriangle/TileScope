@@ -63,7 +63,7 @@ def insertion_encoding(tiling, **kwargs):
         strategy.extend(
             [Tiling(obstructions=obstructions,
                     requirements=(
-                           requirements + 
+                           requirements +
                            [[Requirement(Perm((0, )), ((x, y + 1),))],
                             [Requirement(Perm((0, )), ((x + 2, y + 1),))]])),
              Tiling(obstructions=(

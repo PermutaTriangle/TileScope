@@ -11,7 +11,7 @@ def empty_cell_inferral(tiling, **kwargs):
     obstruction can be added into the cell, i.e. the cell is empty."""
     if tiling.is_empty():
         return InferralStrategy("The tiling is empty",
-                                Tiling(obstructions=[Obstruction.empty_perm()]))
+                                Tiling([Obstruction.empty_perm()]))
     active = set(tiling.active_cells)
     positive = set(tiling.positive_cells)
     empty_cells = []
