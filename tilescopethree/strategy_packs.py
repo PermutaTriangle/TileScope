@@ -27,10 +27,64 @@ regular_insertion_encoding = StrategyPack(
         name="regular_insertion_encoding"
 )
 
+regular_insertion_encoding_symmetries = StrategyPack(
+        eq_strats=[],
+        ver_strats=[verify_points],
+        inf_strats=[],
+        other_strats=[[factor], [partial(insertion_encoding, symmetry=True)]],
+        name="regular_insertion_encoding_symmetries"
+)
+
+regular_insertion_encoding_top_and_bottom = StrategyPack(
+        eq_strats=[],
+        ver_strats=[verify_points],
+        inf_strats=[],
+        other_strats=[[factor],
+                      [partial(insertion_encoding, top_and_bottom=True)]],
+        name="regular_insertion_encoding_top_and_bottom"
+)
+
+regular_insertion_encoding_symmetries_top_and_bottom = StrategyPack(
+        eq_strats=[],
+        ver_strats=[verify_points],
+        inf_strats=[],
+        other_strats=[[factor],
+                      [partial(insertion_encoding, symmetry=True,
+                               top_and_bottom=True)]],
+        name="regular_insertion_encoding_symmetries_top_and_bottom"
+)
+
 better_insertion_encoding = StrategyPack(
         eq_strats=[],
         ver_strats=[verify_points],
         inf_strats=[obstruction_transitivity, row_and_column_separation],
         other_strats=[[factor], [insertion_encoding]],
-        name="regular_insertion_encoding"
+        name="better_insertion_encoding"
+)
+
+better_insertion_encoding_symmetries = StrategyPack(
+        eq_strats=[],
+        ver_strats=[verify_points],
+        inf_strats=[obstruction_transitivity, row_and_column_separation],
+        other_strats=[[factor], [partial(insertion_encoding, symmetry=True)]],
+        name="better_insertion_encoding_symmetries"
+)
+
+better_insertion_encoding_top_and_bottom = StrategyPack(
+        eq_strats=[],
+        ver_strats=[verify_points],
+        inf_strats=[obstruction_transitivity, row_and_column_separation],
+        other_strats=[[factor],
+                      [partial(insertion_encoding, top_and_bottom=True)]],
+        name="better_insertion_encoding_top_and_bottom"
+)
+
+better_insertion_encoding_symmetries_top_and_bottom = StrategyPack(
+        eq_strats=[],
+        ver_strats=[verify_points],
+        inf_strats=[obstruction_transitivity, row_and_column_separation],
+        other_strats=[[factor],
+                      [partial(insertion_encoding, symmetry=True,
+                               top_and_bottom=True)]],
+        name="better_insertion_encoding_symmetries_top_and_bottom"
 )
