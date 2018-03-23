@@ -5,7 +5,7 @@ from permuta import Perm
 from tilescopethree.strategies.batch_strategies import cell_insertion
 
 
-def insertion_encoding(tiling, symmetry=False, top_and_bottom=False, **kwargs):
+def insertion_encoding(tiling, **kwargs):
     """
     Insert a new maximum as in the insertion encoding.
 
@@ -23,10 +23,13 @@ def insertion_encoding(tiling, symmetry=False, top_and_bottom=False, **kwargs):
              right and left of it in this cell.
 
     If 'symmetry' then it will also consider symmetries of tilings at the root.
+
+    If 'top_and_bottom' then will try insertion encoding rules from to and
+    bottom.
     """
     if not tiling.requirements:
         if tiling.dimensions == (1, 1):
-            if symmetry:
+            if kwargs.get('symmetry'):
                 for sym_tiling in [tiling.rotate90(), tiling.rotate180(),
                                    tiling.rotate270()]:
                     yield EquivalenceStrategy("a rotation", sym_tiling)
@@ -37,7 +40,7 @@ def insertion_encoding(tiling, symmetry=False, top_and_bottom=False, **kwargs):
                          tiling.add_single_cell_requirement(Perm((0, )),
                                                             (0, 0))])
         return
-    if top_and_bottom:
+    if kwargs.get('top_and_bottom'):
         yield EquivalenceStrategy("a rotation", tiling.rotate180())
     slots = []
     for req in tiling.requirements:
