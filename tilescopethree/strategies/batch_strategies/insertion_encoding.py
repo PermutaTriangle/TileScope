@@ -65,14 +65,15 @@ def insertion_encoding(tiling, **kwargs):
                                                          (x + 1, y))])
             requirements = [[Requirement(Perm((0, )), ((x + 1, y),))]]
 
-            for i, j in slots:
-                if x == i:
-                    continue
-                if i > x:
-                    i += 2
-                if j >= y:
-                    j += 1
-                requirements.append([Requirement(Perm((0, )), ((i, j),))])
+            for other_slots in rows.values():
+                for i, j in other_slots:
+                    if x == i:
+                        continue
+                    if i > x:
+                        i += 2
+                    if j >= y:
+                        j += 1
+                    requirements.append([Requirement(Perm((0, )), ((i, j),))])
 
             strategy.extend(
                 [Tiling(obstructions=obstructions,

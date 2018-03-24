@@ -9,6 +9,15 @@ from tilescopethree.strategies import (all_cell_insertions, database_verified,
                                        row_and_column_separation,
                                        subset_verified, insertion_encoding)
 
+point_placement_no_database_only = StrategyPack(
+         eq_strats=[point_placement],
+         ver_strats=[subset_verified, globally_verified],
+         inf_strats=[empty_cell_inferral, obstruction_transitivity,
+                     row_and_column_separation],
+         other_strats=[[factor], [all_cell_insertions],
+                       [requirement_corroboration]],
+         name="point_placement_no_database")
+
 point_placement_only = StrategyPack(
          eq_strats=[point_placement],
          ver_strats=[subset_verified, globally_verified,
