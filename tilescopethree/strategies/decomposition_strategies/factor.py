@@ -1,4 +1,5 @@
 from comb_spec_searcher import Strategy
+from itertools import chain
 from grids_three import Tiling
 from grids_three.misc import union_reduce
 from permuta.misc import UnionFind
@@ -97,8 +98,8 @@ def factor(tiling, **kwargs):
             strategy = []
             for part in partition:
                 obstructions, requirements = zip(*part)
-                strategy.append(Tiling(obstructions=obstructions[0],
-                                       requirements=requirements[0]))
+                strategy.append(Tiling(obstructions=chain(*obstructions),
+                                       requirements=chain(*requirements)))
             yield Strategy("The union of factors of the tiling",
                            strategy,
                            workable=[False for _ in strategy],
