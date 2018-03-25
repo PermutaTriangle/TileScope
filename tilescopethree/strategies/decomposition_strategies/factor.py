@@ -97,9 +97,8 @@ def factor(tiling, **kwargs):
             strategy = []
             for part in partition:
                 obstructions, requirements = zip(*part)
-
-                strategy.append(Tiling(obstructions=obstructions,
-                                       requirements=requirements))
+                strategy.append(Tiling(obstructions=obstructions[0],
+                                       requirements=requirements[0]))
             yield Strategy("The union of factors of the tiling",
                            strategy,
                            workable=[False for _ in strategy],

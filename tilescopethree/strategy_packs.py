@@ -1,6 +1,9 @@
 from comb_spec_searcher import StrategyPack
 from functools import partial
-from tilescopethree.strategies import (all_cell_insertions, database_verified,
+from tilescopethree.strategies import (all_cell_insertions,
+                                       all_point_insertions,
+                                       all_requirement_extensions,
+                                       database_verified,
                                        empty_cell_inferral, factor,
                                        globally_verified,
                                        obstruction_transitivity,
@@ -14,7 +17,7 @@ point_placement_no_database_only = StrategyPack(
          ver_strats=[subset_verified, globally_verified],
          inf_strats=[empty_cell_inferral, obstruction_transitivity,
                      row_and_column_separation],
-         other_strats=[[factor], [all_cell_insertions],
+         other_strats=[[factor], [all_point_insertions],
                        [requirement_corroboration]],
          name="point_placement_no_database")
 
@@ -24,9 +27,93 @@ point_placement_only = StrategyPack(
                      database_verified],
          inf_strats=[empty_cell_inferral, obstruction_transitivity,
                      row_and_column_separation],
-         other_strats=[[factor], [all_cell_insertions],
+         other_strats=[[factor], [all_point_insertions],
                        [requirement_corroboration]],
          name="point_placement")
+
+length_2_requirement_with_point_placement_no_database = StrategyPack(
+         eq_strats=[],
+         ver_strats=[subset_verified, globally_verified],
+         inf_strats=[empty_cell_inferral, obstruction_transitivity,
+                     row_and_column_separation],
+         other_strats=[[factor], [partial(all_cell_insertions, maxreqlen=2)],
+                       [point_placement], [requirement_corroboration]],
+         name="length_2_requirement_with_point_placement_no_database")
+
+length_2_requirement_with_point_placement = StrategyPack(
+         eq_strats=[],
+         ver_strats=[subset_verified, globally_verified,
+                     database_verified],
+         inf_strats=[empty_cell_inferral, obstruction_transitivity,
+                     row_and_column_separation],
+         other_strats=[[factor], [partial(all_cell_insertions, maxreqlen=2)],
+                       [point_placement], [requirement_corroboration]],
+         name="length_2_requirement_with_point_placement")
+
+length_2_requirement_with_pattern_placement_no_database = StrategyPack(
+         eq_strats=[point_placement],
+         ver_strats=[subset_verified, globally_verified],
+         inf_strats=[empty_cell_inferral, obstruction_transitivity,
+                     row_and_column_separation],
+         other_strats=[[partial(factor, unions=True)],
+                       [partial(all_cell_insertions, maxreqlen=2),
+                        partial(all_requirement_extensions, maxreqlen=2)],
+                       [requirement_corroboration]],
+         name="length_2_requirement_with_pattern_placement_no_database")
+
+length_2_requirement_with_pattern_with_pattern_placement = StrategyPack(
+         eq_strats=[point_placement],
+         ver_strats=[subset_verified, globally_verified,
+                     database_verified],
+         inf_strats=[empty_cell_inferral, obstruction_transitivity,
+                     row_and_column_separation],
+         other_strats=[[partial(factor, unions=True)],
+                       [partial(all_cell_insertions, maxreqlen=2),
+                        partial(all_requirement_extensions, maxreqlen=2)],
+                       [requirement_corroboration]],
+         name="length_2_requirement_with_pattern_placement")
+
+length_3_requirement_with_point_placement_no_database = StrategyPack(
+         eq_strats=[],
+         ver_strats=[subset_verified, globally_verified],
+         inf_strats=[empty_cell_inferral, obstruction_transitivity,
+                     row_and_column_separation],
+         other_strats=[[factor], [partial(all_cell_insertions, maxreqlen=3)],
+                       [point_placement], [requirement_corroboration]],
+         name="length_3_requirement_with_point_placement_no_database")
+
+length_3_requirement_with_point_placement = StrategyPack(
+         eq_strats=[],
+         ver_strats=[subset_verified, globally_verified,
+                     database_verified],
+         inf_strats=[empty_cell_inferral, obstruction_transitivity,
+                     row_and_column_separation],
+         other_strats=[[factor], [partial(all_cell_insertions, maxreqlen=3)],
+                       [point_placement], [requirement_corroboration]],
+         name="length_3_requirement_with_point_placement")
+
+length_3_requirement_with_pattern_placement_no_database = StrategyPack(
+         eq_strats=[point_placement],
+         ver_strats=[subset_verified, globally_verified],
+         inf_strats=[empty_cell_inferral, obstruction_transitivity,
+                     row_and_column_separation],
+         other_strats=[[partial(factor, unions=True)],
+                       [partial(all_cell_insertions, maxreqlen=3),
+                        partial(all_requirement_extensions, maxreqlen=3)],
+                       [requirement_corroboration]],
+         name="length_3_requirement_with_pattern_placement_no_database")
+
+length_3_requirement_with_pattern_placement = StrategyPack(
+         eq_strats=[point_placement],
+         ver_strats=[subset_verified, globally_verified,
+                     database_verified],
+         inf_strats=[empty_cell_inferral, obstruction_transitivity,
+                     row_and_column_separation],
+         other_strats=[[partial(factor, unions=True)],
+                       [partial(all_cell_insertions, maxreqlen=3),
+                        partial(all_requirement_extensions, maxreqlen=3)],
+                       [requirement_corroboration]],
+         name="length_3_requirement_with_pattern_placement")
 
 regular_insertion_encoding = StrategyPack(
         eq_strats=[],
