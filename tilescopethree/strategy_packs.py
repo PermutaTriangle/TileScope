@@ -32,6 +32,15 @@ point_placement_only = StrategyPack(
                        [requirement_corroboration]],
          name="point_placement")
 
+fundamental_point_placement = StrategyPack(
+         eq_strats=[point_placement],
+         ver_strats=[fundamentally_verified],
+         inf_strats=[empty_cell_inferral, obstruction_transitivity,
+                     row_and_column_separation],
+         other_strats=[[all_point_insertions],
+                       [requirement_corroboration]],
+         name="fundamental_point_placement")
+
 length_2_requirement_with_point_placement_no_database = StrategyPack(
          eq_strats=[],
          ver_strats=[subset_verified, globally_verified],
@@ -115,6 +124,16 @@ length_3_requirement_with_pattern_placement = StrategyPack(
                         partial(all_requirement_extensions, maxreqlen=3)],
                        [requirement_corroboration]],
          name="length_3_requirement_with_pattern_placement")
+
+fundamental_length_3_requirement_with_pattern_placement = StrategyPack(
+         eq_strats=[requirement_placement],
+         ver_strats=[fundamentally_verified],
+         inf_strats=[empty_cell_inferral, obstruction_transitivity,
+                     row_and_column_separation],
+         other_strats=[[partial(all_cell_insertions, maxreqlen=3),
+                        partial(all_requirement_extensions, maxreqlen=3)],
+                       [requirement_corroboration]],
+         name="fundamental_length_3_requirement_with_pattern_placement")
 
 regular_insertion_encoding = StrategyPack(
         eq_strats=[],
