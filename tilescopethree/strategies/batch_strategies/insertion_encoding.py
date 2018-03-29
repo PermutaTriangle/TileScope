@@ -36,7 +36,7 @@ def insertion_encoding(tiling, **kwargs):
                     yield EquivalenceStrategy("a rotation", sym_tiling)
             yield BatchStrategy(
                 formal_step="Insert {} into (0, 0).",
-                tilings=[tiling.add_single_cell_obstruction(Perm((0, )),
+                objects=[tiling.add_single_cell_obstruction(Perm((0, )),
                                                             (0, 0)),
                          tiling.add_single_cell_requirement(Perm((0, )),
                                                             (0, 0))])
@@ -101,4 +101,4 @@ def insertion_encoding(tiling, **kwargs):
 
         yield BatchStrategy(formal_step="Place next maximum into"
                                     "the slots in row {}.".format(row),
-                            tilings=strategy)
+                            objects=strategy)

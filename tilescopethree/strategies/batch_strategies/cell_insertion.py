@@ -31,7 +31,7 @@ def all_cell_insertions(tiling, **kwargs):
             for patt in Av(bdict[cell][0]).of_length(length):
                 yield BatchStrategy(
                     formal_step="Insert {} into cell {}.".format(patt, cell),
-                    tilings=[tiling.add_single_cell_obstruction(patt, cell),
+                    objects=[tiling.add_single_cell_obstruction(patt, cell),
                              tiling.add_single_cell_requirement(patt, cell)])
 
 
@@ -65,7 +65,7 @@ def all_requirement_extensions(tiling, **kwargs):
                     yield BatchStrategy(
                         formal_step="Insert {} into cell {}.".format(patt,
                                                                      cell),
-                        tilings=[tiling.add_single_cell_obstruction(patt,
+                        objects=[tiling.add_single_cell_obstruction(patt,
                                                                     cell),
                                  tiling.add_single_cell_requirement(patt,
                                                                     cell)])
