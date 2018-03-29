@@ -16,4 +16,4 @@ def point_isolations(tiling, **kwargs):
             formal_step=("Isolating point at {} into its own row and "
                          "column").format(cell),
             # Direction does not matter
-            tiling=place_point_of_requirement(tiling, ri, 0, DIR_WEST))
+            object=place_point_of_requirement(tiling, ri, 0, DIR_WEST))
