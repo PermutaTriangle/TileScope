@@ -15,7 +15,7 @@ from tilescopethree.strategies import (all_cell_insertions,
                                        subset_verified, insertion_encoding)
 
 point_placement_no_database_only = StrategyPack(
-         eq_strats=[point_placement],
+         eq_strats=[requirement_placement],
          ver_strats=[subset_verified, globally_verified],
          inf_strats=[empty_cell_inferral, obstruction_transitivity,
                      row_and_column_separation],
@@ -24,7 +24,7 @@ point_placement_no_database_only = StrategyPack(
          name="point_placement_no_database")
 
 point_placement_only = StrategyPack(
-         eq_strats=[point_placement],
+         eq_strats=[requirement_placement],
          ver_strats=[subset_verified, globally_verified,
                      database_verified],
          inf_strats=[empty_cell_inferral, obstruction_transitivity,
