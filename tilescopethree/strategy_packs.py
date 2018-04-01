@@ -72,7 +72,7 @@ length_2_requirement_with_pattern_placement_no_database = StrategyPack(
                        [requirement_corroboration]],
          name="length_2_requirement_with_pattern_placement_no_database")
 
-length_2_requirement_with_pattern_with_pattern_placement = StrategyPack(
+length_2_requirement_with_pattern_placement = StrategyPack(
          eq_strats=[requirement_placement],
          ver_strats=[subset_verified, globally_verified,
                      database_verified],
