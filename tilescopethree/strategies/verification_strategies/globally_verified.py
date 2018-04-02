@@ -14,11 +14,10 @@ def globally_verified(tiling, **kwargs):
                    for req in tiling.requirements):
                 return VerificationStrategy(formal_step="Globally verified.")
 
+
 def fundamentally_verified(tiling, **kwargs):
-    """
-    A tiling is fundamentally verified if it is globally verified and has no
-    interleaving cells.
-    """
+    """A tiling is fundamentally verified if it is globally verified and has no
+    interleaving cells."""
     if tiling.fully_isolated():
         if tiling.dimensions == (1, 1):
             return subset_verified(tiling, **kwargs)
