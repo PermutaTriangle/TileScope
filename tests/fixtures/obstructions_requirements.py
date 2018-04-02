@@ -50,6 +50,7 @@ def typical_redundant_requirements():
          Requirement(Perm((1, 0)), ((3, 1), (3, 1))),
          Requirement(Perm((1, 0)), ((3, 1), (3, 0)))]]
 
+
 @pytest.fixture
 def typical_obstructions_with_local():
     return [
@@ -66,6 +67,7 @@ def typical_obstructions_with_local():
         Obstruction(Perm((3, 2, 1, 0)), ((1, 1), (2, 0), (2, 0), (2, 0))),
         Obstruction(Perm((3, 2, 1, 0)), ((2, 1), (2, 1), (3, 0), (3, 0)))
     ]
+
 
 @pytest.fixture
 def typical_requirements_with_local():

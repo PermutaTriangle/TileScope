@@ -99,6 +99,6 @@ def insertion_encoding(tiling, **kwargs):
                             Obstruction(Perm((0, )), ((x + 2, y + 1),))]),
                         requirements=requirements)])
 
-        yield BatchStrategy(formal_step="Place next maximum into"
-                                    "the slots in row {}.".format(row),
+        yield BatchStrategy(formal_step=("Place next maximum into"
+                                         " the slots in row {}.".format(row)),
                             objects=strategy)

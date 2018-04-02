@@ -7,13 +7,14 @@ pytest_plugins = [
     'tests.fixtures.simple_tiling'
 ]
 
+
 def test_requirement_extensions(typical_obstructions_with_local,
                                 typical_requirements_with_local):
     tiling = Tiling(obstructions=typical_obstructions_with_local,
                     requirements=typical_requirements_with_local)
-                    
+
     strats = set([tuple(s.objects)
-              for s in all_requirement_extensions(tiling, maxreqlen=3)])
+                  for s in all_requirement_extensions(tiling, maxreqlen=3)])
     actual = set([
         (tiling.add_single_cell_obstruction(Perm((2, 1, 0)), (2, 0)),
          tiling.add_single_cell_requirement(Perm((2, 1, 0)), (2, 0))),
