@@ -46,6 +46,7 @@ def all_point_insertions(tiling, **kwargs):
     """The cell insertion strategy using only points."""
     yield from all_cell_insertions(tiling, maxreqlen=1, **kwargs)
 
+
 def all_requirement_extensions(tiling, **kwargs):
     """Insert longer requirements in to cells which contain a requirement"""
     maxreqlen = kwargs.get('maxreqlen')
