@@ -94,14 +94,14 @@ fundamental_length_2_requirement_with_point_placement = StrategyPack(
          name="fundamental_length_2_requirement_with_point_placement")
 
 fundamental_length_2_requirement_with_pattern_placement = StrategyPack(
-         eq_strats=[],
+         eq_strats=[requirement_placement],
          ver_strats=[fundamentally_verified],
          inf_strats=[empty_cell_inferral, obstruction_transitivity,
                      row_and_column_separation],
-         other_strats=[[partial(all_cell_insertions, maxreqlen=2),
+         other_strats=[[partial(factor, unions=True)],
+                       [partial(all_cell_insertions, maxreqlen=2),
                         partial(all_requirement_extensions, maxreqlen=2)],
-                       [requirement_corroboration],
-                       [requirement_placement]],
+                       [requirement_corroboration]],
          name="fundamental_length_2_requirement_with_pattern_placement")
 
 length_3_requirement_with_point_placement_no_database = StrategyPack(
@@ -156,14 +156,14 @@ fundamental_length_3_requirement_with_point_placement = StrategyPack(
          name="fundamental_length_3_requirement_with_point_placement")
 
 fundamental_length_3_requirement_with_pattern_placement = StrategyPack(
-         eq_strats=[],
+         eq_strats=[requirement_placement],
          ver_strats=[fundamentally_verified],
          inf_strats=[empty_cell_inferral, obstruction_transitivity,
                      row_and_column_separation],
-         other_strats=[[partial(all_cell_insertions, maxreqlen=3),
+         other_strats=[[partial(factor, unions=True)],
+                       [partial(all_cell_insertions, maxreqlen=3),
                         partial(all_requirement_extensions, maxreqlen=3)],
-                       [requirement_corroboration],
-                       [requirement_placement]],
+                       [requirement_corroboration]],
          name="fundamental_length_3_requirement_with_pattern_placement")
 
 regular_insertion_encoding = StrategyPack(
