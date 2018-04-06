@@ -89,7 +89,7 @@ fundamental_length_2_requirement_with_point_placement = StrategyPack(
          ver_strats=[fundamentally_verified],
          inf_strats=[empty_cell_inferral, obstruction_transitivity,
                      row_and_column_separation],
-         other_strats=[[factor], [partial(all_cell_insertions, maxreqlen=2)],
+         other_strats=[[partial(all_cell_insertions, maxreqlen=2)],
                        [requirement_placement], [requirement_corroboration]],
          name="fundamental_length_2_requirement_with_point_placement")
 
@@ -151,7 +151,7 @@ fundamental_length_3_requirement_with_point_placement = StrategyPack(
          ver_strats=[fundamentally_verified],
          inf_strats=[empty_cell_inferral, obstruction_transitivity,
                      row_and_column_separation],
-         other_strats=[[factor], [partial(all_cell_insertions, maxreqlen=3)],
+         other_strats=[[partial(all_cell_insertions, maxreqlen=3)],
                        [requirement_placement], [requirement_corroboration]],
          name="fundamental_length_3_requirement_with_point_placement")
 
