@@ -27,7 +27,7 @@ def one_by_one_verified(tiling, basis, **kwargs):
     if basis is None:
         return False
     rootbasis = [ob.patt for ob in tiling.obstructions]
-    if kwargs['symmetry']:
+    if kwargs.get('symmetry'):
         all_patts = [Basis(sym_set)
                      for sym_set in all_symmetry_sets(rootbasis)]
     else:
