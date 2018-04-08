@@ -237,7 +237,7 @@ better_insertion_encoding_symmetries_top_and_bottom = StrategyPack(
 
 fundamental_row_placements_symmetries = StrategyPack(
         eq_strats=[],
-        ver_strats=[fundamentally_verified],
+        ver_strats=[partial(fundamentally_verified, symmetry=True)],
         inf_strats=[obstruction_transitivity, row_and_column_separation],
         other_strats=[[partial(insertion_encoding, symmetry=True)]],
         name="fundamental_row_placements_symmetries"
@@ -245,7 +245,7 @@ fundamental_row_placements_symmetries = StrategyPack(
 
 fundamental_row_placements_symmetries_top_and_bottom = StrategyPack(
         eq_strats=[],
-        ver_strats=[fundamentally_verified],
+        ver_strats=[partial(fundamentally_verified, symmetry=True)],
         inf_strats=[obstruction_transitivity, row_and_column_separation],
         other_strats=[[partial(insertion_encoding, symmetry=True,
                                top_and_bottom=True)]],

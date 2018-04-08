@@ -2,6 +2,7 @@
 
 from comb_spec_searcher import VerificationStrategy
 from permuta.descriptors import Basis
+from permuta.permutils import all_symmetry_sets
 
 
 def subset_verified(tiling, basis, **kwargs):
@@ -11,7 +12,7 @@ def subset_verified(tiling, basis, **kwargs):
     localized.
     """
     if tiling.dimensions == (1, 1):
-        if one_by_one_verified(tiling, basis):
+        if one_by_one_verified(tiling, basis, **kwargs):
             return VerificationStrategy(
                 formal_step="The tiling is a subset of the class.")
     elif (all(ob.is_single_cell() for ob in tiling.obstructions) and
@@ -21,11 +22,16 @@ def subset_verified(tiling, basis, **kwargs):
                 formal_step="The tiling is a subset of the class.")
 
 
-def one_by_one_verified(tiling, basis):
+def one_by_one_verified(tiling, basis, **kwargs):
     """Return true if tiling is a subset of the Av(basis)."""
     if basis is None:
         return False
-    patts = Basis([ob.patt for ob in tiling.obstructions])
-    if basis == patts:
+    rootbasis = [ob.patt for ob in tiling.obstructions]
+    if kwargs['symmetry']:
+        all_patts = [Basis(sym_set)
+                     for sym_set in all_symmetry_sets(rootbasis)]
+    else:
+        all_patts = [Basis(rootbasis)]
+    if any(basis == patts for patts in all_patts):
         return False
     return True

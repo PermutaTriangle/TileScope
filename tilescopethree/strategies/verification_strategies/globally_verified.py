@@ -13,6 +13,8 @@ def globally_verified(tiling, **kwargs):
             if all(all(not r.is_interleaving() for r in req)
                    for req in tiling.requirements):
                 return VerificationStrategy(formal_step="Globally verified.")
+    else:
+        return subset_verified(tiling, **kwargs)
 
 
 def fundamentally_verified(tiling, **kwargs):
@@ -21,4 +23,4 @@ def fundamentally_verified(tiling, **kwargs):
     if tiling.fully_isolated():
         if tiling.dimensions == (1, 1):
             return subset_verified(tiling, **kwargs)
-        return globally_verified(tiling)
+        return globally_verified(tiling, **kwargs)
