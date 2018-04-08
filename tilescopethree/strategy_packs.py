@@ -98,8 +98,7 @@ fundamental_length_2_requirement_with_pattern_placement = StrategyPack(
          ver_strats=[fundamentally_verified],
          inf_strats=[empty_cell_inferral, obstruction_transitivity,
                      row_and_column_separation],
-         other_strats=[[partial(factor, unions=True)],
-                       [partial(all_cell_insertions, maxreqlen=2),
+         other_strats=[[partial(all_cell_insertions, maxreqlen=2),
                         partial(all_requirement_extensions, maxreqlen=2)],
                        [requirement_corroboration]],
          name="fundamental_length_2_requirement_with_pattern_placement")
@@ -160,11 +159,11 @@ fundamental_length_3_requirement_with_pattern_placement = StrategyPack(
          ver_strats=[fundamentally_verified],
          inf_strats=[empty_cell_inferral, obstruction_transitivity,
                      row_and_column_separation],
-         other_strats=[[partial(factor, unions=True)],
-                       [partial(all_cell_insertions, maxreqlen=3),
+         other_strats=[[partial(all_cell_insertions, maxreqlen=3),
                         partial(all_requirement_extensions, maxreqlen=3)],
                        [requirement_corroboration]],
          name="fundamental_length_3_requirement_with_pattern_placement")
+
 
 regular_insertion_encoding = StrategyPack(
         eq_strats=[],
@@ -234,4 +233,21 @@ better_insertion_encoding_symmetries_top_and_bottom = StrategyPack(
                       [partial(insertion_encoding, symmetry=True,
                                top_and_bottom=True)]],
         name="better_insertion_encoding_symmetries_top_and_bottom"
+)
+
+fundamental_row_placements_symmetries = StrategyPack(
+        eq_strats=[],
+        ver_strats=[fundamentally_verified],
+        inf_strats=[obstruction_transitivity, row_and_column_separation],
+        other_strats=[[partial(insertion_encoding, symmetry=True)]],
+        name="fundamental_row_placements_symmetries"
+)
+
+fundamental_row_placements_symmetries_top_and_bottom = StrategyPack(
+        eq_strats=[],
+        ver_strats=[fundamentally_verified],
+        inf_strats=[obstruction_transitivity, row_and_column_separation],
+        other_strats=[[partial(insertion_encoding, symmetry=True,
+                               top_and_bottom=True)]],
+        name="fundamental_row_placements_symmetries_top_and_bottom"
 )
