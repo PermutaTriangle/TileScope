@@ -159,10 +159,10 @@ def separations(inequalities, unprocessed_cells=None,
     potential_states = []
 
     if furthest_left_index > 0:
-        potential_state = (current_state[:furthest_left_index-1]
-                           + [current_state[furthest_left_index - 1]
-                           + [current_cell]]
-                           + current_state[furthest_left_index:])
+        potential_state = (current_state[:furthest_left_index-1] +
+                           [current_state[furthest_left_index - 1] +
+                           [current_cell]] +
+                           current_state[furthest_left_index:])
         potential_states.append(potential_state)
 
     for index in range(furthest_left_index, furthest_right_index + 1):
