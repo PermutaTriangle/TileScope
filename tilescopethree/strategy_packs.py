@@ -282,7 +282,7 @@ super_insertion_encoding_sym = StrategyPack(
 
 super_insertion_encoding_tab = StrategyPack(
         eq_strats=[],
-        ver_strats=[globally_verified],
+        ver_strats=[[partial(globally_verified, symmetry=True)],
         inf_strats=[obstruction_transitivity, row_and_column_separation],
         other_strats=[[factor],
                       [partial(insertion_encoding, top_and_bottom=True)]],
