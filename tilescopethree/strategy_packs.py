@@ -263,3 +263,38 @@ fundamental_row_placements_symmetries_top_and_bottom = StrategyPack(
         iterative=True,
         name="fundamental_row_placements_symmetries_top_and_bottom"
 )
+
+super_insertion_encoding = StrategyPack(
+        eq_strats=[],
+        ver_strats=[globally_verified],
+        inf_strats=[obstruction_transitivity, row_and_column_separation],
+        other_strats=[[factor], [insertion_encoding]],
+        name="super_insertion_encoding"
+)
+
+super_insertion_encoding_sym = StrategyPack(
+        eq_strats=[],
+        ver_strats=[globally_verified],
+        inf_strats=[obstruction_transitivity, row_and_column_separation],
+        other_strats=[[factor], [partial(insertion_encoding, symmetry=True)]],
+        name="super_insertion_encoding_sym"
+)
+
+super_insertion_encoding_tab = StrategyPack(
+        eq_strats=[],
+        ver_strats=[globally_verified],
+        inf_strats=[obstruction_transitivity, row_and_column_separation],
+        other_strats=[[factor],
+                      [partial(insertion_encoding, top_and_bottom=True)]],
+        name="super_insertion_encoding_tab"
+)
+
+super_insertion_encoding_sym_tab = StrategyPack(
+        eq_strats=[],
+        ver_strats=[globally_verified],
+        inf_strats=[obstruction_transitivity, row_and_column_separation],
+        other_strats=[[factor],
+                      [partial(insertion_encoding, symmetry=True,
+                               top_and_bottom=True)]],
+        name="super_insertion_encoding_sym_tab"
+)
