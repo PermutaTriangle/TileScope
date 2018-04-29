@@ -164,8 +164,7 @@ fundamental_row_placements_symmetries = Pack(
         inf_strats=[obstruction_transitivity, row_and_column_separation],
         other_strats=[[factor], [partial(insertion_encoding, symmetry=True)]],
         iterative=True,
-        name="fundamental_row_placements_symmetries"
-)
+        name="fundamental_row_placements_symmetries")
 
 fundamental_row_placements_symmetries_top_and_bottom = Pack(
         eq_strats=[],
@@ -175,8 +174,7 @@ fundamental_row_placements_symmetries_top_and_bottom = Pack(
                       [partial(insertion_encoding, symmetry=True,
                                top_and_bottom=True)]],
         iterative=True,
-        name="fundamental_row_placements_symmetries_top_and_bottom"
-)
+        name="fundamental_row_placements_symmetries_top_and_bottom")
 
 fundamental_point_placement_no_factors = Pack(
          eq_strats=[point_placement],
@@ -195,8 +193,7 @@ fundamental_length_2_requirement_with_point_placement_no_factors = Pack(
                        [requirement_placement], [requirement_corroboration]],
          iterative=True,
          name=("fundamental_length_2_requirement_with_point_placement_"
-               "no_factors")
-)
+               "no_factors"))
 
 fundamental_length_2_requirement_with_pattern_placement_no_factors = Pack(
          eq_strats=[requirement_placement],
@@ -207,8 +204,7 @@ fundamental_length_2_requirement_with_pattern_placement_no_factors = Pack(
                        [requirement_corroboration]],
          iterative=True,
          name=("fundamental_length_2_requirement_with_pattern_placement_"
-               "no_factors")
-)
+               "no_factors"))
 
 fundamental_length_3_requirement_with_point_placement_no_factors = Pack(
          eq_strats=[],
@@ -218,8 +214,7 @@ fundamental_length_3_requirement_with_point_placement_no_factors = Pack(
                        [requirement_placement], [requirement_corroboration]],
          iterative=True,
          name=("fundamental_length_3_requirement_with_point_placement_"
-               "no_factors")
-)
+               "no_factors"))
 
 fundamental_length_3_requirement_with_pattern_placement_no_factors = Pack(
          eq_strats=[requirement_placement],
@@ -230,8 +225,7 @@ fundamental_length_3_requirement_with_pattern_placement_no_factors = Pack(
                        [requirement_corroboration]],
          iterative=True,
          name=("fundamental_length_3_requirement_with_pattern_placement_"
-               "no_factors")
-)
+               "no_factors"))
 
 fundamental_row_placements_symmetries_no_factors = Pack(
         eq_strats=[],
@@ -239,8 +233,7 @@ fundamental_row_placements_symmetries_no_factors = Pack(
         inf_strats=[row_and_column_separation, obstruction_transitivity],
         other_strats=[[partial(insertion_encoding, symmetry=True)]],
         iterative=True,
-        name="fundamental_row_placements_symmetries_no_factors"
-)
+        name="fundamental_row_placements_symmetries_no_factors")
 
 fundamental_row_placements_symmetries_top_and_bottom_no_factors = Pack(
         eq_strats=[],
@@ -249,24 +242,21 @@ fundamental_row_placements_symmetries_top_and_bottom_no_factors = Pack(
         other_strats=[[partial(insertion_encoding, symmetry=True,
                                top_and_bottom=True)]],
         iterative=True,
-        name="fundamental_row_placements_symmetries_top_and_bottom_no_factors"
-)
+        name="fundamental_row_placements_symmetries_top_and_bottom_no_factors")
 
 regular_insertion_encoding = Pack(
         eq_strats=[],
         ver_strats=[verify_points],
         inf_strats=[],
         other_strats=[[factor], [insertion_encoding]],
-        name="regular_insertion_encoding"
-)
+        name="regular_insertion_encoding")
 
 regular_insertion_encoding_symmetries = Pack(
         eq_strats=[],
         ver_strats=[verify_points],
         inf_strats=[],
         other_strats=[[factor], [partial(insertion_encoding, symmetry=True)]],
-        name="regular_insertion_encoding_symmetries"
-)
+        name="regular_insertion_encoding_symmetries")
 
 regular_insertion_encoding_top_and_bottom = Pack(
         eq_strats=[],
@@ -274,8 +264,7 @@ regular_insertion_encoding_top_and_bottom = Pack(
         inf_strats=[],
         other_strats=[[factor],
                       [partial(insertion_encoding, top_and_bottom=True)]],
-        name="regular_insertion_encoding_top_and_bottom"
-)
+        name="regular_insertion_encoding_top_and_bottom")
 
 regular_insertion_encoding_symmetries_top_and_bottom = Pack(
         eq_strats=[],
@@ -284,24 +273,21 @@ regular_insertion_encoding_symmetries_top_and_bottom = Pack(
         other_strats=[[factor],
                       [partial(insertion_encoding, symmetry=True,
                                top_and_bottom=True)]],
-        name="regular_insertion_encoding_symmetries_top_and_bottom"
-)
+        name="regular_insertion_encoding_symmetries_top_and_bottom")
 
 better_insertion_encoding = Pack(
         eq_strats=[],
         ver_strats=[verify_points],
         inf_strats=[row_and_column_separation, obstruction_transitivity],
         other_strats=[[factor], [insertion_encoding]],
-        name="better_insertion_encoding"
-)
+        name="better_insertion_encoding")
 
 better_insertion_encoding_symmetries = Pack(
         eq_strats=[],
         ver_strats=[verify_points],
         inf_strats=[row_and_column_separation, obstruction_transitivity],
         other_strats=[[factor], [partial(insertion_encoding, symmetry=True)]],
-        name="better_insertion_encoding_symmetries"
-)
+        name="better_insertion_encoding_symmetries")
 
 better_insertion_encoding_top_and_bottom = Pack(
         eq_strats=[],
@@ -309,8 +295,7 @@ better_insertion_encoding_top_and_bottom = Pack(
         inf_strats=[row_and_column_separation, obstruction_transitivity],
         other_strats=[[factor],
                       [partial(insertion_encoding, top_and_bottom=True)]],
-        name="better_insertion_encoding_top_and_bottom"
-)
+        name="better_insertion_encoding_top_and_bottom")
 
 better_insertion_encoding_symmetries_top_and_bottom = Pack(
         eq_strats=[],
@@ -319,24 +304,21 @@ better_insertion_encoding_symmetries_top_and_bottom = Pack(
         other_strats=[[factor],
                       [partial(insertion_encoding, symmetry=True,
                                top_and_bottom=True)]],
-        name="better_insertion_encoding_symmetries_top_and_bottom"
-)
+        name="better_insertion_encoding_symmetries_top_and_bottom")
 
 super_insertion_encoding = Pack(
         eq_strats=[],
         ver_strats=[globally_verified],
         inf_strats=[row_and_column_separation, obstruction_transitivity],
         other_strats=[[factor], [insertion_encoding]],
-        name="super_insertion_encoding"
-)
+        name="super_insertion_encoding")
 
 super_insertion_encoding_sym = Pack(
         eq_strats=[],
         ver_strats=[partial(globally_verified, symmetry=True)],
         inf_strats=[row_and_column_separation, obstruction_transitivity],
         other_strats=[[factor], [partial(insertion_encoding, symmetry=True)]],
-        name="super_insertion_encoding_sym"
-)
+        name="super_insertion_encoding_sym")
 
 super_insertion_encoding_tab = Pack(
         eq_strats=[],
@@ -344,8 +326,7 @@ super_insertion_encoding_tab = Pack(
         inf_strats=[row_and_column_separation, obstruction_transitivity],
         other_strats=[[factor],
                       [partial(insertion_encoding, top_and_bottom=True)]],
-        name="super_insertion_encoding_tab"
-)
+        name="super_insertion_encoding_tab")
 
 super_insertion_encoding_sym_tab = Pack(
         eq_strats=[],
@@ -354,8 +335,7 @@ super_insertion_encoding_sym_tab = Pack(
         other_strats=[[factor],
                       [partial(insertion_encoding, symmetry=True,
                                top_and_bottom=True)]],
-        name="super_insertion_encoding_sym_tab"
-)
+        name="super_insertion_encoding_sym_tab")
 
 natural_point_placement_no_database_only = Pack(
          eq_strats=[requirement_placement],
@@ -422,8 +402,7 @@ length_2_requirement_with_point_placement_no_database_interleaving = Pack(
                        [requirement_placement], [requirement_corroboration]],
          forward_equivalence=True,
          name=("length_2_requirement_with_point_placement_"
-               "no_database_interleaving")
-)
+               "no_database_interleaving"))
 
 length_2_requirement_with_pattern_placement_no_database_interleaving = Pack(
          eq_strats=[requirement_placement],
@@ -435,8 +414,7 @@ length_2_requirement_with_pattern_placement_no_database_interleaving = Pack(
                        [requirement_corroboration]],
          forward_equivalence=True,
          name=("length_2_requirement_with_pattern_placement_"
-               "no_database_interleaving")
-)
+               "no_database_interleaving"))
 
 length_3_requirement_with_point_placement_no_database_interleaving = Pack(
          eq_strats=[],
@@ -447,8 +425,7 @@ length_3_requirement_with_point_placement_no_database_interleaving = Pack(
                        [requirement_placement], [requirement_corroboration]],
          forward_equivalence=True,
          name=("length_3_requirement_with_point_placement_"
-               "no_database_interleaving")
-)
+               "no_database_interleaving"))
 
 length_3_requirement_with_pattern_placement_no_database_interleaving = Pack(
          eq_strats=[requirement_placement],
@@ -460,5 +437,4 @@ length_3_requirement_with_pattern_placement_no_database_interleaving = Pack(
                        [requirement_corroboration]],
          forward_equivalence=True,
          name=("length_3_requirement_with_pattern_placement_no"
-               "_database_interleaving")
-)
+               "_database_interleaving"))
