@@ -1,4 +1,4 @@
-from comb_spec_searcher import StrategyPack
+from comb_spec_searcher import StrategyPack as Pack
 from functools import partial
 from tilescopethree.strategies import (all_cell_insertions,
                                        all_point_insertions,
@@ -14,7 +14,7 @@ from tilescopethree.strategies import (all_cell_insertions,
                                        row_and_column_separation,
                                        subset_verified, insertion_encoding)
 
-point_placement_no_database_only = StrategyPack(
+point_placement_no_database_only = Pack(
          eq_strats=[requirement_placement],
          ver_strats=[subset_verified, globally_verified],
          inf_strats=[row_and_column_separation, obstruction_transitivity],
@@ -22,7 +22,7 @@ point_placement_no_database_only = StrategyPack(
                        [requirement_corroboration]],
          name="point_placement_no_database")
 
-point_placement_only = StrategyPack(
+point_placement_only = Pack(
          eq_strats=[requirement_placement],
          ver_strats=[subset_verified, globally_verified,
                      database_verified],
@@ -31,7 +31,7 @@ point_placement_only = StrategyPack(
                        [requirement_corroboration]],
          name="point_placement")
 
-length_2_requirement_with_point_placement_no_database = StrategyPack(
+length_2_requirement_with_point_placement_no_database = Pack(
          eq_strats=[],
          ver_strats=[subset_verified, globally_verified],
          inf_strats=[row_and_column_separation, obstruction_transitivity],
@@ -39,7 +39,7 @@ length_2_requirement_with_point_placement_no_database = StrategyPack(
                        [requirement_placement], [requirement_corroboration]],
          name="length_2_requirement_with_point_placement_no_database")
 
-length_2_requirement_with_point_placement = StrategyPack(
+length_2_requirement_with_point_placement = Pack(
          eq_strats=[],
          ver_strats=[subset_verified, globally_verified,
                      database_verified],
@@ -48,7 +48,7 @@ length_2_requirement_with_point_placement = StrategyPack(
                        [requirement_placement], [requirement_corroboration]],
          name="length_2_requirement_with_point_placement")
 
-length_2_requirement_with_pattern_placement_no_database = StrategyPack(
+length_2_requirement_with_pattern_placement_no_database = Pack(
          eq_strats=[requirement_placement],
          ver_strats=[subset_verified, globally_verified],
          inf_strats=[row_and_column_separation, obstruction_transitivity],
@@ -58,7 +58,7 @@ length_2_requirement_with_pattern_placement_no_database = StrategyPack(
                        [requirement_corroboration]],
          name="length_2_requirement_with_pattern_placement_no_database")
 
-length_2_requirement_with_pattern_placement = StrategyPack(
+length_2_requirement_with_pattern_placement = Pack(
          eq_strats=[requirement_placement],
          ver_strats=[subset_verified, globally_verified,
                      database_verified],
@@ -69,7 +69,7 @@ length_2_requirement_with_pattern_placement = StrategyPack(
                        [requirement_corroboration]],
          name="length_2_requirement_with_pattern_placement")
 
-length_3_requirement_with_point_placement_no_database = StrategyPack(
+length_3_requirement_with_point_placement_no_database = Pack(
          eq_strats=[],
          ver_strats=[subset_verified, globally_verified],
          inf_strats=[row_and_column_separation, obstruction_transitivity],
@@ -77,7 +77,7 @@ length_3_requirement_with_point_placement_no_database = StrategyPack(
                        [requirement_placement], [requirement_corroboration]],
          name="length_3_requirement_with_point_placement_no_database")
 
-length_3_requirement_with_point_placement = StrategyPack(
+length_3_requirement_with_point_placement = Pack(
          eq_strats=[],
          ver_strats=[subset_verified, globally_verified,
                      database_verified],
@@ -86,7 +86,7 @@ length_3_requirement_with_point_placement = StrategyPack(
                        [requirement_placement], [requirement_corroboration]],
          name="length_3_requirement_with_point_placement")
 
-length_3_requirement_with_pattern_placement_no_database = StrategyPack(
+length_3_requirement_with_pattern_placement_no_database = Pack(
          eq_strats=[requirement_placement],
          ver_strats=[subset_verified, globally_verified],
          inf_strats=[row_and_column_separation, obstruction_transitivity],
@@ -96,7 +96,7 @@ length_3_requirement_with_pattern_placement_no_database = StrategyPack(
                        [requirement_corroboration]],
          name="length_3_requirement_with_pattern_placement_no_database")
 
-length_3_requirement_with_pattern_placement = StrategyPack(
+length_3_requirement_with_pattern_placement = Pack(
          eq_strats=[requirement_placement],
          ver_strats=[subset_verified, globally_verified,
                      database_verified],
@@ -107,7 +107,7 @@ length_3_requirement_with_pattern_placement = StrategyPack(
                        [requirement_corroboration]],
          name="length_3_requirement_with_pattern_placement")
 
-fundamental_point_placement = StrategyPack(
+fundamental_point_placement = Pack(
          eq_strats=[point_placement],
          ver_strats=[fundamentally_verified],
          inf_strats=[row_and_column_separation, obstruction_transitivity],
@@ -116,7 +116,7 @@ fundamental_point_placement = StrategyPack(
          iterative=True,
          name="fundamental_point_placement")
 
-fundamental_length_2_requirement_with_point_placement = StrategyPack(
+fundamental_length_2_requirement_with_point_placement = Pack(
          eq_strats=[],
          ver_strats=[fundamentally_verified],
          inf_strats=[row_and_column_separation, obstruction_transitivity],
@@ -126,7 +126,7 @@ fundamental_length_2_requirement_with_point_placement = StrategyPack(
          iterative=True,
          name="fundamental_length_2_requirement_with_point_placement")
 
-fundamental_length_2_requirement_with_pattern_placement = StrategyPack(
+fundamental_length_2_requirement_with_pattern_placement = Pack(
          eq_strats=[requirement_placement],
          ver_strats=[fundamentally_verified],
          inf_strats=[row_and_column_separation, obstruction_transitivity],
@@ -137,7 +137,7 @@ fundamental_length_2_requirement_with_pattern_placement = StrategyPack(
          iterative=True,
          name="fundamental_length_2_requirement_with_pattern_placement")
 
-fundamental_length_3_requirement_with_point_placement = StrategyPack(
+fundamental_length_3_requirement_with_point_placement = Pack(
          eq_strats=[],
          ver_strats=[fundamentally_verified],
          inf_strats=[row_and_column_separation, obstruction_transitivity],
@@ -147,7 +147,7 @@ fundamental_length_3_requirement_with_point_placement = StrategyPack(
          iterative=True,
          name="fundamental_length_3_requirement_with_point_placement")
 
-fundamental_length_3_requirement_with_pattern_placement = StrategyPack(
+fundamental_length_3_requirement_with_pattern_placement = Pack(
          eq_strats=[requirement_placement],
          ver_strats=[fundamentally_verified],
          inf_strats=[row_and_column_separation, obstruction_transitivity],
@@ -158,7 +158,7 @@ fundamental_length_3_requirement_with_pattern_placement = StrategyPack(
          iterative=True,
          name="fundamental_length_3_requirement_with_pattern_placement")
 
-fundamental_row_placements_symmetries = StrategyPack(
+fundamental_row_placements_symmetries = Pack(
         eq_strats=[],
         ver_strats=[partial(fundamentally_verified, symmetry=True)],
         inf_strats=[obstruction_transitivity, row_and_column_separation],
@@ -167,7 +167,7 @@ fundamental_row_placements_symmetries = StrategyPack(
         name="fundamental_row_placements_symmetries"
 )
 
-fundamental_row_placements_symmetries_top_and_bottom = StrategyPack(
+fundamental_row_placements_symmetries_top_and_bottom = Pack(
         eq_strats=[],
         ver_strats=[partial(fundamentally_verified, symmetry=True)],
         inf_strats=[obstruction_transitivity, row_and_column_separation],
@@ -178,7 +178,7 @@ fundamental_row_placements_symmetries_top_and_bottom = StrategyPack(
         name="fundamental_row_placements_symmetries_top_and_bottom"
 )
 
-fundamental_point_placement_no_factors = StrategyPack(
+fundamental_point_placement_no_factors = Pack(
          eq_strats=[point_placement],
          ver_strats=[fundamentally_verified],
          inf_strats=[row_and_column_separation, obstruction_transitivity],
@@ -187,16 +187,18 @@ fundamental_point_placement_no_factors = StrategyPack(
          iterative=True,
          name="fundamental_point_placement_no_factors")
 
-fundamental_length_2_requirement_with_point_placement_no_factors = StrategyPack(
+fundamental_length_2_requirement_with_point_placement_no_factors = Pack(
          eq_strats=[],
          ver_strats=[fundamentally_verified],
          inf_strats=[row_and_column_separation, obstruction_transitivity],
          other_strats=[[partial(all_cell_insertions, maxreqlen=2)],
                        [requirement_placement], [requirement_corroboration]],
          iterative=True,
-         name="fundamental_length_2_requirement_with_point_placement_no_factors")
+         name=("fundamental_length_2_requirement_with_point_placement_"
+               "no_factors")
+)
 
-fundamental_length_2_requirement_with_pattern_placement_no_factors = StrategyPack(
+fundamental_length_2_requirement_with_pattern_placement_no_factors = Pack(
          eq_strats=[requirement_placement],
          ver_strats=[fundamentally_verified],
          inf_strats=[row_and_column_separation, obstruction_transitivity],
@@ -204,18 +206,22 @@ fundamental_length_2_requirement_with_pattern_placement_no_factors = StrategyPac
                         partial(all_requirement_extensions, maxreqlen=2)],
                        [requirement_corroboration]],
          iterative=True,
-         name="fundamental_length_2_requirement_with_pattern_placement_no_factors")
+         name=("fundamental_length_2_requirement_with_pattern_placement_"
+               "no_factors")
+)
 
-fundamental_length_3_requirement_with_point_placement_no_factors = StrategyPack(
+fundamental_length_3_requirement_with_point_placement_no_factors = Pack(
          eq_strats=[],
          ver_strats=[fundamentally_verified],
          inf_strats=[row_and_column_separation, obstruction_transitivity],
          other_strats=[[partial(all_cell_insertions, maxreqlen=3)],
                        [requirement_placement], [requirement_corroboration]],
          iterative=True,
-         name="fundamental_length_3_requirement_with_point_placement_no_factors")
+         name=("fundamental_length_3_requirement_with_point_placement_"
+               "no_factors")
+)
 
-fundamental_length_3_requirement_with_pattern_placement_no_factors = StrategyPack(
+fundamental_length_3_requirement_with_pattern_placement_no_factors = Pack(
          eq_strats=[requirement_placement],
          ver_strats=[fundamentally_verified],
          inf_strats=[row_and_column_separation, obstruction_transitivity],
@@ -223,9 +229,11 @@ fundamental_length_3_requirement_with_pattern_placement_no_factors = StrategyPac
                         partial(all_requirement_extensions, maxreqlen=3)],
                        [requirement_corroboration]],
          iterative=True,
-         name="fundamental_length_3_requirement_with_pattern_placement_no_factors")
+         name=("fundamental_length_3_requirement_with_pattern_placement_"
+               "no_factors")
+)
 
-fundamental_row_placements_symmetries_no_factors = StrategyPack(
+fundamental_row_placements_symmetries_no_factors = Pack(
         eq_strats=[],
         ver_strats=[partial(fundamentally_verified, symmetry=True)],
         inf_strats=[row_and_column_separation, obstruction_transitivity],
@@ -234,7 +242,7 @@ fundamental_row_placements_symmetries_no_factors = StrategyPack(
         name="fundamental_row_placements_symmetries_no_factors"
 )
 
-fundamental_row_placements_symmetries_top_and_bottom_no_factors = StrategyPack(
+fundamental_row_placements_symmetries_top_and_bottom_no_factors = Pack(
         eq_strats=[],
         ver_strats=[partial(fundamentally_verified, symmetry=True)],
         inf_strats=[row_and_column_separation, obstruction_transitivity],
@@ -244,7 +252,7 @@ fundamental_row_placements_symmetries_top_and_bottom_no_factors = StrategyPack(
         name="fundamental_row_placements_symmetries_top_and_bottom_no_factors"
 )
 
-regular_insertion_encoding = StrategyPack(
+regular_insertion_encoding = Pack(
         eq_strats=[],
         ver_strats=[verify_points],
         inf_strats=[],
@@ -252,7 +260,7 @@ regular_insertion_encoding = StrategyPack(
         name="regular_insertion_encoding"
 )
 
-regular_insertion_encoding_symmetries = StrategyPack(
+regular_insertion_encoding_symmetries = Pack(
         eq_strats=[],
         ver_strats=[verify_points],
         inf_strats=[],
@@ -260,7 +268,7 @@ regular_insertion_encoding_symmetries = StrategyPack(
         name="regular_insertion_encoding_symmetries"
 )
 
-regular_insertion_encoding_top_and_bottom = StrategyPack(
+regular_insertion_encoding_top_and_bottom = Pack(
         eq_strats=[],
         ver_strats=[verify_points],
         inf_strats=[],
@@ -269,7 +277,7 @@ regular_insertion_encoding_top_and_bottom = StrategyPack(
         name="regular_insertion_encoding_top_and_bottom"
 )
 
-regular_insertion_encoding_symmetries_top_and_bottom = StrategyPack(
+regular_insertion_encoding_symmetries_top_and_bottom = Pack(
         eq_strats=[],
         ver_strats=[verify_points],
         inf_strats=[],
@@ -279,7 +287,7 @@ regular_insertion_encoding_symmetries_top_and_bottom = StrategyPack(
         name="regular_insertion_encoding_symmetries_top_and_bottom"
 )
 
-better_insertion_encoding = StrategyPack(
+better_insertion_encoding = Pack(
         eq_strats=[],
         ver_strats=[verify_points],
         inf_strats=[row_and_column_separation, obstruction_transitivity],
@@ -287,7 +295,7 @@ better_insertion_encoding = StrategyPack(
         name="better_insertion_encoding"
 )
 
-better_insertion_encoding_symmetries = StrategyPack(
+better_insertion_encoding_symmetries = Pack(
         eq_strats=[],
         ver_strats=[verify_points],
         inf_strats=[row_and_column_separation, obstruction_transitivity],
@@ -295,7 +303,7 @@ better_insertion_encoding_symmetries = StrategyPack(
         name="better_insertion_encoding_symmetries"
 )
 
-better_insertion_encoding_top_and_bottom = StrategyPack(
+better_insertion_encoding_top_and_bottom = Pack(
         eq_strats=[],
         ver_strats=[verify_points],
         inf_strats=[row_and_column_separation, obstruction_transitivity],
@@ -304,7 +312,7 @@ better_insertion_encoding_top_and_bottom = StrategyPack(
         name="better_insertion_encoding_top_and_bottom"
 )
 
-better_insertion_encoding_symmetries_top_and_bottom = StrategyPack(
+better_insertion_encoding_symmetries_top_and_bottom = Pack(
         eq_strats=[],
         ver_strats=[verify_points],
         inf_strats=[row_and_column_separation, obstruction_transitivity],
@@ -314,7 +322,7 @@ better_insertion_encoding_symmetries_top_and_bottom = StrategyPack(
         name="better_insertion_encoding_symmetries_top_and_bottom"
 )
 
-super_insertion_encoding = StrategyPack(
+super_insertion_encoding = Pack(
         eq_strats=[],
         ver_strats=[globally_verified],
         inf_strats=[row_and_column_separation, obstruction_transitivity],
@@ -322,7 +330,7 @@ super_insertion_encoding = StrategyPack(
         name="super_insertion_encoding"
 )
 
-super_insertion_encoding_sym = StrategyPack(
+super_insertion_encoding_sym = Pack(
         eq_strats=[],
         ver_strats=[partial(globally_verified, symmetry=True)],
         inf_strats=[row_and_column_separation, obstruction_transitivity],
@@ -330,7 +338,7 @@ super_insertion_encoding_sym = StrategyPack(
         name="super_insertion_encoding_sym"
 )
 
-super_insertion_encoding_tab = StrategyPack(
+super_insertion_encoding_tab = Pack(
         eq_strats=[],
         ver_strats=[partial(globally_verified, symmetry=True)],
         inf_strats=[row_and_column_separation, obstruction_transitivity],
@@ -339,7 +347,7 @@ super_insertion_encoding_tab = StrategyPack(
         name="super_insertion_encoding_tab"
 )
 
-super_insertion_encoding_sym_tab = StrategyPack(
+super_insertion_encoding_sym_tab = Pack(
         eq_strats=[],
         ver_strats=[partial(globally_verified, symmetry=True)],
         inf_strats=[row_and_column_separation, obstruction_transitivity],
@@ -349,7 +357,7 @@ super_insertion_encoding_sym_tab = StrategyPack(
         name="super_insertion_encoding_sym_tab"
 )
 
-natural_point_placement_no_database_only = StrategyPack(
+natural_point_placement_no_database_only = Pack(
          eq_strats=[requirement_placement],
          ver_strats=[subset_verified, globally_verified],
          inf_strats=[row_and_column_separation, obstruction_transitivity],
@@ -358,7 +366,7 @@ natural_point_placement_no_database_only = StrategyPack(
                        [requirement_corroboration]],
          name="natural_point_placement_no_database")
 
-natural_length_2_requirement_with_point_placement_no_database = StrategyPack(
+natural_length_2_requirement_with_point_placement_no_database = Pack(
          eq_strats=[],
          ver_strats=[subset_verified, globally_verified],
          inf_strats=[row_and_column_separation, obstruction_transitivity],
@@ -367,7 +375,7 @@ natural_length_2_requirement_with_point_placement_no_database = StrategyPack(
                        [requirement_placement], [requirement_corroboration]],
          name="natural_length_2_requirement_point_placement_no_database")
 
-natural_length_2_requirement_with_pattern_placement_no_database = StrategyPack(
+natural_length_2_requirement_with_pattern_placement_no_database = Pack(
          eq_strats=[requirement_placement],
          ver_strats=[subset_verified, globally_verified],
          inf_strats=[row_and_column_separation, obstruction_transitivity],
@@ -377,7 +385,7 @@ natural_length_2_requirement_with_pattern_placement_no_database = StrategyPack(
                        [requirement_corroboration]],
          name="natural_length_2_requirement_pattern_placement_no_database")
 
-natural_length_3_requirement_with_point_placement_no_database = StrategyPack(
+natural_length_3_requirement_with_point_placement_no_database = Pack(
          eq_strats=[],
          ver_strats=[subset_verified, globally_verified],
          inf_strats=[row_and_column_separation, obstruction_transitivity],
@@ -386,7 +394,7 @@ natural_length_3_requirement_with_point_placement_no_database = StrategyPack(
                        [requirement_placement], [requirement_corroboration]],
          name="natural_length_3_requirement_point_placement_no_database")
 
-natural_length_3_requirement_with_pattern_placement_no_database = StrategyPack(
+natural_length_3_requirement_with_pattern_placement_no_database = Pack(
          eq_strats=[requirement_placement],
          ver_strats=[subset_verified, globally_verified],
          inf_strats=[row_and_column_separation, obstruction_transitivity],
@@ -396,7 +404,7 @@ natural_length_3_requirement_with_pattern_placement_no_database = StrategyPack(
                        [requirement_corroboration]],
          name="natural_length_3_requirement_pattern_placement_no_database")
 
-point_placement_no_database_interleaving = StrategyPack(
+point_placement_no_database_interleaving = Pack(
          eq_strats=[requirement_placement],
          ver_strats=[subset_verified, globally_verified],
          inf_strats=[row_and_column_separation, obstruction_transitivity],
@@ -405,7 +413,7 @@ point_placement_no_database_interleaving = StrategyPack(
          forward_equivalence=True,
          name="point_placement_no_database_interleaving")
 
-length_2_requirement_with_point_placement_no_database_interleaving = StrategyPack(
+length_2_requirement_with_point_placement_no_database_interleaving = Pack(
          eq_strats=[],
          ver_strats=[subset_verified, globally_verified],
          inf_strats=[row_and_column_separation, obstruction_transitivity],
@@ -413,9 +421,11 @@ length_2_requirement_with_point_placement_no_database_interleaving = StrategyPac
                        [partial(all_cell_insertions, maxreqlen=2)],
                        [requirement_placement], [requirement_corroboration]],
          forward_equivalence=True,
-         name="length_2_requirement_with_point_placement_no_database_interleaving")
+         name=("length_2_requirement_with_point_placement_"
+               "no_database_interleaving")
+)
 
-length_2_requirement_with_pattern_placement_no_database_interleaving = StrategyPack(
+length_2_requirement_with_pattern_placement_no_database_interleaving = Pack(
          eq_strats=[requirement_placement],
          ver_strats=[subset_verified, globally_verified],
          inf_strats=[row_and_column_separation, obstruction_transitivity],
@@ -424,9 +434,11 @@ length_2_requirement_with_pattern_placement_no_database_interleaving = StrategyP
                         partial(all_requirement_extensions, maxreqlen=2)],
                        [requirement_corroboration]],
          forward_equivalence=True,
-         name="length_2_requirement_with_pattern_placement_no_database_interleaving")
+         name=("length_2_requirement_with_pattern_placement_"
+               "no_database_interleaving")
+)
 
-length_3_requirement_with_point_placement_no_database_interleaving = StrategyPack(
+length_3_requirement_with_point_placement_no_database_interleaving = Pack(
          eq_strats=[],
          ver_strats=[subset_verified, globally_verified],
          inf_strats=[row_and_column_separation, obstruction_transitivity],
@@ -434,9 +446,11 @@ length_3_requirement_with_point_placement_no_database_interleaving = StrategyPac
                        [partial(all_cell_insertions, maxreqlen=3)],
                        [requirement_placement], [requirement_corroboration]],
          forward_equivalence=True,
-         name="length_3_requirement_with_point_placement_no_database_interleaving")
+         name=("length_3_requirement_with_point_placement_"
+               "no_database_interleaving")
+)
 
-length_3_requirement_with_pattern_placement_no_database_interleaving = StrategyPack(
+length_3_requirement_with_pattern_placement_no_database_interleaving = Pack(
          eq_strats=[requirement_placement],
          ver_strats=[subset_verified, globally_verified],
          inf_strats=[row_and_column_separation, obstruction_transitivity],
@@ -445,4 +459,6 @@ length_3_requirement_with_pattern_placement_no_database_interleaving = StrategyP
                         partial(all_requirement_extensions, maxreqlen=3)],
                        [requirement_corroboration]],
          forward_equivalence=True,
-         name="length_3_requirement_with_pattern_placement_no_database_interleaving")
+         name=("length_3_requirement_with_pattern_placement_no"
+               "_database_interleaving")
+)
