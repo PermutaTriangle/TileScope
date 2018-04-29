@@ -11,7 +11,6 @@ from comb_spec_searcher.objectqueue import ObjectQueue
 from grids_three import Obstruction, Tiling
 from permuta import Perm
 from permuta.descriptors import Basis
-from tilescopethree.strategies import is_empty_strategy
 
 
 class TileScopeTHREE(CombinatorialSpecificationSearcher):
@@ -67,6 +66,5 @@ class TileScopeTHREE(CombinatorialSpecificationSearcher):
             compress=compress,
             forward_equivalence=forward_equivalence,
             objectqueue=objectqueue,
-            is_empty_strategy=is_empty_strategy,
             function_kwargs=function_kwargs,
             logger_kwargs=logger_kwargs)
