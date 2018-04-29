@@ -25,7 +25,6 @@ class TileScopeTHREE(CombinatorialSpecificationSearcher):
                  symmetry=False,
                  forward_equivalence=False,
                  compress=True,
-                 complement_verify=False,
                  objectqueue=ObjectQueue,
                  start_tiling=None,
                  logger_kwargs={'processname': 'runner'}):
@@ -49,10 +48,12 @@ class TileScopeTHREE(CombinatorialSpecificationSearcher):
         else:
             self.basis = []
 
-        if symmetry:
+        if symmetry or strategy_pack.symmetry:
             symmetries = [Tiling.inverse, Tiling.reverse, Tiling.complement,
                           Tiling.antidiagonal, Tiling.rotate90,
                           Tiling.rotate180, Tiling.rotate270]
+            symmetries = [sym for sym in symmetries
+                          if sym(start_tiling) == start_tiling]
         else:
             symmetries = []
 
@@ -65,7 +66,6 @@ class TileScopeTHREE(CombinatorialSpecificationSearcher):
             symmetry=symmetries,
             compress=compress,
             forward_equivalence=forward_equivalence,
-            complement_verify=complement_verify,
             objectqueue=objectqueue,
             is_empty_strategy=is_empty_strategy,
             function_kwargs=function_kwargs,
