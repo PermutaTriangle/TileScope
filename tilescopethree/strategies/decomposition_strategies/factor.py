@@ -93,7 +93,7 @@ def factor(tiling, **kwargs):
     yield Strategy("The factors of the tiling.", strategy,
                    inferable=[False for _ in strategy], workable=work,
                    ignore_parent=kwargs.get("workable", True),
-                   back_maps=[t.back_map for t in strategy])
+                   constructor='cartesian')
 
     if kwargs.get("unions", False):
         for partition in ordered_set_partitions_list(factors):
@@ -106,4 +106,4 @@ def factor(tiling, **kwargs):
                            strategy,
                            inferable=[False for _ in strategy],
                            workable=[False for _ in strategy],
-                           back_maps=[t.back_map for t in strategy])
+                           constructor='cartesian')
