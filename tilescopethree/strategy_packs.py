@@ -13,6 +13,16 @@ from tilescopethree.strategies import (all_cell_insertions,
                                        requirement_corroboration,
                                        row_and_column_separation,
                                        subset_verified, insertion_encoding)
+from grids_three import Tiling
+
+
+inverse = Tiling.inverse
+reverse = Tiling.reverse
+complement = Tiling.complement
+antidiagonal = Tiling.antidiagonal
+rotate90 = Tiling.rotate90
+rotate180 = Tiling.rotate180
+rotate270 = Tiling.rotate270
 
 point_placement_no_database_only = StrategyPack(
          eq_strats=[requirement_placement],
@@ -182,22 +192,23 @@ fundamental_row_placements_symmetries = StrategyPack(
         eq_strats=[],
         ver_strats=[partial(fundamentally_verified, symmetry=True)],
         inf_strats=[obstruction_transitivity, row_and_column_separation],
-        other_strats=[[factor], [partial(insertion_encoding, symmetry=True)]],
+        other_strats=[[factor], [insertion_encoding]],
         iterative=True,
         forward_equivalence=True,
+        symmetries = [reverse, rotate180, complement],
         name="fundamental_row_placements_symmetries"
 )
 
-fundamental_row_placements_symmetries_top_and_bottom = StrategyPack(
+fundamental_row_placements_top_and_bottom = StrategyPack(
         eq_strats=[],
         ver_strats=[partial(fundamentally_verified, symmetry=True)],
         inf_strats=[obstruction_transitivity, row_and_column_separation],
         other_strats=[[factor],
-                      [partial(insertion_encoding, symmetry=True,
-                               top_and_bottom=True)]],
+                      [insertion_encoding]],
         iterative=True,
         forward_equivalence=True,
-        name="fundamental_row_placements_symmetries_top_and_bottom"
+        symmetries = [complement],
+        name="fundamental_row_placements_top_and_bottom"
 )
 
 fundamental_point_placement_no_factors = StrategyPack(
@@ -256,19 +267,10 @@ fundamental_row_placements_symmetries_no_factors = StrategyPack(
         eq_strats=[],
         ver_strats=[partial(fundamentally_verified, symmetry=True)],
         inf_strats=[obstruction_transitivity, row_and_column_separation],
-        other_strats=[[partial(insertion_encoding, symmetry=True)]],
+        other_strats=[[insertion_encoding]],
         iterative=True,
+        symmetries = [reverse, rotate180, complement],
         name="fundamental_row_placements_symmetries_no_factors"
-)
-
-fundamental_row_placements_symmetries_top_and_bottom_no_factors = StrategyPack(
-        eq_strats=[],
-        ver_strats=[partial(fundamentally_verified, symmetry=True)],
-        inf_strats=[obstruction_transitivity, row_and_column_separation],
-        other_strats=[[partial(insertion_encoding, symmetry=True,
-                               top_and_bottom=True)]],
-        iterative=True,
-        name="fundamental_row_placements_symmetries_top_and_bottom_no_factors"
 )
 
 regular_insertion_encoding = StrategyPack(
@@ -283,7 +285,8 @@ regular_insertion_encoding_symmetries = StrategyPack(
         eq_strats=[],
         ver_strats=[verify_points],
         inf_strats=[],
-        other_strats=[[factor], [partial(insertion_encoding, symmetry=True)]],
+        other_strats=[[factor], [insertion_encoding]],
+        symmetries = [reverse, rotate180, complement],
         name="regular_insertion_encoding_symmetries"
 )
 
@@ -292,18 +295,9 @@ regular_insertion_encoding_top_and_bottom = StrategyPack(
         ver_strats=[verify_points],
         inf_strats=[],
         other_strats=[[factor],
-                      [partial(insertion_encoding, top_and_bottom=True)]],
+                      [insertion_encoding]],
+        symmetries = [complement],
         name="regular_insertion_encoding_top_and_bottom"
-)
-
-regular_insertion_encoding_symmetries_top_and_bottom = StrategyPack(
-        eq_strats=[],
-        ver_strats=[verify_points],
-        inf_strats=[],
-        other_strats=[[factor],
-                      [partial(insertion_encoding, symmetry=True,
-                               top_and_bottom=True)]],
-        name="regular_insertion_encoding_symmetries_top_and_bottom"
 )
 
 better_insertion_encoding = StrategyPack(
@@ -318,7 +312,8 @@ better_insertion_encoding_symmetries = StrategyPack(
         eq_strats=[],
         ver_strats=[verify_points],
         inf_strats=[obstruction_transitivity, row_and_column_separation],
-        other_strats=[[factor], [partial(insertion_encoding, symmetry=True)]],
+        other_strats=[[factor], [insertion_encoding]],
+        symmetries = [reverse, rotate180, complement],
         name="better_insertion_encoding_symmetries"
 )
 
@@ -327,18 +322,9 @@ better_insertion_encoding_top_and_bottom = StrategyPack(
         ver_strats=[verify_points],
         inf_strats=[obstruction_transitivity, row_and_column_separation],
         other_strats=[[factor],
-                      [partial(insertion_encoding, top_and_bottom=True)]],
+                      [insertion_encoding]],
+        symmetries = [complement],
         name="better_insertion_encoding_top_and_bottom"
-)
-
-better_insertion_encoding_symmetries_top_and_bottom = StrategyPack(
-        eq_strats=[],
-        ver_strats=[verify_points],
-        inf_strats=[obstruction_transitivity, row_and_column_separation],
-        other_strats=[[factor],
-                      [partial(insertion_encoding, symmetry=True,
-                               top_and_bottom=True)]],
-        name="better_insertion_encoding_symmetries_top_and_bottom"
 )
 
 super_insertion_encoding = StrategyPack(
@@ -353,7 +339,8 @@ super_insertion_encoding_sym = StrategyPack(
         eq_strats=[],
         ver_strats=[partial(globally_verified, symmetry=True)],
         inf_strats=[obstruction_transitivity, row_and_column_separation],
-        other_strats=[[factor], [partial(insertion_encoding, symmetry=True)]],
+        other_strats=[[factor], [insertion_encoding]],
+        symmetries = [reverse, rotate180, complement],
         name="super_insertion_encoding_sym"
 )
 
@@ -362,19 +349,11 @@ super_insertion_encoding_tab = StrategyPack(
         ver_strats=[partial(globally_verified, symmetry=True)],
         inf_strats=[obstruction_transitivity, row_and_column_separation],
         other_strats=[[factor],
-                      [partial(insertion_encoding, top_and_bottom=True)]],
+                      [insertion_encoding]],
+        symmetries = [complement],
         name="super_insertion_encoding_tab"
 )
 
-super_insertion_encoding_sym_tab = StrategyPack(
-        eq_strats=[],
-        ver_strats=[partial(globally_verified, symmetry=True)],
-        inf_strats=[obstruction_transitivity, row_and_column_separation],
-        other_strats=[[factor],
-                      [partial(insertion_encoding, symmetry=True,
-                               top_and_bottom=True)]],
-        name="super_insertion_encoding_sym_tab"
-)
 
 natural_point_placement_no_database_only = StrategyPack(
          eq_strats=[requirement_placement],

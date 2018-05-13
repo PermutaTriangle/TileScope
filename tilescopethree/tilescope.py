@@ -50,9 +50,14 @@ class TileScopeTHREE(CombinatorialSpecificationSearcher):
             self.basis = []
 
         if symmetry:
-            symmetries = [Tiling.inverse, Tiling.reverse, Tiling.complement,
-                          Tiling.antidiagonal, Tiling.rotate90,
-                          Tiling.rotate180, Tiling.rotate270]
+            if (isinstance(symmetry, list) and
+                    all(callable(f) for f in symmetry)):
+                symmetries = symmetry
+            else:
+                symmetries = [Tiling.inverse, Tiling.reverse,
+                              Tiling.complement,Tiling.antidiagonal,
+                              Tiling.rotate90, Tiling.rotate180,
+                              Tiling.rotate270]
         else:
             symmetries = []
 
