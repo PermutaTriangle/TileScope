@@ -125,6 +125,7 @@ fundamental_point_placement = StrategyPack(
          other_strats=[[factor], [all_point_insertions],
                        [requirement_corroboration]],
          iterative=True,
+         forward_equivalence=True,
          name="fundamental_point_placement")
 
 fundamental_length_2_requirement_with_point_placement = StrategyPack(
@@ -136,6 +137,7 @@ fundamental_length_2_requirement_with_point_placement = StrategyPack(
                        [partial(all_cell_insertions, maxreqlen=2)],
                        [requirement_placement], [requirement_corroboration]],
          iterative=True,
+         forward_equivalence=True,
          name="fundamental_length_2_requirement_with_point_placement")
 
 fundamental_length_2_requirement_with_pattern_placement = StrategyPack(
@@ -148,6 +150,7 @@ fundamental_length_2_requirement_with_pattern_placement = StrategyPack(
                         partial(all_requirement_extensions, maxreqlen=2)],
                        [requirement_corroboration]],
          iterative=True,
+         forward_equivalence=True,
          name="fundamental_length_2_requirement_with_pattern_placement")
 
 fundamental_length_3_requirement_with_point_placement = StrategyPack(
@@ -159,6 +162,7 @@ fundamental_length_3_requirement_with_point_placement = StrategyPack(
                        [partial(all_cell_insertions, maxreqlen=3)],
                        [requirement_placement], [requirement_corroboration]],
          iterative=True,
+         forward_equivalence=True,
          name="fundamental_length_3_requirement_with_point_placement")
 
 fundamental_length_3_requirement_with_pattern_placement = StrategyPack(
@@ -171,6 +175,7 @@ fundamental_length_3_requirement_with_pattern_placement = StrategyPack(
                         partial(all_requirement_extensions, maxreqlen=3)],
                        [requirement_corroboration]],
          iterative=True,
+         forward_equivalence=True,
          name="fundamental_length_3_requirement_with_pattern_placement")
 
 fundamental_row_placements_symmetries = StrategyPack(
@@ -179,6 +184,7 @@ fundamental_row_placements_symmetries = StrategyPack(
         inf_strats=[obstruction_transitivity, row_and_column_separation],
         other_strats=[[factor], [partial(insertion_encoding, symmetry=True)]],
         iterative=True,
+        forward_equivalence=True,
         name="fundamental_row_placements_symmetries"
 )
 
@@ -190,6 +196,7 @@ fundamental_row_placements_symmetries_top_and_bottom = StrategyPack(
                       [partial(insertion_encoding, symmetry=True,
                                top_and_bottom=True)]],
         iterative=True,
+        forward_equivalence=True,
         name="fundamental_row_placements_symmetries_top_and_bottom"
 )
 
