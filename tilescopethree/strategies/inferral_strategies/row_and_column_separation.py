@@ -219,7 +219,7 @@ def row_and_column_separation(tiling, **kwargs):
             for cell in cells:
                 row_map[cell] = cell[1] + shift + index
         shift += len(separation) - 1
-        if len(separation):
+        if len(separation) > 1:
             separated_rows.append(row)
 
     col_map = {}
@@ -240,7 +240,7 @@ def row_and_column_separation(tiling, **kwargs):
             for cell in cells:
                 col_map[cell] = cell[0] + shift + index
         shift += len(separation) - 1
-        if len(separation):
+        if len(separation) > 1:
             separated_cols.append(col)
 
     if inferred:
