@@ -1,7 +1,7 @@
 """The cell insertion strategy checks whether a cell is empty or contains a
 point"""
 
-from comb_spec_searcher import BatchStrategy
+from comb_spec_searcher import Strategy
 from permuta import Av, Perm
 
 
@@ -35,10 +35,17 @@ def all_cell_insertions(tiling, **kwargs):
     for cell in (active - positive):
         for length in range(1, maxreqlen + 1):
             for patt in Av(bdict[cell][0] + extra_basis).of_length(length):
-                yield BatchStrategy(
-                    formal_step="Insert {} into cell {}.".format(patt, cell),
-                    objects=[tiling.add_single_cell_obstruction(patt, cell),
-                             tiling.add_single_cell_requirement(patt, cell)])
+                yield Strategy(
+                    formal_step="Insert {} into cell {}.".format(patt,
+                                                                 cell),
+                    comb_classes=[tiling.add_single_cell_obstruction(patt,
+                                                                     cell),
+                                  tiling.add_single_cell_requirement(patt,
+                                                                     cell)],
+                    ignore_parent=False,
+                    inferable=[True for _ in range(2)],
+                    workable=[True for _ in range(2)],
+                    constructor='disjoint')
 
 
 def root_requirement_insertion(tiling, **kwargs):
@@ -76,10 +83,13 @@ def all_requirement_extensions(tiling, **kwargs):
         for length in range(len(curr_req) + 1, maxreqlen + 1):
             for patt in Av(bdict[cell][0] + extra_basis).of_length(length):
                 if curr_req in patt:
-                    yield BatchStrategy(
+                    yield Strategy(
                         formal_step="Insert {} into cell {}.".format(patt,
                                                                      cell),
-                        objects=[tiling.add_single_cell_obstruction(patt,
-                                                                    cell),
-                                 tiling.add_single_cell_requirement(patt,
-                                                                    cell)])
+                        comb_classes=[
+                            tiling.add_single_cell_obstruction(patt, cell),
+                            tiling.add_single_cell_requirement(patt, cell)],
+                        ignore_parent=False,
+                        inferable=[True for _ in range(2)],
+                        workable=[True for _ in range(2)],
+                        constructor='disjoint')

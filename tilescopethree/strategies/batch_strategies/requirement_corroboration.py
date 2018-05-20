@@ -1,7 +1,7 @@
 """
     Module containing the requirement corroboration strategy.
 """
-from comb_spec_searcher import BatchStrategy
+from comb_spec_searcher import Strategy
 from grids_three import Obstruction, Tiling
 
 
@@ -25,11 +25,15 @@ def requirement_corroboration(tiling, basis, **kwargs):
         if len(reqs) == 1:
             continue
         for req in reqs:
-            yield BatchStrategy(
+            yield Strategy(
                 formal_step="",
-                objects=[
+                comb_classes=[
                     Tiling(obstructions=tiling.obstructions,
                            requirements=tiling.requirements + ((req,),)),
                     Tiling(obstructions=tiling.obstructions + (
                         Obstruction(req.patt, req.pos),),
-                           requirements=tiling.requirements)])
+                           requirements=tiling.requirements)],
+                ignore_parent=False,
+                workable=[True for _ in range(2)],
+                inferable=[True for _ in range(2)],
+                constructor='disjoint')

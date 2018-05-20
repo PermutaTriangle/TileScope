@@ -7,10 +7,10 @@
                           '
 """
 from comb_spec_searcher import CombinatorialSpecificationSearcher
-from comb_spec_searcher.objectqueue import ObjectQueue
 from grids_three import Obstruction, Tiling
 from permuta import Perm
 from permuta.descriptors import Basis
+from logzero import logger
 
 
 class TileScopeTHREE(CombinatorialSpecificationSearcher):
@@ -19,52 +19,60 @@ class TileScopeTHREE(CombinatorialSpecificationSearcher):
     respect to the given basis.
     """
     def __init__(self,
-                 basis=None,
-                 strategy_pack=None,
+                 start_class,
+                 strategy_pack,
                  symmetry=False,
                  forward_equivalence=False,
-                 compress=True,
-                 objectqueue=ObjectQueue,
-                 start_tiling=None,
-                 logger_kwargs={'processname': 'runner'}):
+                 logger_kwargs={'processname': 'runner'},
+                 **kwargs):
         """Initialise TileScope."""
-        if basis is None and start_tiling is None:
-            raise ValueError(("Tilescope requires either a start tiling or a "
-                              "basis."))
-        if basis is not None and start_tiling is not None:
-            raise ValueError(("Tilescope takes either a basis or a "
-                              "start_tiling, not both."))
+        if isinstance(start_class, str):
+            basis = Basis([Perm.to_standard([int(c) for c in p])
+                                for p in start_class.split('_')])
+        elif isinstance(start_class, list):
+            basis = Basis(start_class)
+        elif isinstance(start_class, Tiling):
+            start_tiling = start_class
+            basis = []
 
-        if basis is not None:
-            if isinstance(basis, str):
-                self.basis = Basis([Perm.to_standard([int(c) for c in p])
-                                    for p in basis.split('_')])
-            else:
-                self.basis = Basis(basis)
+        if not isinstance(start_class, Tiling):
             start_tiling = Tiling(
-                obstructions=[Obstruction.single_cell(patt, (0, 0))
-                              for patt in self.basis])
-        else:
-            self.basis = []
-
-        if symmetry or strategy_pack.symmetry:
+                            obstructions=[Obstruction.single_cell(patt, (0, 0))
+                                          for patt in basis])
+        if symmetry and not strategy_pack.symmetries:
             symmetries = [Tiling.inverse, Tiling.reverse, Tiling.complement,
                           Tiling.antidiagonal, Tiling.rotate90,
                           Tiling.rotate180, Tiling.rotate270]
             symmetries = [sym for sym in symmetries
                           if sym(start_tiling) == start_tiling]
+            strategy_pack.symmetries = symmetries
         else:
             symmetries = []
 
-        function_kwargs = {"basis": self.basis}
+        function_kwargs = {"basis": basis}
+        function_kwargs.update(kwargs.get('kwargs', dict()))
 
         CombinatorialSpecificationSearcher.__init__(
             self,
-            start_object=start_tiling,
-            strategy_pack=strategy_pack,
+            start_tiling,
+            strategy_pack,
             symmetry=symmetries,
-            compress=compress,
             forward_equivalence=forward_equivalence,
-            objectqueue=objectqueue,
             function_kwargs=function_kwargs,
             logger_kwargs=logger_kwargs)
+
+
+    def to_dict(self):
+        dict = super().to_dict()
+        dict.pop('kwargs')
+        logger.warn(("Tilescope assumes only keyword argument is basis from "
+                     "all patterns in obstructions in start class so removing"
+                     " kwargs."))
+        return dict
+
+    @classmethod
+    def from_dict(cls, dict):
+        scope = super(cls, TileScopeTHREE).from_dict(dict, Tiling)
+        basis = Basis([ob.patt for ob in scope.start_class.obstructions])
+        scope.kwargs['basis'] = basis
+        return scope

@@ -9,7 +9,7 @@ pytest_plugins = [
 
 
 def test_all_cell_insertions_points(simple_tiling):
-    strats = [s.objects
+    strats = [s.comb_classes
               for s in all_cell_insertions(simple_tiling, maxreqlen=1)]
     assert all(len(s) == 2 for s in strats)
     s = strats[0]
@@ -50,13 +50,13 @@ def test_all_cell_insertions(typical_redundant_requirements,
     tiling = Tiling(obstructions=typical_redundant_obstructions,
                     requirements=typical_redundant_requirements)
     strats = list(all_cell_insertions(tiling, maxreqlen=3))
-    assert all(len(s.objects) == 2 for s in strats)
+    assert all(len(s.comb_classes) == 2 for s in strats)
     s = strats[-1]
-    assert s.objects[0] == Tiling(
+    assert s.comb_classes[0] == Tiling(
         obstructions=typical_redundant_obstructions + [
             Obstruction(Perm((1, 0, 2)), [(2, 3), (2, 3), (2, 3)])],
         requirements=typical_redundant_requirements)
-    assert s.objects[1] == Tiling(
+    assert s.comb_classes[1] == Tiling(
         obstructions=typical_redundant_obstructions,
         requirements=typical_redundant_requirements + [
             [Requirement(Perm((1, 0, 2)), [(2, 3), (2, 3), (2, 3)])]])

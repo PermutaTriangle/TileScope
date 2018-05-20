@@ -27,7 +27,8 @@ def compute_new_ineqs(pos, ineqs):
                     gtlist[lt].append(gt)
                     ltlist[gt].append(lt)
                     ineqs.add((gt, lt))
-                    newineqs.add((gt, lt))
+                    if gt != lt:
+                        newineqs.add((gt, lt))
                     if lt not in stack and lt in pos:
                         stack.append(lt)
                     if gt not in stack and gt in pos:
@@ -97,8 +98,9 @@ def obstruction_transitivity(tiling, **kwargs):
         for left, right in compute_new_ineqs(positive_cells_row[row], ineqs):
             newineqs.append(((left, row), (right, row)))
 
-    return InferralStrategy(
-        "Computing transitivity of inequalities.",
-        Tiling(obstructions=(tiling.obstructions + tuple(
-            compute_ineq_ob(left, right) for left, right in newineqs)),
-               requirements=tiling.requirements))
+    if newineqs:
+        return InferralStrategy(
+            "Computing transitivity of inequalities.",
+            Tiling(obstructions=(tiling.obstructions + tuple(
+                compute_ineq_ob(left, right) for left, right in newineqs)),
+                   requirements=tiling.requirements))

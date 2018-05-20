@@ -84,7 +84,7 @@ def requirement_placement(tiling, **kwargs):
                     formal_step=("Placing point {} of requirement {} with "
                                  "force {}").format(
                                      (i, reqs[0].patt[i]), reqs[0], DIR),
-                    object=placedtiling)
+                    comb_class=placedtiling)
 
 
 def point_placement(tiling, **kwargs):
