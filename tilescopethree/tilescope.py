@@ -59,7 +59,8 @@ class TileScopeTHREE(CombinatorialSpecificationSearcher):
             symmetry=symmetries,
             forward_equivalence=forward_equivalence,
             function_kwargs=function_kwargs,
-            logger_kwargs=logger_kwargs)
+            logger_kwargs=logger_kwargs,
+            **kwargs)
 
     def to_dict(self):
         """Return dictionary object of self."""
