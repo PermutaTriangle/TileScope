@@ -28,7 +28,7 @@ class TileScopeTHREE(CombinatorialSpecificationSearcher):
         """Initialise TileScope."""
         if isinstance(start_class, str):
             basis = Basis([Perm.to_standard([int(c) for c in p])
-                                for p in start_class.split('_')])
+                           for p in start_class.split('_')])
         elif isinstance(start_class, list):
             basis = Basis(start_class)
         elif isinstance(start_class, Tiling):
@@ -61,8 +61,8 @@ class TileScopeTHREE(CombinatorialSpecificationSearcher):
             function_kwargs=function_kwargs,
             logger_kwargs=logger_kwargs)
 
-
     def to_dict(self):
+        """Return dictionary object of self."""
         dict = super().to_dict()
         dict.pop('kwargs')
         logger.warn(("Tilescope assumes only keyword argument is basis from "
@@ -72,6 +72,7 @@ class TileScopeTHREE(CombinatorialSpecificationSearcher):
 
     @classmethod
     def from_dict(cls, dict):
+        """Return TileScopeTHREE object from dictionary."""
         scope = super(cls, TileScopeTHREE).from_dict(dict, Tiling)
         basis = Basis([ob.patt for ob in scope.start_class.obstructions])
         scope.kwargs['basis'] = basis

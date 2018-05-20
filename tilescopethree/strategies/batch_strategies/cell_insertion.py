@@ -26,7 +26,7 @@ def all_cell_insertions(tiling, **kwargs):
     if extra_basis is None:
         extra_basis = []
     if (not isinstance(extra_basis, list) or
-        not all(isinstance(p, Perm) for p in extra_basis)):
+            not all(isinstance(p, Perm) for p in extra_basis)):
         raise TypeError("'extra_basis' flag should be a list of Perm to avoid")
 
     active = tiling.active_cells
@@ -36,12 +36,10 @@ def all_cell_insertions(tiling, **kwargs):
         for length in range(1, maxreqlen + 1):
             for patt in Av(bdict[cell][0] + extra_basis).of_length(length):
                 yield Strategy(
-                    formal_step="Insert {} into cell {}.".format(patt,
-                                                                 cell),
-                    comb_classes=[tiling.add_single_cell_obstruction(patt,
-                                                                     cell),
-                                  tiling.add_single_cell_requirement(patt,
-                                                                     cell)],
+                    formal_step="Insert {} into cell {}.".format(patt, cell),
+                    comb_classes=[
+                            tiling.add_single_cell_obstruction(patt, cell),
+                            tiling.add_single_cell_requirement(patt, cell)],
                     ignore_parent=False,
                     inferable=[True for _ in range(2)],
                     workable=[True for _ in range(2)],
@@ -69,7 +67,7 @@ def all_requirement_extensions(tiling, **kwargs):
     if extra_basis is None:
         extra_basis = []
     if (not isinstance(extra_basis, list) or
-        not all(isinstance(p, Perm) for p in extra_basis)):
+            not all(isinstance(p, Perm) for p in extra_basis)):
         raise TypeError("'extra_basis' flag should be a list of Perm to avoid")
 
     active = tiling.active_cells
@@ -84,8 +82,8 @@ def all_requirement_extensions(tiling, **kwargs):
             for patt in Av(bdict[cell][0] + extra_basis).of_length(length):
                 if curr_req in patt:
                     yield Strategy(
-                        formal_step="Insert {} into cell {}.".format(patt,
-                                                                     cell),
+                        formal_step=("Insert {} into cell {}."
+                                     "".format(patt, cell)),
                         comb_classes=[
                             tiling.add_single_cell_obstruction(patt, cell),
                             tiling.add_single_cell_requirement(patt, cell)],

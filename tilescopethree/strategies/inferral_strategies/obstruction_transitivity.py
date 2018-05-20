@@ -102,5 +102,5 @@ def obstruction_transitivity(tiling, **kwargs):
         return InferralStrategy(
             "Computing transitivity of inequalities.",
             Tiling(obstructions=(tiling.obstructions + tuple(
-                compute_ineq_ob(left, right) for left, right in newineqs)),
+                   compute_ineq_ob(left, right) for left, right in newineqs)),
                    requirements=tiling.requirements))

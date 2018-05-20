@@ -6,15 +6,6 @@ from permuta import Perm
 
 database = {
     Tiling(
-        obstructions=(Obstruction(Perm((0, 1)), ((0, 1), (0, 1))),
-                      Obstruction(Perm((0, 1)), ((1, 0), (1, 0))),
-                      Obstruction(Perm((0, 1)), ((1, 2), (1, 2))),
-                      Obstruction(Perm((0, 1, 2)), ((0, 1), (0, 2), (0, 2))),
-                      Obstruction(Perm((0, 1, 2)), ((0, 1), (0, 2), (1, 2))),
-                      Obstruction(Perm((0, 1, 2)), ((0, 2), (0, 2), (1, 2))),
-                      Obstruction(Perm((0, 1, 2)), ((0, 2), (0, 2), (0, 2)))),
-        requirements=()),
-    Tiling(
         obstructions=(Obstruction(Perm((0, 1)), ((1, 0), (1, 0))),
                       Obstruction(Perm((0, 1, 2)), ((0, 0), (0, 0), (0, 0))),
                       Obstruction(Perm((0, 1, 2)), ((0, 0), (0, 0), (1, 0)))),
