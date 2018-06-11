@@ -33,7 +33,10 @@ class TileScopeTHREE(CombinatorialSpecificationSearcher):
             basis = Basis(start_class)
         elif isinstance(start_class, Tiling):
             start_tiling = start_class
-            basis = []
+            if start_class.dimensions == (1, 1):
+                basis = Basis([o.patt for o in start_class.obstructions])
+            else:
+                basis = []
 
         if not isinstance(start_class, Tiling):
             start_tiling = Tiling(
