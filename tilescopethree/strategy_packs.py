@@ -12,7 +12,8 @@ from tilescopethree.strategies import (all_cell_insertions,
                                        verify_points,
                                        requirement_corroboration,
                                        row_and_column_separation,
-                                       subset_verified, insertion_encoding)
+                                       subset_verified, insertion_encoding,
+                                       subclass_verified)
 
 point_placements = Pack(
          initial_strats=[requirement_placement],
@@ -22,6 +23,14 @@ point_placements = Pack(
                            [requirement_corroboration]],
          name="point_placements")
 
+point_placements_scv = Pack(
+         initial_strats=[requirement_placement],
+         ver_strats=[subset_verified, globally_verified, subclass_verified],
+         inferral_strats=[row_and_column_separation, obstruction_transitivity],
+         expansion_strats=[[factor], [all_point_insertions],
+                           [requirement_corroboration]],
+         name="point_placements_scv")
+
 point_placements_db = Pack(
          initial_strats=[requirement_placement],
          ver_strats=[subset_verified, globally_verified,
@@ -30,6 +39,15 @@ point_placements_db = Pack(
          expansion_strats=[[factor], [all_point_insertions],
                            [requirement_corroboration]],
          name="point_placements_db")
+
+insertion_point_placements_scv = Pack(
+         initial_strats=[factor, requirement_corroboration,
+                         all_point_insertions],
+         ver_strats=[subset_verified, globally_verified,
+                     subclass_verified],
+         inferral_strats=[row_and_column_separation, obstruction_transitivity],
+         expansion_strats=[[requirement_placement]],
+         name="insertion_point_placements_scv")
 
 insertion_point_placements_db = Pack(
          initial_strats=[factor, requirement_corroboration,
@@ -50,6 +68,17 @@ length_2_requirement_with_point_placements = Pack(
                            [requirement_corroboration]],
          name="length_2_requirement_with_point_placements")
 
+length_2_requirement_with_point_placements_scv = Pack(
+         initial_strats=[],
+         ver_strats=[subset_verified, globally_verified,
+                     subclass_verified],
+         inferral_strats=[row_and_column_separation, obstruction_transitivity],
+         expansion_strats=[[factor],
+                           [partial(all_cell_insertions, maxreqlen=2)],
+                           [requirement_placement],
+                           [requirement_corroboration]],
+         name="length_2_requirement_with_point_placements_scv")
+
 length_2_requirement_with_point_placements_db = Pack(
          initial_strats=[],
          ver_strats=[subset_verified, globally_verified,
@@ -60,6 +89,15 @@ length_2_requirement_with_point_placements_db = Pack(
                            [requirement_placement],
                            [requirement_corroboration]],
          name="length_2_requirement_with_point_placements_db")
+
+insertion_length_2_requirement_with_point_placements_scv = Pack(
+         initial_strats=[factor, requirement_corroboration,
+                         partial(all_cell_insertions, maxreqlen=2)],
+         ver_strats=[subset_verified, globally_verified,
+                     subclass_verified],
+         inferral_strats=[row_and_column_separation, obstruction_transitivity],
+         expansion_strats=[[requirement_placement]],
+         name="insertion_length_2_requirement_with_point_placements_scv")
 
 insertion_length_2_requirement_with_point_placements_db = Pack(
          initial_strats=[factor, requirement_corroboration,
@@ -79,6 +117,17 @@ length_2_requirement_with_pattern_placements = Pack(
                             partial(all_requirement_extensions, maxreqlen=2)],
                            [requirement_corroboration]],
          name="length_2_requirement_with_pattern_placements")
+
+length_2_requirement_with_pattern_placements_scv = Pack(
+         initial_strats=[requirement_placement],
+         ver_strats=[subset_verified, globally_verified,
+                     subclass_verified],
+         inferral_strats=[row_and_column_separation, obstruction_transitivity],
+         expansion_strats=[[partial(factor, unions=True)],
+                           [partial(all_cell_insertions, maxreqlen=2),
+                            partial(all_requirement_extensions, maxreqlen=2)],
+                           [requirement_corroboration]],
+         name="length_2_requirement_with_pattern_placements_scv")
 
 length_2_requirement_with_pattern_placements_db = Pack(
          initial_strats=[requirement_placement],
@@ -101,6 +150,17 @@ length_3_requirement_with_point_placements = Pack(
                            [requirement_corroboration]],
          name="length_3_requirement_with_point_placements")
 
+length_3_requirement_with_point_placements_scv = Pack(
+         initial_strats=[],
+         ver_strats=[subset_verified, globally_verified,
+                     subclass_verified],
+         inferral_strats=[row_and_column_separation, obstruction_transitivity],
+         expansion_strats=[[factor],
+                           [partial(all_cell_insertions, maxreqlen=3)],
+                           [requirement_placement],
+                           [requirement_corroboration]],
+         name="length_3_requirement_with_point_placements_scv")
+
 length_3_requirement_with_point_placements_db = Pack(
          initial_strats=[],
          ver_strats=[subset_verified, globally_verified,
@@ -120,6 +180,15 @@ insertion_length_3_requirement_with_point_placements_db = Pack(
          inferral_strats=[row_and_column_separation, obstruction_transitivity],
          expansion_strats=[[requirement_placement]],
          name="length_3_requirement_with_point_placements_db")
+
+insertion_length_3_requirement_with_point_placements_scv = Pack(
+         initial_strats=[factor, requirement_corroboration,
+                         partial(all_cell_insertions, maxreqlen=3)],
+         ver_strats=[subset_verified, globally_verified,
+                     subclass_verified],
+         inferral_strats=[row_and_column_separation, obstruction_transitivity],
+         expansion_strats=[[requirement_placement]],
+         name="length_3_requirement_with_point_placements_scv")
 
 length_3_requirement_with_pattern_placement_no_database = Pack(
          initial_strats=[requirement_placement],
