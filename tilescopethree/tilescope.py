@@ -71,7 +71,8 @@ class TileScopeTHREE(CombinatorialSpecificationSearcher):
         dict.pop('kwargs')
         logger.warn(("Tilescope assumes only keyword argument is basis from "
                      "all patterns in obstructions in start class so removing"
-                     " kwargs."))
+                     " kwargs."),
+                    extra=self.logger_kwargs)
         return dict
 
     @classmethod
