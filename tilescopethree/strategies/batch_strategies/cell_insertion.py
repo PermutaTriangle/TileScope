@@ -22,6 +22,7 @@ def all_cell_insertions(tiling, **kwargs):
     maxreqlen = kwargs.get('maxreqlen')
     if not maxreqlen:
         maxreqlen = 1
+    ignore_parent = kwargs.get('ignore_parent', False)
     extra_basis = kwargs.get('extra_basis')
     if extra_basis is None:
         extra_basis = []
@@ -40,7 +41,7 @@ def all_cell_insertions(tiling, **kwargs):
                     comb_classes=[
                             tiling.add_single_cell_obstruction(patt, cell),
                             tiling.add_single_cell_requirement(patt, cell)],
-                    ignore_parent=False,
+                    ignore_parent=ignore_parent,
                     inferable=[True for _ in range(2)],
                     workable=[True for _ in range(2)],
                     constructor='disjoint')

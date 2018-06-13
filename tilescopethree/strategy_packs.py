@@ -42,7 +42,7 @@ point_placements_db = Pack(
 
 insertion_point_placements_scv = Pack(
          initial_strats=[factor, requirement_corroboration,
-                         all_point_insertions],
+                         partial(all_point_insertions, ignore_parent=True)],
          ver_strats=[subset_verified, globally_verified,
                      subclass_verified],
          inferral_strats=[row_and_column_separation, obstruction_transitivity],
@@ -51,7 +51,7 @@ insertion_point_placements_scv = Pack(
 
 insertion_point_placements_db = Pack(
          initial_strats=[factor, requirement_corroboration,
-                         all_point_insertions],
+                         partial(all_point_insertions, ignore_parent=True)],
          ver_strats=[subset_verified, globally_verified,
                      database_verified],
          inferral_strats=[row_and_column_separation, obstruction_transitivity],
@@ -92,7 +92,8 @@ length_2_requirement_with_point_placements_db = Pack(
 
 insertion_length_2_requirement_with_point_placements_scv = Pack(
          initial_strats=[factor, requirement_corroboration,
-                         partial(all_cell_insertions, maxreqlen=2)],
+                         partial(all_cell_insertions, maxreqlen=2,
+                                 ignore_parent=True)],
          ver_strats=[subset_verified, globally_verified,
                      subclass_verified],
          inferral_strats=[row_and_column_separation, obstruction_transitivity],
@@ -101,7 +102,8 @@ insertion_length_2_requirement_with_point_placements_scv = Pack(
 
 insertion_length_2_requirement_with_point_placements_db = Pack(
          initial_strats=[factor, requirement_corroboration,
-                         partial(all_cell_insertions, maxreqlen=2)],
+                         partial(all_cell_insertions, maxreqlen=2,
+                                 ignore_parent=True)],
          ver_strats=[subset_verified, globally_verified,
                      database_verified],
          inferral_strats=[row_and_column_separation, obstruction_transitivity],
@@ -174,7 +176,8 @@ length_3_requirement_with_point_placements_db = Pack(
 
 insertion_length_3_requirement_with_point_placements_db = Pack(
          initial_strats=[factor, requirement_corroboration,
-                         partial(all_cell_insertions, maxreqlen=3)],
+                         partial(all_cell_insertions, maxreqlen=3,
+                                 ignore_parent=True)],
          ver_strats=[subset_verified, globally_verified,
                      database_verified],
          inferral_strats=[row_and_column_separation, obstruction_transitivity],
@@ -183,7 +186,8 @@ insertion_length_3_requirement_with_point_placements_db = Pack(
 
 insertion_length_3_requirement_with_point_placements_scv = Pack(
          initial_strats=[factor, requirement_corroboration,
-                         partial(all_cell_insertions, maxreqlen=3)],
+                         partial(all_cell_insertions, maxreqlen=3,
+                                 ignore_parent=True)],
          ver_strats=[subset_verified, globally_verified,
                      subclass_verified],
          inferral_strats=[row_and_column_separation, obstruction_transitivity],
