@@ -1,4 +1,4 @@
-"""A strategy for checking if a tiling is a subset of the class."""
+"""A strategy for checking if a tiling is contained in a subclass."""
 
 from comb_spec_searcher import VerificationStrategy
 from itertools import chain
