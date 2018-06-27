@@ -4,7 +4,7 @@ from tilescopethree.strategies import (all_cell_insertions,
                                        all_point_insertions,
                                        all_requirement_extensions,
                                        database_verified,
-                                       factor,
+                                       empty_cell_inferral, factor, fusion,
                                        globally_verified,
                                        elementary_verified,
                                        obstruction_transitivity,
@@ -772,3 +772,12 @@ length_3_requirement_with_pattern_placement_no_database_interleaving = Pack(
          forward_equivalence=True,
          name=("length_3_requirement_with_pattern_placement_no"
                "_database_interleaving"))
+
+point_placements_with_fusion = Pack(
+         initial_strats=[requirement_placement, fusion],
+         ver_strats=[subset_verified, globally_verified],
+         inferral_strats=[row_and_column_separation, obstruction_transitivity],
+         expansion_strats=[[factor], [all_point_insertions],
+                           [requirement_corroboration]],
+         forward_equivalence=True,
+         name="point_placements_with_fusion")
