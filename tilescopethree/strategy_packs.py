@@ -182,7 +182,7 @@ insertion_length_3_requirement_with_point_placements_db = Pack(
                      database_verified],
          inferral_strats=[row_and_column_separation, obstruction_transitivity],
          expansion_strats=[[requirement_placement]],
-         name="length_3_requirement_with_point_placements_db")
+         name="insertion_length_3_requirement_with_point_placements_db")
 
 insertion_length_3_requirement_with_point_placements_scv = Pack(
          initial_strats=[factor, requirement_corroboration,
@@ -192,7 +192,7 @@ insertion_length_3_requirement_with_point_placements_scv = Pack(
                      subclass_verified],
          inferral_strats=[row_and_column_separation, obstruction_transitivity],
          expansion_strats=[[requirement_placement]],
-         name="length_3_requirement_with_point_placements_scv")
+         name="insertion_length_3_requirement_with_point_placements_scv")
 
 length_3_requirement_with_pattern_placements = Pack(
          initial_strats=[requirement_placement],
