@@ -579,10 +579,19 @@ length_3_requirement_with_pattern_placement_no_database_interleaving = Pack(
                "_database_interleaving"))
 
 point_placements_with_fusion = Pack(
-         initial_strats=[requirement_placement, fusion],
+         initial_strats=[factor, requirement_placement, fusion],
          ver_strats=[subset_verified, globally_verified],
-         inferral_strats=[row_and_column_separation, obstruction_transitivity],
-         expansion_strats=[[factor], [all_point_insertions],
+         inferral_strats=[row_and_column_separation],
+         expansion_strats=[[all_point_insertions],
                            [requirement_corroboration]],
          forward_equivalence=True,
          name="point_placements_with_fusion")
+
+insertion_point_placements_with_fusion = Pack(
+         initial_strats=[factor, fusion, requirement_corroboration,
+                         partial(all_point_insertions, ignore_parent=True)],
+         ver_strats=[subset_verified, globally_verified],
+         inferral_strats=[row_and_column_separation, obstruction_transitivity],
+         expansion_strats=[[requirement_placement]],
+         forward_equivalence=True,
+         name="insertion_point_placements_db")

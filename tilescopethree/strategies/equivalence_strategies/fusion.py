@@ -8,15 +8,15 @@ def fusion(tiling, **kwargs):
     """Yield rules found by fusing rows and columns of a tiling."""
     for row_index in range(tiling.dimensions[1] - 1):
         if fusable(tiling, row_index, True):
-            yield Strategy(("Fuse rows {} and {}."
-                            "").format(row_index, row_index + 1),
+            yield Strategy(("Fuse rows {} and {}|{}|."
+                            "").format(row_index, row_index + 1, row_index),
                            [fuse_tiling(tiling, row_index, True)],
                            inferable=[True], workable=[True],
                            constructor='other')
     for col_index in range(tiling.dimensions[0] - 1):
         if fusable(tiling, col_index, False):
-            yield Strategy(("Fuse columns {} and {}."
-                            "").format(row_index, row_index + 1),
+            yield Strategy(("Fuse columns {} and {}|{}|."
+                            "").format(col_index, col_index + 1, col_index),
                            [fuse_tiling(tiling, col_index, False)],
                            inferable=[True], workable=[True],
                            constructor='other')
@@ -44,7 +44,7 @@ def can_fuse_set_of_gridded_perms(gridded_perms, row_index, row):
     return True
 
 
-def fuse_tiling(tiling, row_index, row=True):
+def fuse_tiling(tiling, row_index, row=True, **kwargs):
     """
     Return the tiling where rows 'row_index' and 'row_index + 1' are fused.
 
@@ -55,7 +55,18 @@ def fuse_tiling(tiling, row_index, row=True):
     fused_requirements = [[fuse_gridded_perm(req, row_index, row)
                            for req in req_list]
                           for req_list in tiling.requirements]
-    return Tiling(fused_obstructions, fused_requirements)
+    fused_tiling = Tiling(fused_obstructions, fused_requirements)
+    if kwargs.get('regions', False):
+        cell_to_region = {}
+        for cell in tiling.active_cells:
+            x, y = cell
+            if row and y > row_index:
+                y -= 1
+            elif not row and x > row_index:
+                x -= 1
+            cell_to_region[cell] = set([(x, y)])
+        return ([fused_tiling], [cell_to_region])
+    return fused_tiling
 
 
 def fuse_gridded_perm(gp, row_index, row=True):

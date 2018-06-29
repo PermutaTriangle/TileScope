@@ -37,7 +37,9 @@ def all_cell_insertions(tiling, **kwargs):
         for length in range(1, maxreqlen + 1):
             for patt in Av(bdict[cell][0] + extra_basis).of_length(length):
                 yield Strategy(
-                    formal_step="Insert {} into cell {}.".format(patt, cell),
+                    formal_step=("Insert {} into cell {}.|{}|{}|{}|"
+                                 "".format(patt, cell, cell[0], cell[1],
+                                           "".join(str(i) for i in patt))),
                     comb_classes=[
                             tiling.add_single_cell_obstruction(patt, cell),
                             tiling.add_single_cell_requirement(patt, cell)],
