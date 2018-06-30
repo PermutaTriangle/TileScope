@@ -27,10 +27,13 @@ def requirement_corroboration(tiling, basis, **kwargs):
         for req in reqs:
             yield Strategy(
                 formal_step="",
-                objects=[
+                comb_classes=[
                     Tiling(obstructions=tiling.obstructions,
                            requirements=tiling.requirements + ((req,),)),
                     Tiling(obstructions=tiling.obstructions + (
                         Obstruction(req.patt, req.pos),),
                            requirements=tiling.requirements)],
-                workable=[True, True])
+                ignore_parent=True,
+                workable=[True for _ in range(2)],
+                inferable=[True for _ in range(2)],
+                constructor='disjoint')
