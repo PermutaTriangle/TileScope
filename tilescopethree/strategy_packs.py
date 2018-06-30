@@ -13,7 +13,8 @@ from tilescopethree.strategies import (all_cell_insertions,
                                        requirement_corroboration,
                                        row_and_column_separation,
                                        subset_verified, insertion_encoding,
-                                       subclass_verified)
+                                       subclass_verified,
+                                       deflation)
 
 point_placements = Pack(
          initial_strats=[requirement_placement],
@@ -22,6 +23,15 @@ point_placements = Pack(
          expansion_strats=[[factor], [all_point_insertions],
                            [requirement_corroboration]],
          name="point_placements")
+
+point_placement_deflation = Pack(
+         initial_strats=[requirement_placement, deflation],
+         ver_strats=[subset_verified, globally_verified],
+         inferral_strats=[row_and_column_separation, obstruction_transitivity],
+         expansion_strats=[[factor], [all_point_insertions],
+                           [requirement_corroboration]],
+        forward_equivalence=True,
+         name="point_placement_deflation")
 
 point_placements_scv = Pack(
          initial_strats=[requirement_placement],
