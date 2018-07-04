@@ -220,10 +220,10 @@ point_placements = Pack(
          name="point_placements")
 
 point_placement_deflation = Pack(
-         initial_strats=[requirement_placement, deflation],
+         initial_strats=[factor, requirement_placement, deflation, fusion],
          ver_strats=[subset_verified, globally_verified],
          inferral_strats=[row_and_column_separation, obstruction_transitivity],
-         expansion_strats=[[factor], [all_point_insertions],
+         expansion_strats=[[all_point_insertions],
                            [requirement_corroboration]],
         forward_equivalence=True,
          name="point_placement_deflation")
