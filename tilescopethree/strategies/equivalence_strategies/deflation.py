@@ -32,7 +32,7 @@ def deflation(tiling, interleaving=True, **kwargs):
 
     for cell in tiling.possibly_empty:
         basis = array_tiling[cell[0]][cell[1]]
-        if is_sum_indecomposable(basis):
+        if True:#is_sum_indecomposable(basis):
             if not interleaving:
                 if can_deflate_interleaving(tiling, cell, rows[cell[0]],
                                             cols[cell[1]]):
@@ -47,7 +47,7 @@ def deflation(tiling, interleaving=True, **kwargs):
                     yield EquivalenceStrategy(formal_step,
                                               deflated_tiling(tiling, cell))
 
-        if is_skew_indecomposable(basis):
+        if True:#is_skew_indecomposable(basis):
             if not interleaving:
                 if can_deflate_interleaving(tiling, cell, rows[cell[0]],
                                             cols[cell[1]], sum_decomp=False):
