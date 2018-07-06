@@ -219,14 +219,23 @@ point_placements = Pack(
                            [requirement_corroboration]],
          name="point_placements")
 
-point_placement_deflation = Pack(
+point_placements_with_deflation = Pack(
+         initial_strats=[factor, requirement_placement, deflation],
+         ver_strats=[subset_verified, globally_verified],
+         inferral_strats=[row_and_column_separation, obstruction_transitivity],
+         expansion_strats=[[all_point_insertions],
+                           [requirement_corroboration]],
+        forward_equivalence=True,
+         name="point_placements_with_deflation")
+
+point_placements_with_deflation_and_fusion = Pack(
          initial_strats=[factor, requirement_placement, deflation, fusion],
          ver_strats=[subset_verified, globally_verified],
          inferral_strats=[row_and_column_separation, obstruction_transitivity],
          expansion_strats=[[all_point_insertions],
                            [requirement_corroboration]],
         forward_equivalence=True,
-         name="point_placement_deflation")
+         name="point_placement_with_deflation_and_fusion")
 
 point_placements_scv = Pack(
          initial_strats=[requirement_placement],
