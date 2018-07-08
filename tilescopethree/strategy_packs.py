@@ -221,8 +221,8 @@ point_placements = Pack(
 
 point_placements_with_deflation = Pack(
          initial_strats=[factor, requirement_placement, deflation],
-         ver_strats=[subset_verified, globally_verified],
-         inferral_strats=[row_and_column_separation, obstruction_transitivity],
+         ver_strats=[subset_verified],
+         inferral_strats=[row_and_column_separation],
          expansion_strats=[[all_point_insertions],
                            [requirement_corroboration]],
         forward_equivalence=True,
@@ -254,6 +254,24 @@ point_placements_with_deflation_and_fusion = Pack(
                            [requirement_corroboration]],
         forward_equivalence=True,
          name="point_placement_with_deflation_and_fusion")
+
+length_2_requirement_with_point_placements_and_deflation_and_fusion = Pack(
+         initial_strats=[factor, deflation, fusion],
+         ver_strats=[subset_verified],
+         inferral_strats=[row_and_column_separation],
+         expansion_strats=[[partial(all_cell_insertions, maxreqlen=2)],
+                           [requirement_placement]],
+         forward_equivalence=True,
+         name="length_2_requirement_with_point_placements_and_deflation_and_fusion")
+
+length_3_requirement_with_point_placements_and_deflation_and_fusion = Pack(
+         initial_strats=[factor, deflation, fusion],
+         ver_strats=[subset_verified],
+         inferral_strats=[row_and_column_separation],
+         expansion_strats=[[partial(all_cell_insertions, maxreqlen=3)],
+                           [requirement_placement]],
+         forward_equivalence=True,
+         name="length_3_requirement_with_point_placements_and_deflation_and_fusion")
 
 point_placements_scv = Pack(
          initial_strats=[requirement_placement],

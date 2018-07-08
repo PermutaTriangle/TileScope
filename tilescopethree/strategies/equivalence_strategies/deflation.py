@@ -13,12 +13,12 @@ def deflation(tiling, **kwargs):
             yield Strategy("Sum deflate cell {}.".format(cell),
                            [deflated_tiling(tiling, cell, sum_decomp=True)],
                            inferable=[True], workable=[True],
-                           ignore_parent=True, constructor="other")
+                           ignore_parent=False, constructor="other")
         if can_deflate(tiling, cell, False):
             yield Strategy("Skew deflate cell {}.".format(cell),
                            [deflated_tiling(tiling, cell, sum_decomp=False)],
                            inferable=[True], workable=[True],
-                           ignore_parent=True, constructor="other")
+                           ignore_parent=False, constructor="other")
 
 def can_deflate(tiling, cell, sum_decomp):
     """Return True if can deflate cell, else False."""
