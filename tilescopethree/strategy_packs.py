@@ -248,7 +248,7 @@ length_3_requirement_with_point_placements_and_deflation = Pack(
 
 point_placements_with_deflation_and_fusion = Pack(
          initial_strats=[factor, requirement_placement, deflation, fusion],
-         ver_strats=[subset_verified, globally_verified],
+         ver_strats=[subset_verified],
          inferral_strats=[row_and_column_separation, obstruction_transitivity],
          expansion_strats=[[all_point_insertions],
                            [requirement_corroboration]],
