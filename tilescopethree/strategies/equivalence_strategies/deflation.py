@@ -50,8 +50,25 @@ def can_deflate(tiling, cell, sum_decomp):
                                          if y == cell])
         if ((sum_decomp and patt_in_cell == Perm((1, 0))) or
                 (not sum_decomp and patt_in_cell == Perm((0, 1)))):
-            deflating = True
+            if point_in_between(ob, row, cell, other_cell):
+                return True
     return deflating
+
+def point_in_between(ob, row, cell, other_cell):
+    """Return true if point in other cell is in between point in cell.
+    Assumes a length 3 pattern, and to be told if row or column."""
+    if row:
+        left = other_cell[0] < cell[0]
+        if left:
+            return ob.patt[0] == 1
+        else:
+            return ob.patt[2] == 1
+    below = other_cell[1] < cell[1]
+    if below:
+        return ob.patt[1] == 0
+    else:
+        return ob.patt[1] == 2
+
 
 def deflated_tiling(tiling, cell, sum_decomp=True):
     """Return tiling where cell is deflated."""
