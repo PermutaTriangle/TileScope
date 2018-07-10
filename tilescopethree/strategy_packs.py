@@ -281,6 +281,90 @@ length_3_requirement_with_pattern_placements_scv = Pack(
                        [requirement_corroboration]],
          name="length_3_requirement_with_pattern_placements_scv")
 
+length_4_requirement_with_point_placements = Pack(
+         initial_strats=[],
+         ver_strats=[subset_verified, globally_verified],
+         inferral_strats=[row_and_column_separation, obstruction_transitivity],
+         expansion_strats=[[factor],
+                           [partial(all_cell_insertions, maxreqlen=4)],
+                           [requirement_placement],
+                           [requirement_corroboration]],
+         name="length_4_requirement_with_point_placements")
+
+length_4_requirement_with_point_placements_scv = Pack(
+         initial_strats=[],
+         ver_strats=[subset_verified, globally_verified,
+                     subclass_verified],
+         inferral_strats=[row_and_column_separation, obstruction_transitivity],
+         expansion_strats=[[factor],
+                           [partial(all_cell_insertions, maxreqlen=4)],
+                           [requirement_placement],
+                           [requirement_corroboration]],
+         name="length_4_requirement_with_point_placements_scv")
+
+length_4_requirement_with_point_placements_db = Pack(
+         initial_strats=[],
+         ver_strats=[subset_verified, globally_verified,
+                     database_verified],
+         inferral_strats=[row_and_column_separation, obstruction_transitivity],
+         expansion_strats=[[factor],
+                           [partial(all_cell_insertions, maxreqlen=4)],
+                           [requirement_placement],
+                           [requirement_corroboration]],
+         name="length_4_requirement_with_point_placements_db")
+
+insertion_length_4_requirement_with_point_placements_db = Pack(
+         initial_strats=[factor, requirement_corroboration,
+                         partial(all_cell_insertions, maxreqlen=4,
+                                 ignore_parent=True)],
+         ver_strats=[subset_verified, globally_verified,
+                     database_verified],
+         inferral_strats=[row_and_column_separation, obstruction_transitivity],
+         expansion_strats=[[requirement_placement]],
+         name="insertion_length_4_requirement_with_point_placements_db")
+
+insertion_length_4_requirement_with_point_placements_scv = Pack(
+         initial_strats=[factor, requirement_corroboration,
+                         partial(all_cell_insertions, maxreqlen=4,
+                                 ignore_parent=True)],
+         ver_strats=[subset_verified, globally_verified,
+                     subclass_verified],
+         inferral_strats=[row_and_column_separation, obstruction_transitivity],
+         expansion_strats=[[requirement_placement]],
+         name="insertion_length_4_requirement_with_point_placements_scv")
+
+length_4_requirement_with_pattern_placements = Pack(
+         initial_strats=[requirement_placement],
+         ver_strats=[subset_verified, globally_verified],
+         inferral_strats=[row_and_column_separation, obstruction_transitivity],
+         expansion_strats=[[partial(factor, unions=True)],
+                           [partial(all_cell_insertions, maxreqlen=4),
+                            partial(all_requirement_extensions, maxreqlen=4)],
+                           [requirement_corroboration]],
+         name="length_4_requirement_with_pattern_placements")
+
+length_4_requirement_with_pattern_placements_db = Pack(
+         initial_strats=[factor, requirement_placement],
+         ver_strats=[subset_verified, globally_verified,
+                     database_verified],
+         inferral_strats=[row_and_column_separation, obstruction_transitivity],
+         expansion_strats=[
+                       [partial(all_cell_insertions, maxreqlen=4),
+                        partial(all_requirement_extensions, maxreqlen=4)],
+                       [requirement_corroboration]],
+         name="length_4_requirement_with_pattern_placements_db")
+
+length_4_requirement_with_pattern_placements_scv = Pack(
+         initial_strats=[factor, requirement_placement],
+         ver_strats=[subset_verified, globally_verified,
+                     subclass_verified],
+         inferral_strats=[row_and_column_separation, obstruction_transitivity],
+         expansion_strats=[
+                       [partial(all_cell_insertions, maxreqlen=4),
+                        partial(all_requirement_extensions, maxreqlen=4)],
+                       [requirement_corroboration]],
+         name="length_4_requirement_with_pattern_placements_scv")
+
 fundamental_point_placement = Pack(
          initial_strats=[point_placement],
          ver_strats=[fundamentally_verified],
