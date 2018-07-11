@@ -219,6 +219,14 @@ point_placements = Pack(
                            [requirement_corroboration]],
          name="point_placements")
 
+insertion_point_placements = Pack(
+         initial_strats=[factor, requirement_corroboration,
+                         partial(all_point_insertions, ignore_parent=True)],
+         ver_strats=[subset_verified, globally_verified],
+         inferral_strats=[row_and_column_separation, obstruction_transitivity],
+         expansion_strats=[[requirement_placement]],
+         name="insertion_point_placements_db")
+
 point_placements_with_deflation = Pack(
          initial_strats=[factor, requirement_placement, deflation],
          ver_strats=[subset_verified],
