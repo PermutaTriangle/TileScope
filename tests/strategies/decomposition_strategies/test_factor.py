@@ -17,7 +17,7 @@ def test_factor_no_unions(simple_tiling,
         obstructions=[Obstruction(Perm((0, 1)), [(0, 0), (0, 0)])],
         requirements=[[Requirement(Perm((0, 1)), [(1, 1), (1, 1)]),
                        Requirement(Perm((0, 1)), [(1, 1), (1, 2)])]])
-    strats = [s.objects for s in factor(tiling)]
+    strats = [s.comb_classes for s in factor(tiling)]
     assert len(strats) == 1
     factors = strats[0]
     assert factors[0] == Tiling(
@@ -26,7 +26,8 @@ def test_factor_no_unions(simple_tiling,
     assert factors[1] == Tiling(
         obstructions=[Obstruction(Perm((0, 1)), [(0, 0), (0, 0)])])
 
-    strats = [s.objects for s in factor(diverse_tiling, interleaving=True)]
+    strats = [s.comb_classes
+              for s in factor(diverse_tiling, interleaving=True)]
     assert len(strats) == 1
     factors = strats[0]
     assert len(factors) == 4

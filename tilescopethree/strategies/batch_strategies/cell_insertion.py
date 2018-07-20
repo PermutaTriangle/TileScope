@@ -1,8 +1,8 @@
 """The cell insertion strategy checks whether a cell is empty or contains a
 point"""
 
-from comb_spec_searcher import BatchStrategy
-from permuta import Av
+from comb_spec_searcher import Strategy
+from permuta import Av, Perm
 
 
 def all_cell_insertions(tiling, **kwargs):
@@ -22,17 +22,29 @@ def all_cell_insertions(tiling, **kwargs):
     maxreqlen = kwargs.get('maxreqlen')
     if not maxreqlen:
         maxreqlen = 1
+    ignore_parent = kwargs.get('ignore_parent', False)
+    extra_basis = kwargs.get('extra_basis')
+    if extra_basis is None:
+        extra_basis = []
+    if (not isinstance(extra_basis, list) or
+            not all(isinstance(p, Perm) for p in extra_basis)):
+        raise TypeError("'extra_basis' flag should be a list of Perm to avoid")
 
     active = tiling.active_cells
     positive = tiling.positive_cells
     bdict = tiling.cell_basis()
     for cell in (active - positive):
         for length in range(1, maxreqlen + 1):
-            for patt in Av(bdict[cell][0]).of_length(length):
-                yield BatchStrategy(
+            for patt in Av(bdict[cell][0] + extra_basis).of_length(length):
+                yield Strategy(
                     formal_step="Insert {} into cell {}.".format(patt, cell),
-                    objects=[tiling.add_single_cell_obstruction(patt, cell),
-                             tiling.add_single_cell_requirement(patt, cell)])
+                    comb_classes=[
+                            tiling.add_single_cell_obstruction(patt, cell),
+                            tiling.add_single_cell_requirement(patt, cell)],
+                    ignore_parent=ignore_parent,
+                    inferable=[True for _ in range(2)],
+                    workable=[True for _ in range(2)],
+                    constructor='disjoint')
 
 
 def root_requirement_insertion(tiling, **kwargs):
@@ -52,6 +64,13 @@ def all_requirement_extensions(tiling, **kwargs):
     maxreqlen = kwargs.get('maxreqlen')
     if not maxreqlen:
         maxreqlen = 2
+    extra_basis = kwargs.get('extra_basis')
+    if extra_basis is None:
+        extra_basis = []
+    if (not isinstance(extra_basis, list) or
+            not all(isinstance(p, Perm) for p in extra_basis)):
+        raise TypeError("'extra_basis' flag should be a list of Perm to avoid")
+
     active = tiling.active_cells
     bdict = tiling.cell_basis()
     for cell in active:
@@ -61,12 +80,15 @@ def all_requirement_extensions(tiling, **kwargs):
             continue
         curr_req = reqs[0]
         for length in range(len(curr_req) + 1, maxreqlen + 1):
-            for patt in Av(bdict[cell][0]).of_length(length):
+            for patt in Av(bdict[cell][0] + extra_basis).of_length(length):
                 if curr_req in patt:
-                    yield BatchStrategy(
-                        formal_step="Insert {} into cell {}.".format(patt,
-                                                                     cell),
-                        objects=[tiling.add_single_cell_obstruction(patt,
-                                                                    cell),
-                                 tiling.add_single_cell_requirement(patt,
-                                                                    cell)])
+                    yield Strategy(
+                        formal_step=("Insert {} into cell {}."
+                                     "".format(patt, cell)),
+                        comb_classes=[
+                            tiling.add_single_cell_obstruction(patt, cell),
+                            tiling.add_single_cell_requirement(patt, cell)],
+                        ignore_parent=False,
+                        inferable=[True for _ in range(2)],
+                        workable=[True for _ in range(2)],
+                        constructor='disjoint')
