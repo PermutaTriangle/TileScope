@@ -9,9 +9,6 @@ def empty_cell_inferral(tiling, **kwargs):
     The strategy considers each active but non-positive cell and inserts a
     point requirement. If the resulting tiling is empty, then a point
     obstruction can be added into the cell, i.e. the cell is empty."""
-    if tiling.is_empty():
-        return InferralStrategy("The tiling is empty",
-                                Tiling([Obstruction.empty_perm()]))
     active = set(tiling.active_cells)
     positive = set(tiling.positive_cells)
     empty_cells = []

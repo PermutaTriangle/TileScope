@@ -8,7 +8,7 @@ pytest_plugins = [
 
 
 def test_insertion_encoding(positive_one_by_one):
-    strats = [s.objects for s in insertion_encoding(positive_one_by_one)]
+    strats = [s.comb_classes for s in insertion_encoding(positive_one_by_one)]
     assert len(strats) == 1
     strat = strats[0]
     for t in strat:
