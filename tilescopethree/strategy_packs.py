@@ -3,6 +3,7 @@ from functools import partial
 from tilescopethree.strategies import (all_cell_insertions,
                                        all_point_insertions,
                                        all_requirement_extensions,
+                                       root_requirement_insertion,
                                        database_verified,
                                        empty_cell_inferral, factor, fusion,
                                        globally_verified,
@@ -567,6 +568,26 @@ length_4_requirement_with_pattern_placements_scv = Pack(
                         partial(all_requirement_extensions, maxreqlen=4)],
                        [requirement_corroboration]],
          name="length_4_requirement_with_pattern_placements_scv")
+
+length_3_root_requirement_with_point_placements_db = Pack(
+         initial_strats=[requirement_placement, factor,
+                         requirement_corroboration],
+         ver_strats=[subset_verified, globally_verified,
+                     database_verified],
+         inferral_strats=[row_and_column_separation, obstruction_transitivity],
+         expansion_strats=[[partial(all_point_insertions, ignore_parent=True),
+                            partial(root_requirement_insertion, maxreqlen=3)]],
+         name="length_3_root_requirement_with_point_placements_db")
+
+length_4_root_requirement_with_point_placements_db = Pack(
+         initial_strats=[requirement_placement, factor,
+                         requirement_corroboration],
+         ver_strats=[subset_verified, globally_verified,
+                     database_verified],
+         inferral_strats=[row_and_column_separation, obstruction_transitivity],
+         expansion_strats=[[partial(all_point_insertions, ignore_parent=True),
+                            partial(root_requirement_insertion, maxreqlen=4)]],
+         name="length_4_root_requirement_with_point_placements_db")
 
 fundamental_point_placement = Pack(
          initial_strats=[point_placement],
