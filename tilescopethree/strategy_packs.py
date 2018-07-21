@@ -30,7 +30,7 @@ insertion_point_placements = Pack(
          ver_strats=[subset_verified, globally_verified],
          inferral_strats=[row_and_column_separation, obstruction_transitivity],
          expansion_strats=[[requirement_placement]],
-         name="insertion_point_placements_db")
+         name="insertion_point_placements")
 
 point_placements_with_deflation = Pack(
          initial_strats=[factor, requirement_placement, deflation],

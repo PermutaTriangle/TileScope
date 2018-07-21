@@ -201,6 +201,7 @@ class Specification(object):
                     start_label = node.eqv_path_labels[i]
                     end_labels = [node.eqv_path_labels[i + 1]]
                     formal_step = node.eqv_explanations[i]
+
                     self.rules[first] = Rule(first, [second], start_label,
                                              end_labels, formal_step)
             if node.recursion:
@@ -211,7 +212,15 @@ class Specification(object):
             start_label = node.eqv_path_labels[-1]
             end_labels = [child.eqv_path_labels[0] for child in node.children]
             formal_step = node.formal_step
-            assert (start_tiling not in self.rules or node.strategy_verified), "More than one rule with same left hand side"
+            if "Greedily placing point" in formal_step:
+                continue
+            if "Reverse of" in formal_step:
+                continue
+            if not (start_tiling not in self.rules or node.strategy_verified):
+                print(start_tiling)
+                print(formal_step)
+                print(start_label)
+            # assert (start_tiling not in self.rules or node.strategy_verified), "More than one rule with same left hand side"
             self.rules[start_tiling] = Rule(start_tiling, end_tilings,
                                             start_label, end_labels,
                                             formal_step)
@@ -324,17 +333,17 @@ class Specification(object):
         for tiling, rule in self.rules.items():
             label = rule.start_label
             func = self.get_function(label)
-            empty_variables = []
-            for region, variable in zip(self.regions, self.variables):
-                if tiling not in region:
-                    empty_variables.append(variable)
-            # assert len(empty_variables) < 8, "There are too many variables"
-            for i in range(1, len(empty_variables) + 1):
-                for subset in combinations(empty_variables, i):
-                    subs = {v: 1 for v in subset}
-                    lhs = func
-                    rhs = func.subs(subs)
-                    eqs.add(Eq(lhs, rhs))
+        empty_variables = []
+        for region, variable in zip(self.regions, self.variables):
+            if tiling not in region:
+                empty_variables.append(variable)
+        # assert len(empty_variables) < 8, "There are too many variables"
+        for i in range(1, len(empty_variables) + 1):
+            for subset in combinations(empty_variables, i):
+                subs = {v: 1 for v in subset}
+                lhs = func
+                rhs = func.subs(subs)
+                eqs.add(Eq(lhs, rhs))
         return eqs
 
 def get_genf_with_region(tiling, regions_to_track, variables, root_func, root_class):
