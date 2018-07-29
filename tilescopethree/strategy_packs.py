@@ -339,14 +339,12 @@ length_2_requirement_with_point_placements_scv = Pack(
          name="length_2_requirement_with_point_placements_scv")
 
 length_2_requirement_with_point_placements_db = Pack(
-         initial_strats=[],
+         initial_strats=[factor, requirement_corroboration],
          ver_strats=[subset_verified, globally_verified,
                      database_verified],
          inferral_strats=[row_and_column_separation, obstruction_transitivity],
-         expansion_strats=[[factor],
-                           [partial(all_cell_insertions, maxreqlen=2)],
-                           [requirement_placement],
-                           [requirement_corroboration]],
+         expansion_strats=[[partial(all_cell_insertions, maxreqlen=2)],
+                           [requirement_placement]],
          name="length_2_requirement_with_point_placements_db")
 
 insertion_length_2_requirement_with_point_placements_scv = Pack(
@@ -423,14 +421,12 @@ length_3_requirement_with_point_placements_scv = Pack(
          name="length_3_requirement_with_point_placements_scv")
 
 length_3_requirement_with_point_placements_db = Pack(
-         initial_strats=[],
+         initial_strats=[factor, requirement_corroboration],
          ver_strats=[subset_verified, globally_verified,
                      database_verified],
          inferral_strats=[row_and_column_separation, obstruction_transitivity],
-         expansion_strats=[[factor],
-                           [partial(all_cell_insertions, maxreqlen=3)],
-                           [requirement_placement],
-                           [requirement_corroboration]],
+         expansion_strats=[[partial(all_cell_insertions, maxreqlen=3)],
+                           [requirement_placement]],
          name="length_3_requirement_with_point_placements_db")
 
 insertion_length_3_requirement_with_point_placements_db = Pack(
@@ -464,25 +460,23 @@ length_3_requirement_with_pattern_placements = Pack(
          name="length_3_requirement_with_pattern_placements")
 
 length_3_requirement_with_pattern_placements_db = Pack(
-         initial_strats=[factor, requirement_placement],
-         ver_strats=[subset_verified, globally_verified,
-                     database_verified],
+         initial_strats=[requirement_placement],
+         ver_strats=[subset_verified, globally_verified, database_verified],
          inferral_strats=[row_and_column_separation, obstruction_transitivity],
-         expansion_strats=[
-                       [partial(all_cell_insertions, maxreqlen=3),
-                        partial(all_requirement_extensions, maxreqlen=3)],
-                       [requirement_corroboration]],
+         expansion_strats=[[partial(factor, unions=True)],
+                           [partial(all_cell_insertions, maxreqlen=3),
+                            partial(all_requirement_extensions, maxreqlen=3)],
+                           [requirement_corroboration]],
          name="length_3_requirement_with_pattern_placements_db")
 
 length_3_requirement_with_pattern_placements_scv = Pack(
-         initial_strats=[factor, requirement_placement],
-         ver_strats=[subset_verified, globally_verified,
-                     subclass_verified],
+         initial_strats=[requirement_placement],
+         ver_strats=[subset_verified, globally_verified, subclass_verified],
          inferral_strats=[row_and_column_separation, obstruction_transitivity],
-         expansion_strats=[
-                       [partial(all_cell_insertions, maxreqlen=3),
-                        partial(all_requirement_extensions, maxreqlen=3)],
-                       [requirement_corroboration]],
+         expansion_strats=[[partial(factor, unions=True)],
+                           [partial(all_cell_insertions, maxreqlen=3),
+                            partial(all_requirement_extensions, maxreqlen=3)],
+                           [requirement_corroboration]],
          name="length_3_requirement_with_pattern_placements_scv")
 
 length_4_requirement_with_point_placements = Pack(
@@ -507,14 +501,12 @@ length_4_requirement_with_point_placements_scv = Pack(
          name="length_4_requirement_with_point_placements_scv")
 
 length_4_requirement_with_point_placements_db = Pack(
-         initial_strats=[],
+         initial_strats=[factor, requirement_corroboration],
          ver_strats=[subset_verified, globally_verified,
                      database_verified],
          inferral_strats=[row_and_column_separation, obstruction_transitivity],
-         expansion_strats=[[factor],
-                           [partial(all_cell_insertions, maxreqlen=4)],
-                           [requirement_placement],
-                           [requirement_corroboration]],
+         expansion_strats=[[partial(all_cell_insertions, maxreqlen=4)],
+                           [requirement_placement]],
          name="length_4_requirement_with_point_placements_db")
 
 insertion_length_4_requirement_with_point_placements_db = Pack(
@@ -548,25 +540,23 @@ length_4_requirement_with_pattern_placements = Pack(
          name="length_4_requirement_with_pattern_placements")
 
 length_4_requirement_with_pattern_placements_db = Pack(
-         initial_strats=[factor, requirement_placement],
-         ver_strats=[subset_verified, globally_verified,
-                     database_verified],
+         initial_strats=[requirement_placement],
+         ver_strats=[subset_verified, globally_verified, database_verified],
          inferral_strats=[row_and_column_separation, obstruction_transitivity],
-         expansion_strats=[
-                       [partial(all_cell_insertions, maxreqlen=4),
-                        partial(all_requirement_extensions, maxreqlen=4)],
-                       [requirement_corroboration]],
+         expansion_strats=[[partial(factor, unions=True)],
+                           [partial(all_cell_insertions, maxreqlen=4),
+                            partial(all_requirement_extensions, maxreqlen=4)],
+                           [requirement_corroboration]],
          name="length_4_requirement_with_pattern_placements_db")
 
 length_4_requirement_with_pattern_placements_scv = Pack(
-         initial_strats=[factor, requirement_placement],
-         ver_strats=[subset_verified, globally_verified,
-                     subclass_verified],
+         initial_strats=[requirement_placement],
+         ver_strats=[subset_verified, globally_verified, subclass_verified],
          inferral_strats=[row_and_column_separation, obstruction_transitivity],
-         expansion_strats=[
-                       [partial(all_cell_insertions, maxreqlen=4),
-                        partial(all_requirement_extensions, maxreqlen=4)],
-                       [requirement_corroboration]],
+         expansion_strats=[[partial(factor, unions=True)],
+                           [partial(all_cell_insertions, maxreqlen=4),
+                            partial(all_requirement_extensions, maxreqlen=4)],
+                           [requirement_corroboration]],
          name="length_4_requirement_with_pattern_placements_scv")
 
 length_3_root_requirement_with_point_placements_db = Pack(
@@ -575,17 +565,17 @@ length_3_root_requirement_with_point_placements_db = Pack(
          ver_strats=[subset_verified, globally_verified,
                      database_verified],
          inferral_strats=[row_and_column_separation, obstruction_transitivity],
-         expansion_strats=[[partial(all_point_insertions, ignore_parent=True),
+         expansion_strats=[[all_point_insertions,
                             partial(root_requirement_insertion, maxreqlen=3)]],
          name="length_3_root_requirement_with_point_placements_db")
 
 length_4_root_requirement_with_point_placements_db = Pack(
-         initial_strats=[requirement_placement, factor,
-                         requirement_corroboration],
+         initial_strats=[factor, requirement_corroboration,
+                         requirement_placement],
          ver_strats=[subset_verified, globally_verified,
                      database_verified],
          inferral_strats=[row_and_column_separation, obstruction_transitivity],
-         expansion_strats=[[partial(all_point_insertions, ignore_parent=True),
+         expansion_strats=[[all_point_insertions,
                             partial(root_requirement_insertion, maxreqlen=4)]],
          name="length_4_root_requirement_with_point_placements_db")
 
