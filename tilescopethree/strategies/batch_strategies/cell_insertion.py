@@ -45,6 +45,7 @@ def all_cell_insertions(tiling, **kwargs):
                             tiling.add_single_cell_requirement(patt, cell)],
                     ignore_parent=ignore_parent,
                     inferable=[True for _ in range(2)],
+                    possibly_empty=[False, True],
                     workable=[True for _ in range(2)],
                     constructor='disjoint')
 
@@ -91,6 +92,7 @@ def all_requirement_extensions(tiling, **kwargs):
                             tiling.add_single_cell_obstruction(patt, cell),
                             tiling.add_single_cell_requirement(patt, cell)],
                         ignore_parent=False,
+                        possibly_empty=[False, True],
                         inferable=[True for _ in range(2)],
                         workable=[True for _ in range(2)],
                         constructor='disjoint')
