@@ -92,6 +92,7 @@ def factor(tiling, **kwargs):
 
     yield Strategy("The factors of the tiling.", strategy,
                    inferable=[False for _ in strategy], workable=work,
+                   possibly_empty=[False for _ in strategy],
                    ignore_parent=kwargs.get("workable", True),
                    constructor='cartesian')
 
@@ -104,6 +105,7 @@ def factor(tiling, **kwargs):
                                        requirements=chain(*requirements)))
             yield Strategy("The union of factors of the tiling",
                            strategy,
+                           possibly_empty=[False for _ in strategy],
                            inferable=[False for _ in strategy],
                            workable=[False for _ in strategy],
                            constructor='cartesian')

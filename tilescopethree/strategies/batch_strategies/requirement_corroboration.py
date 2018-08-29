@@ -34,6 +34,7 @@ def requirement_corroboration(tiling, basis, **kwargs):
                         Obstruction(req.patt, req.pos),),
                            requirements=tiling.requirements)],
                 ignore_parent=True,
+                possibly_empty=[True, True],
                 workable=[True for _ in range(2)],
                 inferable=[True for _ in range(2)],
                 constructor='disjoint')
