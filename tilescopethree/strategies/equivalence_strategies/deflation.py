@@ -12,13 +12,15 @@ def deflation(tiling, **kwargs):
         if can_deflate(tiling, cell, True):
             yield Strategy("Sum deflate cell {}.".format(cell),
                            [deflated_tiling(tiling, cell, sum_decomp=True)],
-                           inferable=[True], workable=[True],
-                           ignore_parent=False, constructor="other")
+                           inferable=[True], workable=[True], 
+                           possibly_empty=[False], ignore_parent=False, 
+                           constructor="other")
         if can_deflate(tiling, cell, False):
             yield Strategy("Skew deflate cell {}.".format(cell),
                            [deflated_tiling(tiling, cell, sum_decomp=False)],
-                           inferable=[True], workable=[True],
-                           ignore_parent=False, constructor="other")
+                           inferable=[True], workable=[True], 
+                           possibly_empty=[False], ignore_parent=False, 
+                           constructor="other")
 
 def can_deflate(tiling, cell, sum_decomp):
     """Return True if can deflate cell, else False."""
@@ -26,23 +28,27 @@ def can_deflate(tiling, cell, sum_decomp):
     col = tiling.only_cell_in_row(cell)
     if not row and not col:
         return False
-    deflating = False
+    deflating = set()
     sumpatt = Obstruction.single_cell(Perm((1, 0)) if sum_decomp
                                       else Perm((0, 1)), cell)
     for ob in tiling.obstructions:
         if ob == sumpatt:
             return False
-        if ob.is_single_cell() or len(ob) <= 2 or not ob.occupies(cell):
+        if ob.is_single_cell() or not ob.occupies(cell):
+            continue
+        if len(ob) == 2:
+            other_cell = [c for c in ob.pos if c != cell][0]
+            deflating.add(other_cell)
             continue
         n = sum(1 for c in ob.pos if c == cell)
         if n == 1:
             continue
-        if n != 2 or len(ob) > 3:
+        if n > 2 or len(ob) > 3:
             if sum(1 for c in ob.pos if c != cell) != 1:
                 return False
         other_cell = [c for c in ob.pos if c != cell][0]
         if ((row and other_cell[1] != cell[1]) or
-                (not row and other_cell[0] != cell[0])):
+                (col and other_cell[0] != cell[0])):
             return False
         if ob.patt.is_decreasing() or ob.patt.is_increasing():
             continue
@@ -51,8 +57,9 @@ def can_deflate(tiling, cell, sum_decomp):
         if ((sum_decomp and patt_in_cell == Perm((1, 0))) or
                 (not sum_decomp and patt_in_cell == Perm((0, 1)))):
             if point_in_between(ob, row, cell, other_cell):
-                return True
-    return deflating
+                deflating.add(other_cell)
+    return ((not col or deflating >= set(tiling.cells_in_col(cell[0]))) 
+            and (not row or deflating >= set(tiling.cells_in_row(cell[1]))))
 
 def point_in_between(ob, row, cell, other_cell):
     """Return true if point in other cell is in between point in cell.
