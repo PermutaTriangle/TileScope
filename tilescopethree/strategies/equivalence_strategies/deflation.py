@@ -48,7 +48,6 @@ def can_deflate(tiling, cell, sum_decomp):
     
     for ob in tiling.obstructions:
         if ob == deflate_patt:
-            print("1")
             return False
         if ob.is_single_cell() or not ob.occupies(cell):
             continue
@@ -61,12 +60,10 @@ def can_deflate(tiling, cell, sum_decomp):
                 cells_not_interleaving.add(other_cell)
         elif number_points_in_cell == 2:
             if len(ob) != 3:
-                print(2)
                 return False
             patt_in_cell = ob.get_gridded_perm_in_cells((cell, ))
             if patt_in_cell != deflate_patt:
                 # you can interleave with components
-                print(3)
                 return False
             # we need the other cell to be in between the intended deflate 
             # patt in either the row or column
@@ -76,20 +73,11 @@ def can_deflate(tiling, cell, sum_decomp):
                 # this cell does not interleave with inflated components
                 cells_not_interleaving.add(other_cell)
             else:
-                print(4)
                 return False
         elif number_points_in_cell >= 3:
             # you can interleave with components
-            print(5)
             return False
     # check that do not interleave with any cells in row or column.
-    if (cells_not_interleaving >= tiling.cells_in_row(cell[1]) and
-            cells_not_interleaving >= tiling.cells_in_col(cell[0])):
-        print(cell)
-        print(tiling.to_old_tiling())
-        print(repr(tiling))
-        print()
-    print(6)
     return (cells_not_interleaving >= tiling.cells_in_row(cell[1]) and
             cells_not_interleaving >= tiling.cells_in_col(cell[0]))
             

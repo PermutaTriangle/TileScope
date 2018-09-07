@@ -939,6 +939,15 @@ point_placements_with_fusion = Pack(
          forward_equivalence=True,
          name="point_placements_with_fusion")
 
+point_placements_with_int_fusion = Pack(
+         initial_strats=[factor, requirement_placement, 
+                         fusion_with_interleaving],
+         ver_strats=[subset_verified],
+         inferral_strats=[row_and_column_separation],
+         expansion_strats=[[all_point_insertions]],
+         forward_equivalence=True,
+         name="point_placements_with_int_fusion")
+
 length_2_requirement_with_point_placements_and_fusion = Pack(
          initial_strats=[factor, fusion],
          ver_strats=[subset_verified],

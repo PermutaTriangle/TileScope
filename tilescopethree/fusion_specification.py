@@ -93,7 +93,6 @@ class Rule(object):
         """Will return an equation, (or in some special cases a tuple of
         equations) which enumerate the rule."""
         lhs = get_function(self.start_label)
-
         def get_subs(out_index):
             out_tiling = self.end_tilings[out_index]
             subs = {}
@@ -201,7 +200,8 @@ class Specification(object):
                     start_label = node.eqv_path_labels[i]
                     end_labels = [node.eqv_path_labels[i + 1]]
                     formal_step = node.eqv_explanations[i]
-
+                    if "Reverse of" in formal_step:
+                        continue
                     self.rules[first] = Rule(first, [second], start_label,
                                              end_labels, formal_step)
             if node.recursion:
@@ -213,8 +213,6 @@ class Specification(object):
             end_labels = [child.eqv_path_labels[0] for child in node.children]
             formal_step = node.formal_step
             if "Greedily placing point" in formal_step:
-                continue
-            if "Reverse of" in formal_step:
                 continue
             if not (start_tiling not in self.rules or node.strategy_verified):
                 print(start_tiling)
@@ -262,7 +260,10 @@ class Specification(object):
         """Return a list where each entry is a dictionary pointing from tilings to a
         region that needs tracked by a catalytic variable."""
         regions = []
+        print(len(self.fusion_regions))
         for tiling, region in self.fusion_regions:
+            print("============================================================Tracking============================================================")
+            print(tiling.to_old_tiling())
             tiling_to_region = {tiling: set(region)}
             queue = [tiling]
             while queue:
@@ -274,14 +275,23 @@ class Specification(object):
                 if "The tiling is a subset of the class" in rule.formal_step:
                     continue
                 assert len(rule.regions) == len(rule.end_tilings), "length of regions and end_tilings do not match up in rule"
+                print()
+                print(curr.to_old_tiling())
+                print(rule.formal_step)
+                print(tiling_to_region[curr])
                 for t, r in zip(rule.end_tilings, rule.regions):
                     region = union_reduce(r[c] for c in tiling_to_region[curr]
                                           if c in r)
                     if t in tiling_to_region:
-                        # print(t.to_old_tiling())
-                        # print(region, tiling_to_region[t])
-                        assert (not region or not tiling_to_region[t] or
-                                region == tiling_to_region[t]), "need a substitution other than y = 1, new variable?"
+                        print(t.to_old_tiling())
+                        print("need to track:", region)
+                        print("already tracking:", tiling_to_region[t])
+                        if (region or tiling_to_region[t]) and not region == tiling_to_region[t]:
+                            if not any(r[t] == region for r in regions):
+                                self.fusion_regions.append((t, region))
+
+                        # assert (not region or not tiling_to_region[t] or
+                        #         region == tiling_to_region[t]), "need a substitution other than y = 1, new variable?"
                         if tiling_to_region[t] < region:
                             assert tiling_to_region[t] != region, "need a substitution other than y = 1, new variable?"
                             queue.append(t)
