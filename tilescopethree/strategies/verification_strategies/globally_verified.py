@@ -29,7 +29,6 @@ def possible_tautology(tiling):
             return False 
     return True
 
-
 def fundamentally_verified(tiling, **kwargs):
     """A tiling is fundamentally verified if it is globally verified and has no
     interleaving cells."""

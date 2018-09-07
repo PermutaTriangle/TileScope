@@ -3490,7 +3490,6 @@ database = {Tiling(obstructions=(Obstruction(Perm((0, 1)), ((0, 0), (0, 0))),
                    requirements=((Requirement(Perm((0,)), ((0, 0),)),),
                                  (Requirement(Perm((0,)), ((1, 0),)),))), }
 
-
 def database_verified(tiling, **kwargs):
     if tiling in database:
         return VerificationStrategy("Already in database!")
