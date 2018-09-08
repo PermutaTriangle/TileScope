@@ -56,18 +56,34 @@ def fusable(tiling, row_index, bases, row=True, **kwargs):
         # through it in every way so that it crosses to the secoond cell
         #TODO: Should we be worried about obstruction going only to the 
         #      second cell?
+        special_cell = None
         if ob.occupies(first_cell) and not ob.occupies(second_cell):
             # the point in the first cell
             in_cell = [(idx, val) for idx, val in enumerate(ob.patt) 
                        if ob.pos[idx] == first_cell]
             if row:
                 in_cell = sorted(in_cell, key=lambda x: (x[1], x[0]))
-            # place i points in bottom cell, rest in top.
-            for i in range(1, len(in_cell)):
-                maxdex = [point[0] for point in in_cell[i:]]
-                pos = [second_cell if i in maxdex else c 
-                       for i, c in enumerate(ob.pos)]
-                obstructions_to_add.append(Obstruction(ob.patt, pos))
+            special_cell = second_cell
+        elif ob.occupies(second_cell) and not ob.occupies(first_cell):
+            in_cell = [(idx, val) for idx, val in enumerate(ob.patt) 
+                       if ob.pos[idx] == second_cell]
+            if row:
+                in_cell = sorted(in_cell, key=lambda x: -x[1])
+            else:
+                in_cell = sorted(in_cell, key=lambda x: -x[0])
+            special_cell = first_cell
+        else:
+            continue
+        # place i points in bottom cell, rest in top.
+        print(repr(ob))
+        print(row_index, row)
+        for i in range(len(in_cell)):
+            maxdex = [point[0] for point in in_cell[i:]]
+            pos = [special_cell if i in maxdex else c 
+                   for i, c in enumerate(ob.pos)]
+            print(repr(Obstruction(ob.patt, pos)))
+            obstructions_to_add.append(Obstruction(ob.patt, pos))
+        print()
     # if the tiling is unchanged, then the previous obstruction imply all those
     #  obstructions that needed to be added, and therefore we can think of this
     #  as one row with a line drawn through it
