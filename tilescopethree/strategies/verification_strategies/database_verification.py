@@ -2,7 +2,10 @@
 
 from comb_spec_searcher import VerificationStrategy
 from grids_three import Tiling, Obstruction, Requirement
+from tilescopethree.strategies.decomposition_strategies.factor import factor
 from permuta import Perm
+from grids_three.misc import union_reduce
+from permuta.misc import UnionFind
 
 
 database = {Tiling(obstructions=(Obstruction(Perm((0, 1)), ((0, 0), (0, 0))),
@@ -3489,6 +3492,103 @@ database = {Tiling(obstructions=(Obstruction(Perm((0, 1)), ((0, 0), (0, 0))),
                                  Obstruction(Perm((0, 1, 2)), ((0, 0), (0, 0), (1, 0)))),
                    requirements=((Requirement(Perm((0,)), ((0, 0),)),),
                                  (Requirement(Perm((0,)), ((1, 0),)),))), }
+
+def twist_one_by_ones(tiling):
+    """
+    The factor strategy that decomposes a tiling into its connected factors.
+
+    The factors are the connected components of the graph of the tiling, where
+    vertices are the cells. Two vertices are connected if there exists a
+    obstruction or requirement occupying both cells. Two cells are also
+    connected if they share the same row or column unless the interleaving or
+    point_interleaving keyword arguments are set to True.
+    When point interleavings are allowed, two cells in the same row or column
+    are not connected. When general interleavings are allowed, two cells in the
+    same row or column are not connected.
+    """
+    interleaving = True
+    n, m = tiling.dimensions
+
+    def cell_to_int(cell):
+        return cell[0] * m + cell[1]
+
+    def int_to_cell(i):
+        return (i // m, i % m)
+
+    cells = list(tiling.active_cells)
+    uf = UnionFind(n * m)
+
+    # Unite by obstructions
+    for ob in tiling.obstructions:
+        for i in range(len(ob.pos)):
+            for j in range(i+1, len(ob.pos)):
+                uf.unite(cell_to_int(ob.pos[i]), cell_to_int(ob.pos[j]))
+
+    # Unite by requirements
+    for req_list in tiling.requirements:
+        req_cells = list(union_reduce(req.pos for req in req_list))
+        for i in range(len(req_cells)):
+            for j in range(i + 1, len(req_cells)):
+                uf.unite(cell_to_int(req_cells[i]), cell_to_int(req_cells[j]))
+
+    # Collect the connected components of the cells
+    all_components = {}
+    for cell in cells:
+        i = uf.find(cell_to_int(cell))
+        if i in all_components:
+            all_components[i].append(cell)
+        else:
+            all_components[i] = [cell]
+    component_cells = list(set(cells) for cells in all_components.values())
+
+    # If the tiling is a single connected component
+    if len(component_cells) <= 1:
+        return
+
+    # Collect the factors of the tiling
+    factors = []
+    strategy = []  # the vanilla factors
+    one_by_ones = []
+    for cell_component in component_cells:
+        if len(cell_component) == 1:
+            one_by_ones.extend(c for c in cell_component)
+        obstructions = [ob for ob in tiling.obstructions
+                        if ob.pos[0] in cell_component]
+        requirements = [req for req in tiling.requirements
+                        if req[0].pos[0] in cell_component]
+
+        if obstructions or requirements:
+            factors.append((obstructions, requirements))
+            strategy.append(Tiling(obstructions=obstructions,
+                                   requirements=requirements))
+
+    twists = []                
+    for cell in one_by_ones:
+        if tiling.cell_basis()[cell][0] == [Perm((0,1))] and tiling.cell_basis()[cell][1] == []:
+            # This is disgusting
+            # TODO Here I'm skipping requirements, and only doing the flip I'm interested in
+            # TODO Also need to consider combinations of flips (i.e., flip more than one 1x1 at a time)
+            # print(tiling.obstructions)
+            new_obs = list(tiling.obstructions)
+            new_obs.remove(Obstruction(Perm((0, 1)), (cell, cell)))
+            new_obs.append(Obstruction(Perm((1, 0)), (cell, cell)))
+            new_tiling = Tiling(tuple(new_obs), tiling.requirements)
+            # print(new_tiling.to_old_tiling())
+            twists.append(new_tiling)
+
+    if len(twists) > 1:
+        # print(tiling.to_old_tiling())
+        # print('')
+        for t in twists:
+            print(t.to_old_tiling())
+        # print('xxxxxxxxxxxxxxxxxxxxxxx')
+    return set(twists)
+
+twists = set()
+for tiling in database:
+    these_twists = twist_one_by_ones(tiling)
+    if these_twists: twists.update(these_twists)
+database.update(twists)
 
 def database_verified(tiling, **kwargs):
     if tiling in database:
