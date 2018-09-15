@@ -3495,7 +3495,8 @@ database = {Tiling(obstructions=(Obstruction(Perm((0, 1)), ((0, 0), (0, 0))),
                                  Obstruction(Perm((0, 1, 2)), ((0, 0), (0, 0), (0, 1))),
                                  Obstruction(Perm((0, 1, 2)), ((0, 0), (0, 0), (1, 0)))),
                    requirements=((Requirement(Perm((0,)), ((0, 0),)),),
-                                 (Requirement(Perm((0,)), ((1, 0),)),))), }
+                                 (Requirement(Perm((0,)), ((1, 0),)),))), None}
+
 
 def twist_one_by_ones(tiling):
     """
@@ -3536,22 +3537,13 @@ def twist_one_by_ones(tiling):
                              for p in sym_co])
             twists.add(Tiling(twisted_obs, twisted_reqs))
 
-    if len(twists) > 1:
-        # print(tiling.to_old_tiling())
-        # print('')
-        for t in twists:
-            print(t.to_old_tiling())
-            for o in t.obstructions:
-                if not o.is_single_cell():
-                    print(repr(o))
-        # print('xxxxxxxxxxxxxxxxxxxxxxx')
     return set(twists)
 
 
 seen = set()
-def get_twists(database):
+def get_twists(db):
     twists = set()
-    for tiling in database:
+    for tiling in db:
         if tiling in seen:
             continue
         twists |= twist_one_by_ones(tiling)
@@ -3561,23 +3553,24 @@ def get_twists(database):
 til_syms = [Tiling.reverse, Tiling.complement, Tiling.inverse, 
             Tiling.antidiagonal, Tiling.rotate270, Tiling.rotate180, 
             Tiling.rotate90]
-def get_symmetry(database):
+
+def get_symmetry(db):
     sym_database = set()
-    for tiling in database:
+    for tiling in db:
         sym_database.add(tiling)
         for sym in til_syms:
             sym_database.add(sym(tiling))
     return sym_database
+    
 
-database = get_symmetry(database)
-
-while True:
-    new_database = get_symmetry(get_twists(database))
-    if new_database <= database:
-        break
-    database.update(new_database)
-
-
-def database_verified(tiling, **kwargs):
+def database_verified(tiling, database=database, **kwargs):
+    if None in database:
+        database.remove(None)
+        new_database = get_symmetry(database)
+        while True:
+            new_database = get_symmetry(get_twists(new_database))
+            if new_database <= database:
+                break
+            database.update(new_database)
     if tiling in database:
         return VerificationStrategy("Already in database!")
