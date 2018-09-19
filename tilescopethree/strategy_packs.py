@@ -13,7 +13,17 @@ from tilescopethree.strategies import (all_cell_insertions,
                                        requirement_corroboration,
                                        row_and_column_separation,
                                        subset_verified, insertion_encoding,
-                                       subclass_verified)
+                                       subclass_verified, all_row_insertions,
+                                       requirement_placement)
+
+row_col_placements = Pack(
+        initial_strats=[],
+        ver_strats=[subset_verified, globally_verified],
+        inferral_strats=[row_and_column_separation, obstruction_transitivity],
+        expansion_strats=[[factor], [all_row_insertions, requirement_placement], 
+                          [requirement_corroboration]],
+        name="row_placements"
+)
 
 point_placements = Pack(
          initial_strats=[requirement_placement],
