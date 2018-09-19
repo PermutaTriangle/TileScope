@@ -11,6 +11,8 @@ def requirement_placement(tiling, **kwargs):
     for req in tiling.requirements:
         for direction in [DIR_NORTH, DIR_SOUTH, DIR_EAST, DIR_WEST]:
             tilings = place_requirement_list(tiling, req, direction)
+            if tilings is None:
+                continue
             yield Strategy(
                         formal_step=("Place requirement {} in direction {}."
                                      "".format(req, direction)),
@@ -29,9 +31,9 @@ def place_requirement_list(tiling, req_list, direction):
     # Compute the points furthest in the given direction.
     min_points = minimum_points(req_list, direction)
     if len([c for _, c in min_points]) != len(set([c for _, c in min_points])):
-        raise NotImplementedError(("Can't handle list requirements with more" 
-                                   "than req farthest in the direction in same"
-                                   " cell."))
+        # Can't handle list requirements with more than req farthest in the 
+        # direction in same cell.
+        return None
     # For each tiling, compute the tiling where this point is placed furthest 
     # in that direction.
     res = []

@@ -14,15 +14,17 @@ from tilescopethree.strategies import (all_cell_insertions,
                                        row_and_column_separation,
                                        subset_verified, insertion_encoding,
                                        subclass_verified, all_row_insertions,
+                                       all_col_insertions,
                                        requirement_placement)
 
 row_col_placements = Pack(
-        initial_strats=[],
+        initial_strats=[factor],
         ver_strats=[subset_verified, globally_verified],
         inferral_strats=[row_and_column_separation, obstruction_transitivity],
-        expansion_strats=[[factor], [all_row_insertions, requirement_placement], 
+        expansion_strats=[[all_row_insertions, all_col_insertions], 
+                          [requirement_placement], 
                           [requirement_corroboration]],
-        name="row_placements"
+        name="row_col_placements"
 )
 
 point_placements = Pack(
