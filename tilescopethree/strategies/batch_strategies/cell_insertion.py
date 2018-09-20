@@ -3,6 +3,7 @@ point"""
 
 from comb_spec_searcher import Strategy
 from permuta import Av, Perm
+from grids_three import Obstruction, Requirement, Tiling
 
 
 def all_cell_insertions(tiling, **kwargs):
@@ -100,3 +101,51 @@ def all_requirement_extensions(tiling, **kwargs):
                         inferable=[True for _ in range(2)],
                         workable=[True for _ in range(2)],
                         constructor='disjoint')
+
+def all_row_insertions(tiling, **kwargs):
+    """Insert a list requirement into every possibly empty row."""
+    positive_cells = tiling.positive_cells
+    for row in range(tiling.dimensions[1]):
+        row_cells = tiling.cells_in_row(row)
+        if any(c in positive_cells for c in row_cells):
+            continue
+        row_req = tuple(Requirement.single_cell(Perm((0, )), c) for c in row_cells)
+        row_obs = tuple(Obstruction.single_cell(Perm((0, )), c) for c in row_cells)
+        yield Strategy(
+                    formal_step="Either row {} is empty or not.".format(row),
+                    comb_classes=[Tiling(tiling.obstructions + row_obs, 
+                                         tiling.requirements),
+                                  Tiling(tiling.obstructions, 
+                                         tiling.requirements + (row_req,))],
+                    ignore_parent=False,
+                    inferable=[True for _ in range(2)],
+                    possibly_empty=[True,
+                                    True],
+                    workable=[True for _ in range(2)],
+                    constructor='disjoint')
+
+def all_col_insertions(tiling, **kwargs):
+    """Insert a list requirement into every possibly empty column."""
+    positive_cells = tiling.positive_cells
+    for col in range(tiling.dimensions[0]):
+        col_cells = tiling.cells_in_col(col)
+        if any(c in positive_cells for c in col_cells):
+            continue
+        col_req = tuple(Requirement.single_cell(Perm((0, )), c) for c in col_cells)
+        col_obs = tuple(Obstruction.single_cell(Perm((0, )), c) for c in col_cells)
+        yield Strategy(
+                    formal_step="Either col {} is empty or not.".format(col),
+                    comb_classes=[Tiling(tiling.obstructions + col_obs, 
+                                         tiling.requirements),
+                                  Tiling(tiling.obstructions, 
+                                         tiling.requirements + (col_req,))],
+                    ignore_parent=False,
+                    inferable=[True for _ in range(2)],
+                    possibly_empty=[True,
+                                    True],
+                    workable=[True for _ in range(2)],
+                    constructor='disjoint')
+        
+
+
+         

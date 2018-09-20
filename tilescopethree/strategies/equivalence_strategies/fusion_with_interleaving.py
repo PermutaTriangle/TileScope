@@ -5,6 +5,8 @@ from comb_spec_searcher import Strategy
 from grids_three import Tiling, Obstruction
 from tilescopethree.strategies.equivalence_strategies.fusion import fuse_gridded_perm
 
+from permuta import Perm
+
 def fusion_with_interleaving(tiling, **kwargs):
     """Yield rules found by fusing rows and columns of a tiling, where the 
     unfused tiling obtained by drawing a line through certain heights/indices 
@@ -47,8 +49,7 @@ def fusable(tiling, row_index, bases, row=True, **kwargs):
             (not row and first_cell[1] != second_cell[1])):
         return False
     # ensure other cells basis is the same, and not the same as the root basis
-    if (bases[first_cell][0] != bases[second_cell][0] or 
-            set(bases[first_cell][0]) == set(kwargs['basis'])):
+    if (bases[first_cell][0] != bases[second_cell][0]):
         return False
     obstructions_to_add = []
     for ob in tiling.obstructions:
@@ -87,8 +88,17 @@ def fusable(tiling, row_index, bases, row=True, **kwargs):
     # if the tiling is unchanged, then the previous obstruction imply all those
     #  obstructions that needed to be added, and therefore we can think of this
     #  as one row with a line drawn through it
-    return tiling == Tiling(list(tiling.obstructions) + obstructions_to_add,
-                            tiling.requirements)
+    if tiling == Tiling(list(tiling.obstructions) + obstructions_to_add,
+                            tiling.requirements):
+        # return True
+        if (Obstruction(Perm((0, 1)), (first_cell, second_cell)) in tiling.obstructions 
+                or Obstruction(Perm((0, 1)), (second_cell, first_cell)) in tiling.obstructions 
+                or Obstruction(Perm((1, 0)), (first_cell, second_cell)) in tiling.obstructions 
+                or Obstruction(Perm((1, 0)), (second_cell, first_cell)) in tiling.obstructions):
+            print("YES")
+            print(tiling.to_old_tiling())
+            return True
+
 
 def fuse_tiling(tiling, row_index, row=True, **kwargs):
     """
