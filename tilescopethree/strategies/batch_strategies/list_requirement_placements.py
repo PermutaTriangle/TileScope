@@ -7,7 +7,7 @@ from itertools import chain
 from permuta import Perm
 
 
-def requirement_placement(tiling, **kwargs):
+def requirement_list_placement(tiling, **kwargs):
     for req in tiling.requirements:
         for direction in [DIR_NORTH, DIR_SOUTH, DIR_EAST, DIR_WEST]:
             tilings = place_requirement_list(tiling, req, direction)
