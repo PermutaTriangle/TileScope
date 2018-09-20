@@ -15,7 +15,8 @@ from tilescopethree.strategies import (all_cell_insertions,
                                        subset_verified, insertion_encoding,
                                        subclass_verified, all_row_insertions,
                                        all_col_insertions,
-                                       requirement_list_placement)
+                                       requirement_list_placement, 
+                                       partial_requirement_placement)
 
 row_col_placements = Pack(
         initial_strats=[factor],
@@ -26,6 +27,14 @@ row_col_placements = Pack(
                           [requirement_corroboration]],
         name="row_col_placements"
 )
+
+partial_point_placements = Pack(
+         initial_strats=[partial_requirement_placement],
+         ver_strats=[subset_verified, globally_verified],
+         inferral_strats=[row_and_column_separation, obstruction_transitivity],
+         expansion_strats=[[factor], [all_point_insertions],
+                           [requirement_corroboration]],
+         name="point_placements")
 
 point_placements = Pack(
          initial_strats=[requirement_placement],
