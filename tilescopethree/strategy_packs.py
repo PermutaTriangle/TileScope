@@ -18,14 +18,14 @@ from tilescopethree.strategies import (all_cell_insertions,
                                        subclass_verified,
                                        deflation, all_row_insertions,
                                        all_col_insertions,
-                                       requirement_placement)
+                                       requirement_list_placement)
 
 row_col_placements = Pack(
         initial_strats=[factor],
         ver_strats=[subset_verified, globally_verified],
         inferral_strats=[row_and_column_separation, obstruction_transitivity],
         expansion_strats=[[all_row_insertions, all_col_insertions], 
-                          [requirement_placement], 
+                          [requirement_list_placement], 
                           [requirement_corroboration]],
         name="row_col_placements"
 )
