@@ -81,11 +81,18 @@ def partial_requirement_placement(tiling, **kwargs):
         if len(reqs) > 1:
             continue
         if reqs[0].is_point_perm() in point_cells:
-            continue
+            cell = reqs[0].pos[0]
+            directions = []
+            if not tiling.only_cell_in_row(cell):
+                directions.extend((DIR_NORTH, DIR_SOUTH))
+            if not tiling.only_cell_in_col(cell):
+                directions.extend((DIR_EAST, DIR_WEST))
+        else:
+            directions = DIRS
         if point_only and reqs[0].is_point_perm() is None:
             continue
         for i in range(len(reqs[0])):
-            for DIR in DIRS:
+            for DIR in directions:
                 placedtiling = partial_place_point_of_requirement(
                                                         tiling, ri, i, DIR)
                 yield EquivalenceStrategy(

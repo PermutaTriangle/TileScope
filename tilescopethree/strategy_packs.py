@@ -4,7 +4,7 @@ from tilescopethree.strategies import (all_cell_insertions,
                                        all_point_insertions,
                                        all_requirement_extensions,
                                        database_verified,
-                                       empty_cell_inferral, factor,
+                                       factor,
                                        globally_verified,
                                        fundamentally_verified,
                                        obstruction_transitivity,
@@ -34,7 +34,7 @@ partial_point_placements = Pack(
          inferral_strats=[row_and_column_separation, obstruction_transitivity],
          expansion_strats=[[factor], [all_point_insertions],
                            [requirement_corroboration]],
-         name="point_placements")
+         name="partial_point_placements")
 
 point_placements = Pack(
          initial_strats=[requirement_placement],
