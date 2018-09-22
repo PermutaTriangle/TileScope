@@ -22,6 +22,77 @@ from tilescopethree.strategies import (all_cell_insertions,
                                        requirement_list_placement, 
                                        partial_requirement_placement)
 
+super_jay_scv_no_fusion = Pack(
+        initial_strats=[partial(factor,interleaving=False)],
+        ver_strats=[subset_verified, globally_verified, subclass_verified, database_verified],
+        inferral_strats=[row_and_column_separation, obstruction_transitivity],
+        expansion_strats=[
+                          [all_row_insertions, all_col_insertions,all_point_insertions,partial_requirement_placement],
+                          [requirement_placement],
+                          [requirement_corroboration]],
+        forward_equivalence=True,
+        name="super_jay_scv_no_fusion"
+)
+
+super_jay_scv = Pack(
+        initial_strats=[partial(factor,interleaving=True), fusion_with_interleaving],
+        ver_strats=[subset_verified, globally_verified, subclass_verified, database_verified],
+        inferral_strats=[row_and_column_separation, obstruction_transitivity],
+        expansion_strats=[
+                          [all_row_insertions, all_col_insertions,all_point_insertions,partial_requirement_placement],
+                          [requirement_placement],
+                          [requirement_corroboration]],
+        forward_equivalence=True,
+        name="super_jay_scv"
+)
+
+super_jay_no_fusion_with_interleaving_db = Pack(
+        initial_strats=[partial(factor,interleaving=True)],
+        ver_strats=[subset_verified, globally_verified, database_verified],
+        inferral_strats=[row_and_column_separation, obstruction_transitivity],
+        expansion_strats=[
+                          [all_row_insertions, all_col_insertions,all_point_insertions,partial_requirement_placement],
+                          [requirement_placement],
+                          [requirement_corroboration]],
+        forward_equivalence=True,
+        name="super_jay_no_fusion_with_interleaving_db"
+)
+super_jay_no_fusion_with_interleaving = Pack(
+        initial_strats=[partial(factor,interleaving=True)],
+        ver_strats=[subset_verified, globally_verified],
+        inferral_strats=[row_and_column_separation, obstruction_transitivity],
+        expansion_strats=[
+                          [all_row_insertions, all_col_insertions,all_point_insertions,partial_requirement_placement],
+                          [requirement_placement],
+                          [requirement_corroboration]],
+        forward_equivalence=True,
+        name="super_jay_no_fusion_with_interleaving"
+)
+
+super_jay_no_fusion = Pack(
+        initial_strats=[partial(factor,interleaving=False)],
+        ver_strats=[subset_verified, globally_verified, database_verified],
+        inferral_strats=[row_and_column_separation, obstruction_transitivity],
+        expansion_strats=[
+                          [all_row_insertions, all_col_insertions,all_point_insertions,partial_requirement_placement],
+                          [requirement_placement],
+                          [requirement_corroboration]],
+        forward_equivalence=True,
+        name="super_jay_no_fusion"
+)
+
+super_jay_with_interleaving_and_fusion = Pack(
+        initial_strats=[partial(factor,interleaving=True), fusion],
+        ver_strats=[subset_verified, globally_verified, database_verified],
+        inferral_strats=[row_and_column_separation, obstruction_transitivity],
+        expansion_strats=[
+                          [all_row_insertions, all_col_insertions,all_point_insertions,partial_requirement_placement],
+                          [requirement_placement],
+                          [requirement_corroboration]],
+        forward_equivalence=True,
+        name="super_jay"
+)
+
 row_col_placements = Pack(
         initial_strats=[factor],
         ver_strats=[subset_verified, globally_verified],
