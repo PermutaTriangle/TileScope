@@ -218,6 +218,18 @@ super_jay_no_fusion = Pack(
         name="super_jay_no_fusion"
 )
 
+super_jay = Pack(
+        initial_strats=[partial(factor,interleaving=False),fusion],
+        ver_strats=[subset_verified, globally_verified, database_verified],
+        inferral_strats=[row_and_column_separation, obstruction_transitivity],
+        expansion_strats=[
+                          [all_row_insertions, all_col_insertions,all_point_insertions,partial_requirement_placement],
+                          [requirement_placement],
+                          [requirement_corroboration]],
+        forward_equivalence=True,
+        name="super_jay"
+)
+
 super_jay_with_interleaving_and_fusion = Pack(
         initial_strats=[partial(factor,interleaving=True), fusion],
         ver_strats=[subset_verified, globally_verified, database_verified],
