@@ -30,7 +30,7 @@ super_jay_scv_no_fusion = Pack(
                           [all_row_insertions, all_col_insertions,all_point_insertions,partial_requirement_placement],
                           [requirement_placement],
                           [requirement_corroboration]],
-        forward_equivalence=True,
+        forward_equivalence=False,
         name="super_jay_scv_no_fusion"
 )
 
@@ -77,7 +77,7 @@ super_jay_no_fusion = Pack(
                           [all_row_insertions, all_col_insertions,all_point_insertions,partial_requirement_placement],
                           [requirement_placement],
                           [requirement_corroboration]],
-        forward_equivalence=True,
+        forward_equivalence=False,
         name="super_jay_no_fusion"
 )
 
