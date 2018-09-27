@@ -24,48 +24,29 @@ def empty_cell_inferral(tiling, **kwargs):
                requirements=tiling.requirements))
 
 
-def empty_cell_inferral_old(tiling, **kwargs):
-    """The old empty cell inferral strategy.
+def subobstruction_inferral(tiling, **kwargs):
+    """Return tiling created by adding all subobstructions which can be
+    added."""
+    subobs = set()
+    for ob in tiling.obstructions:
+        subobs.update(ob.all_subperms())
+    newobs = []
+    if subobs:
+        merged_tiling = tiling.merge(remove_empty=False)
+        for ob in sorted(subobs, key=len):
+            if not ob.patt.is_increasing() or not ob.is_single_cell() or len(ob) < 3:
+                continue
+            if can_add_obstruction(ob, merged_tiling):
+                newobs.append(ob)
+                merged_tiling = Tiling(merged_tiling.obstructions + (ob,), 
+                                       merged_tiling.requirements, 
+                                       remove_empty=False)
+    if newobs:
+        return InferralStrategy("Added the obstructions {}.".format(newobs),
+                                Tiling(tiling.obstructions + tuple(newobs), 
+                                    tiling.requirements))
 
-    The strategy checks for each active non-positive cell whether a point
-    obstruction can be added into the cell and returns a new tiling with the
-    new obstructions.
-    """
-    positive_cells = list(tiling.positive_cells)
-
-    adding = []
-    empty_cells = []
-    empty_ob = Obstruction.empty_perm()
-    if can_add_obstruction(tiling, empty_ob, positive_cells):
-        adding.append(empty_ob)
-    else:
-        for cell in tiling.possibly_empty:
-            ob = Obstruction.single_cell(Perm((0,)), cell)
-            if can_add_obstruction(tiling, ob, positive_cells):
-                adding.append(ob)
-                empty_cells.append(cell)
-    if adding:
-        new_tiling = Tiling(obstructions=tiling.obstructions + tuple(adding),
-                            requirements=tiling.requirements)
-
-        return InferralStrategy("The cells {} are empty".format(empty_cells),
-                                new_tiling)
-
-
-def can_add_obstruction(tiling, obstruction, positive_cells):
-    """Checks whether an obstruction can be added to a tiling.
-
-    The check is done by considering all superobstructions of the given
-    obstruction using the positive cells. If each of these obstructions are
-    'covered' by the obstructions already present in the tiling, then the given
-    obstruction can be added to the tiling.
-    """
-    for i, cell in enumerate(positive_cells):
-        if obstruction.occupies(cell):
-            continue
-        obs = list(obstruction.insert_point(cell))
-        if all(any(o in ob for o in tiling.obstructions) for ob in obs):
-            return True
-        return all(can_add_obstruction(tiling, ob, positive_cells[i+1:])
-                   for ob in obs)
-    return any(o in obstruction for o in tiling.obstructions)
+def can_add_obstruction(obstruction, tiling):
+    """Return true if obstruction can be added to tiling."""
+    return tiling.add_requirement(obstruction.patt, 
+                                  obstruction.pos).merge().is_empty()
