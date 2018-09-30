@@ -21,7 +21,7 @@ class TileScopeTHREE(CombinatorialSpecificationSearcher):
     def __init__(self,
                  start_class,
                  strategy_pack,
-                 symmetry=False,
+                 # symmetry=False,
                  forward_equivalence=False,
                  logger_kwargs={'processname': 'runner'},
                  **kwargs):
@@ -42,7 +42,7 @@ class TileScopeTHREE(CombinatorialSpecificationSearcher):
             start_tiling = Tiling(
                             obstructions=[Obstruction.single_cell(patt, (0, 0))
                                           for patt in basis])
-        if symmetry and not strategy_pack.symmetries:
+        if strategy_pack.symmetries==True:
             symmetries = [Tiling.inverse, Tiling.reverse, Tiling.complement,
                           Tiling.antidiagonal, Tiling.rotate90,
                           Tiling.rotate180, Tiling.rotate270]
