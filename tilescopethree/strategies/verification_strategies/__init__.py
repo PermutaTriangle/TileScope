@@ -4,3 +4,4 @@ from .miner_verification import miner_verified
 from .subclass_verified import subclass_verified
 from .subset_verified import subset_verified, one_by_one_verification
 from .verify_points import verify_points
+from .verify_short_obs import verify_short_obstructions
