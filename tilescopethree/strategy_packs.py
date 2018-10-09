@@ -19,8 +19,10 @@ from tilescopethree.strategies import (all_cell_insertions,
                                        subclass_verified,
                                        deflation, all_row_insertions,
                                        all_col_insertions,
-                                       requirement_list_placement,
-                                       partial_requirement_placement)
+                                       requirement_list_placement, 
+                                       partial_requirement_placement, 
+                                       subobstruction_inferral)
+
 
 super_jay_scv_no_fusion = Pack(
         initial_strats=[partial(factor,interleaving=False)],
@@ -126,6 +128,15 @@ row_col_placements = Pack(
                           [requirement_corroboration]],
         name="row_col_placements"
 )
+
+partial_point_placements_with_subobstruction_inferral = Pack(
+         initial_strats=[partial_requirement_placement],
+         ver_strats=[subset_verified, globally_verified],
+         inferral_strats=[row_and_column_separation, obstruction_transitivity, 
+                          subobstruction_inferral],
+         expansion_strats=[[factor], [all_point_insertions],
+                           [requirement_corroboration]],
+         name="partial_point_placements_with_subobstruction_inferral")
 
 partial_point_placements = Pack(
          initial_strats=[partial_requirement_placement],
