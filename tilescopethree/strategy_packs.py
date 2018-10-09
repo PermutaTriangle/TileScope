@@ -6,7 +6,8 @@ from tilescopethree.strategies import (all_cell_insertions,
                                        root_requirement_insertion,
                                        database_verified,
                                        empty_cell_inferral, factor, fusion,
-                                       fusion_with_interleaving, 
+                                       fusion_with_interleaving,
+                                       factor,
                                        globally_verified,
                                        elementary_verified,
                                        obstruction_transitivity,
@@ -216,18 +217,6 @@ super_jay_no_fusion = Pack(
                           [requirement_corroboration]],
         forward_equivalence=False,
         name="super_jay_no_fusion"
-)
-
-super_jay_no_fusion_old_test = Pack(
-        initial_strats=[partial(factor,interleaving=False)],
-        ver_strats=[subset_verified, globally_verified, database_verified],
-        inferral_strats=[row_and_column_separation, obstruction_transitivity],
-        expansion_strats=[
-                          [all_row_insertions, all_col_insertions,all_point_insertions,partial_requirement_placement],
-                          [requirement_placement],
-                          [requirement_corroboration]],
-        forward_equivalence=False,
-        name="super_jay_no_fusion_old_test"
 )
 
 super_jay = Pack(
