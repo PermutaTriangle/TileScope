@@ -26,7 +26,7 @@ def requirement_corroboration(tiling, basis, **kwargs):
             continue
         for req in reqs:
             yield Strategy(
-                formal_step="",
+                formal_step="Inserting requirement {}.".format(req),
                 comb_classes=[
                     Tiling(obstructions=tiling.obstructions,
                            requirements=tiling.requirements + ((req,),)),

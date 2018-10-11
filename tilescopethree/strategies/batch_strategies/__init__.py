@@ -4,4 +4,6 @@ from .cell_insertion import (all_cell_insertions, all_point_insertions,
                              all_row_insertions)
 from .insertion_encoding import insertion_encoding
 
-from .list_requirement_placements import requirement_list_placement
+from .list_requirement_placements import (col_placements,
+                                          requirement_list_placement,
+                                          row_placements)
