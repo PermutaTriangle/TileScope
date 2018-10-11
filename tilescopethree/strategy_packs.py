@@ -30,7 +30,6 @@ positive_row_placements = Pack(
         name="positive_row_placements"
 )
 
-
 negative_row_placements = Pack(
         initial_strats=[factor, requirement_corroboration],
         ver_strats=[subset_verified, globally_verified],
@@ -39,6 +38,14 @@ negative_row_placements = Pack(
         name="negative_row_placements"
 )
 
+negative_col_placements = Pack(
+        initial_strats=[factor, requirement_corroboration],
+        ver_strats=[subset_verified, globally_verified],
+        inferral_strats=[row_and_column_separation, obstruction_transitivity],
+        expansion_strats=[[partial(row_placements, row=False,
+                                   positive=False)]],
+        name="negative_col_placements"
+)
 
 positive_col_placements = Pack(
         initial_strats=[factor, requirement_corroboration,
@@ -48,7 +55,6 @@ positive_col_placements = Pack(
         expansion_strats=[[col_placements]],
         name="positive_col_placements"
 )
-
 
 row_col_placements = Pack(
         initial_strats=[factor],
