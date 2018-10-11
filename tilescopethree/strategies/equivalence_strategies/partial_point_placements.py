@@ -96,8 +96,8 @@ def partial_requirement_placement(tiling, **kwargs):
                 placedtiling = partial_place_point_of_requirement(
                                                         tiling, ri, i, DIR)
                 yield EquivalenceStrategy(
-                    formal_step=("Placing point {} of requirement {} with "
-                                 "force {}").format(
+                    formal_step=("Partially placing point {} of requirement {}"
+                                 " with force {}").format(
                                      (i, reqs[0].patt[i]), repr(reqs[0]), DIR),
                     comb_class=placedtiling)
 

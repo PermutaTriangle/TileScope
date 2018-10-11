@@ -10,4 +10,6 @@ from .targeted_cell_insertion import targeted_cell_insertion
 
 from .insertion_encoding import insertion_encoding
 
-from .list_requirement_placements import requirement_list_placement
+from .list_requirement_placements import (col_placements,
+                                          requirement_list_placement,
+                                          row_placements)
