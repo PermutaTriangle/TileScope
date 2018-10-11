@@ -30,6 +30,24 @@ positive_row_placements = Pack(
         name="positive_row_placements"
 )
 
+positive_col_placements = Pack(
+        initial_strats=[factor, requirement_corroboration,
+                        partial(all_cell_insertions, ignore_parent=True)],
+        ver_strats=[subset_verified, globally_verified],
+        inferral_strats=[row_and_column_separation, obstruction_transitivity],
+        expansion_strats=[[col_placements]],
+        name="positive_col_placements"
+)
+
+positive_row_col_placements = Pack(
+        initial_strats=[factor, requirement_corroboration,
+                        partial(all_cell_insertions, ignore_parent=True)],
+        ver_strats=[subset_verified, globally_verified],
+        inferral_strats=[row_and_column_separation, obstruction_transitivity],
+        expansion_strats=[[row_placements, col_placements]],
+        name="positive_row_col_placements"
+)
+
 negative_row_placements = Pack(
         initial_strats=[factor, requirement_corroboration],
         ver_strats=[subset_verified, globally_verified],
@@ -47,13 +65,13 @@ negative_col_placements = Pack(
         name="negative_col_placements"
 )
 
-positive_col_placements = Pack(
-        initial_strats=[factor, requirement_corroboration,
-                        partial(all_cell_insertions, ignore_parent=True)],
+negative_row_col_placements = Pack(
+        initial_strats=[factor, requirement_corroboration],
         ver_strats=[subset_verified, globally_verified],
         inferral_strats=[row_and_column_separation, obstruction_transitivity],
-        expansion_strats=[[col_placements]],
-        name="positive_col_placements"
+        expansion_strats=[[partial(row_placements, row=False, positive=False),
+                           partial(row_placements, positive=False)]],
+        name="negative_row_col_placements"
 )
 
 row_col_placements = Pack(
