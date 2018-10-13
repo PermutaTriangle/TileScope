@@ -18,8 +18,26 @@ from tilescopethree.strategies import (all_cell_insertions,
                                        row_placements,
                                        requirement_list_placement,
                                        partial_requirement_placement,
-                                       subobstruction_inferral)
+                                       subobstruction_inferral,
+                                       rie_verified)
 
+cut_out_rie_3 = Pack(
+         initial_strats=[factor],
+         ver_strats=[subset_verified, globally_verified, rie_verified],
+         inferral_strats=[row_and_column_separation, obstruction_transitivity],
+         expansion_strats=[
+                       [partial(all_cell_insertions, maxreqlen=3)],
+                       [requirement_corroboration]],
+         name="cut_out_rie_3")
+
+cut_out_rie_4 = Pack(
+         initial_strats=[factor],
+         ver_strats=[subset_verified, globally_verified, rie_verified],
+         inferral_strats=[row_and_column_separation, obstruction_transitivity],
+         expansion_strats=[
+                       [partial(all_cell_insertions, maxreqlen=4)],
+                       [requirement_corroboration]],
+         name="cut_out_rie_4")
 
 positive_row_placements = Pack(
         initial_strats=[factor, requirement_corroboration,
@@ -74,6 +92,15 @@ negative_row_col_placements = Pack(
         name="negative_row_col_placements"
 )
 
+negative_row_col_placements_db = Pack(
+        initial_strats=[factor, requirement_corroboration],
+        ver_strats=[subset_verified, globally_verified, database_verified],
+        inferral_strats=[row_and_column_separation, obstruction_transitivity],
+        expansion_strats=[[partial(row_placements, row=False, positive=False),
+                           partial(row_placements, positive=False)]],
+        name="negative_row_col_placements_db"
+)
+
 row_col_placements = Pack(
         initial_strats=[factor],
         ver_strats=[subset_verified, globally_verified],
@@ -82,6 +109,16 @@ row_col_placements = Pack(
                           [requirement_list_placement],
                           [requirement_corroboration]],
         name="row_col_placements"
+)
+
+row_col_placements_db = Pack(
+        initial_strats=[factor],
+        ver_strats=[subset_verified, globally_verified],
+        inferral_strats=[row_and_column_separation, obstruction_transitivity],
+        expansion_strats=[[all_row_insertions, all_col_insertions],
+                          [requirement_list_placement],
+                          [requirement_corroboration]],
+        name="row_col_placements_db"
 )
 
 partial_point_placements_with_subobstruction_inferral = Pack(
