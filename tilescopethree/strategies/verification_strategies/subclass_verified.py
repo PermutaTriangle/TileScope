@@ -7,6 +7,7 @@ from permuta import Av, Perm, PermSet
 from permuta.permutils import basis_of_SB
 from grids_three import Tiling, Requirement, Obstruction
 
+
 def subclass_verified(tiling, basis, **kwargs):
     """The subclass verified strategy.
 
@@ -32,11 +33,12 @@ def subclass_verified(tiling, basis, **kwargs):
                                                  " the patterns {}."
                                                  "".format(Basis(patterns))))
 
+
 def rie_verified(tiling, basis, **kwargs):
     """X
     """
     if tiling.dimensions == (1, 1) and len(tiling.requirements) == 1 and len(tiling.requirements[0]) == 1:
-        
+
         only_req = tiling.requirements[0][0].patt
 
         k = 3
@@ -45,6 +47,9 @@ def rie_verified(tiling, basis, **kwargs):
 
         max_len = len(only_req)+max(len(b) for b in rie_basis)
 
+        # TODO take into account in these two is_ins_enc
+        # that all perms on C(T) contain only_req
+
         # def is_ins_enc(B):
         #     for i in range(2*k+1, max_len+1):
         #         for g in tiling.objects_of_length(i):
@@ -52,10 +57,10 @@ def rie_verified(tiling, basis, **kwargs):
         #             if perm not in Av(rie_basis):
         #                 return False
         #     return True
-    
+
         def is_ins_enc(B):
             for basis_patt in rie_basis:
-                gp = Requirement(pattern=basis_patt, positions=((0,0) for _ in range(len(basis_patt))))
+                gp = Requirement(pattern=basis_patt, positions=((0, 0) for _ in range(len(basis_patt))))
                 temp = Tiling(tiling.obstructions, ((tiling.requirements[0][0],), (gp,))).merge()
                 if temp.obstructions != (Obstruction(Perm(()), ()),):
                     return False
