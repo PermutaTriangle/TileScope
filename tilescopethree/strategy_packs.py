@@ -21,6 +21,15 @@ from tilescopethree.strategies import (all_cell_insertions,
                                        subobstruction_inferral,
                                        rie_verified)
 
+hamster_3 = Pack(
+         initial_strats=[factor],
+         ver_strats=[subset_verified, globally_verified],
+         inferral_strats=[row_and_column_separation, obstruction_transitivity, subobstruction_inferral],
+         expansion_strats=[
+                       [partial(all_cell_insertions, maxreqlen=3)],
+                       [requirement_corroboration]],
+         name="hamster_3")
+
 cut_out_rie_3 = Pack(
          initial_strats=[factor],
          ver_strats=[subset_verified, globally_verified, rie_verified],
