@@ -41,7 +41,7 @@ def rie_verified(tiling, basis, **kwargs):
 
         only_req = tiling.requirements[0][0].patt
 
-        k = 3
+        k = 2
         rie_basis = basis_of_SB(k)
         print('Looking at {}'.format(only_req))
 

@@ -21,14 +21,32 @@ from tilescopethree.strategies import (all_cell_insertions,
                                        subobstruction_inferral,
                                        rie_verified)
 
-hamster_3 = Pack(
+single_cell_subob_3 = Pack(
          initial_strats=[factor],
          ver_strats=[subset_verified, globally_verified],
-         inferral_strats=[row_and_column_separation, obstruction_transitivity, subobstruction_inferral],
-         expansion_strats=[
-                       [partial(all_cell_insertions, maxreqlen=3)],
-                       [requirement_corroboration]],
-         name="hamster_3")
+         inferral_strats=[row_and_column_separation, obstruction_transitivity,
+                          subobstruction_inferral],
+         expansion_strats=[[partial(all_cell_insertions, maxreqlen=3)],
+                           [requirement_corroboration]],
+         name="single_cell_subob_3")
+
+single_cell_subob_4 = Pack(
+         initial_strats=[factor],
+         ver_strats=[subset_verified, globally_verified],
+         inferral_strats=[row_and_column_separation, obstruction_transitivity,
+                          subobstruction_inferral],
+         expansion_strats=[[partial(all_cell_insertions, maxreqlen=4)],
+                           [requirement_corroboration]],
+         name="single_cell_subob_4")
+
+single_cell_subob_5 = Pack(
+         initial_strats=[factor],
+         ver_strats=[subset_verified, globally_verified],
+         inferral_strats=[row_and_column_separation, obstruction_transitivity,
+                          subobstruction_inferral],
+         expansion_strats=[[partial(all_cell_insertions, maxreqlen=4)],
+                           [requirement_corroboration]],
+         name="single_cell_subob_5")
 
 cut_out_rie_3 = Pack(
          initial_strats=[factor],

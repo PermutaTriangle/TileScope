@@ -34,8 +34,9 @@ def subobstruction_inferral(tiling, **kwargs):
     if subobs:
         merged_tiling = tiling.merge(remove_empty=False)
         for ob in sorted(subobs, key=len):
-            if not ob.patt.is_increasing() or not ob.is_single_cell() or len(ob) < 3:
-                continue
+            # TODO should this be a setting?
+            # if not ob.patt.is_increasing() or not ob.is_single_cell() or len(ob) < 3:
+            #     continue
             if can_add_obstruction(ob, merged_tiling):
                 newobs.append(ob)
                 merged_tiling = Tiling(merged_tiling.obstructions + (ob,), 
