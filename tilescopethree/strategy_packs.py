@@ -21,49 +21,46 @@ from tilescopethree.strategies import (all_cell_insertions,
                                        subobstruction_inferral,
                                        rie_verified)
 
+single_cell_subob_2 = Pack(
+         initial_strats=[],
+         ver_strats=[subset_verified],
+         inferral_strats=[],
+         expansion_strats=[[partial(all_cell_insertions, maxreqlen=2)]],
+         name="single_cell_subob_2")
+
 single_cell_subob_3 = Pack(
-         initial_strats=[factor],
-         ver_strats=[subset_verified, globally_verified],
-         inferral_strats=[row_and_column_separation, obstruction_transitivity,
-                          subobstruction_inferral],
-         expansion_strats=[[partial(all_cell_insertions, maxreqlen=3)],
-                           [requirement_corroboration]],
+         initial_strats=[],
+         ver_strats=[subset_verified],
+         inferral_strats=[],
+         expansion_strats=[[partial(all_cell_insertions, maxreqlen=3)]],
          name="single_cell_subob_3")
 
 single_cell_subob_4 = Pack(
-         initial_strats=[factor],
-         ver_strats=[subset_verified, globally_verified],
-         inferral_strats=[row_and_column_separation, obstruction_transitivity,
-                          subobstruction_inferral],
-         expansion_strats=[[partial(all_cell_insertions, maxreqlen=4)],
-                           [requirement_corroboration]],
+         initial_strats=[],
+         ver_strats=[subset_verified],
+         inferral_strats=[],
+         expansion_strats=[[partial(all_cell_insertions, maxreqlen=4)]],
          name="single_cell_subob_4")
 
 single_cell_subob_5 = Pack(
-         initial_strats=[factor],
-         ver_strats=[subset_verified, globally_verified],
-         inferral_strats=[row_and_column_separation, obstruction_transitivity,
-                          subobstruction_inferral],
-         expansion_strats=[[partial(all_cell_insertions, maxreqlen=4)],
-                           [requirement_corroboration]],
+         initial_strats=[],
+         ver_strats=[subset_verified],
+         inferral_strats=[],
+         expansion_strats=[[partial(all_cell_insertions, maxreqlen=5)]],
          name="single_cell_subob_5")
 
 cut_out_rie_3 = Pack(
-         initial_strats=[factor],
-         ver_strats=[subset_verified, globally_verified, rie_verified],
-         inferral_strats=[row_and_column_separation, obstruction_transitivity],
-         expansion_strats=[
-                       [partial(all_cell_insertions, maxreqlen=3)],
-                       [requirement_corroboration]],
+         initial_strats=[],
+         ver_strats=[subset_verified, rie_verified],
+         inferral_strats=[],
+         expansion_strats=[[partial(all_cell_insertions, maxreqlen=3)]],
          name="cut_out_rie_3")
 
 cut_out_rie_4 = Pack(
-         initial_strats=[factor],
-         ver_strats=[subset_verified, globally_verified, rie_verified],
-         inferral_strats=[row_and_column_separation, obstruction_transitivity],
-         expansion_strats=[
-                       [partial(all_cell_insertions, maxreqlen=4)],
-                       [requirement_corroboration]],
+         initial_strats=[],
+         ver_strats=[subset_verified, rie_verified],
+         inferral_strats=[],
+         expansion_strats=[[partial(all_cell_insertions, maxreqlen=4)]],
          name="cut_out_rie_4")
 
 positive_row_placements = Pack(
