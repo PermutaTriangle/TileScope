@@ -82,7 +82,8 @@ def factor(tiling, **kwargs):
         if obstructions or requirements:
             factors.append((obstructions, requirements))
             strategy.append(Tiling(obstructions=obstructions,
-                                   requirements=requirements))
+                                   requirements=requirements,
+                                   minimize=False))
 
     if kwargs.get("workable", True):
         work = [True for _ in strategy]
