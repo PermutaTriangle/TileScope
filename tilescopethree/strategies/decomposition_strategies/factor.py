@@ -3,7 +3,6 @@ from itertools import chain
 from grids_three import Tiling
 from grids_three.misc import union_reduce
 from permuta.misc import UnionFind
-from permuta.misc.ordered_set_partitions import ordered_set_partitions_list
 
 
 def factor(tiling, **kwargs):
@@ -97,15 +96,29 @@ def factor(tiling, **kwargs):
                    constructor='cartesian')
 
     if kwargs.get("unions", False):
-        for partition in ordered_set_partitions_list(factors):
+        for partition in partition_list(factors):
             strategy = []
             for part in partition:
                 obstructions, requirements = zip(*part)
                 strategy.append(Tiling(obstructions=chain(*obstructions),
-                                       requirements=chain(*requirements)))
+                                       requirements=chain(*requirements),
+                                       minimize=False))
             yield Strategy("The union of factors of the tiling",
                            strategy,
                            possibly_empty=[False for _ in strategy],
                            inferable=[False for _ in strategy],
                            workable=[False for _ in strategy],
                            constructor='cartesian')
+
+
+def partition_list(collection):
+    if len(collection) == 1:
+        yield [collection]
+        return
+    first = collection[0]
+    for smaller in partition_list(collection[1:]):
+        # insert `first` in each of the subpartition's subsets
+        for n, subset in enumerate(smaller):
+            yield smaller[:n] + [[first] + subset] + smaller[n+1:]
+        # put `first` in its own subset
+        yield [[first]] + smaller
