@@ -199,15 +199,7 @@ def get_coordinate(tiling):
 def tiling_print(tiling):
     """Print the grid of a tiling detailing local obstructions plus all the 
     crossing obstructions and requirements."""
-    print(tiling.to_old_tiling())
-    # print non-local obstructions
-    for ob in tiling.obstructions:
-        if not ob.is_single_cell():
-            print(repr(ob))
-    # print requirements
-    for req in tiling.requirements:
-        if not (len(req) == 1 and len(req[0]) == 1):
-            print(req)
+    print(tiling)
 
 def print_tilings(tilings):
     for i, t in enumerate(tilings):
