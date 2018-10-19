@@ -3,8 +3,7 @@
 from comb_spec_searcher import VerificationStrategy
 from itertools import chain
 from permuta.descriptors import Basis
-from permuta import Av, Perm, PermSet
-from grids_three import Tiling, Requirement, Obstruction
+from permuta import Av
 
 
 def subclass_verified(tiling, basis, **kwargs):
