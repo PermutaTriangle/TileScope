@@ -44,28 +44,32 @@ single_cell_subob_2 = Pack(
          initial_strats=[],
          ver_strats=[subset_verified],
          inferral_strats=[],
-         expansion_strats=[[partial(all_cell_insertions, maxreqlen=2)]],
+         expansion_strats=[[partial(all_cell_insertions, maxreqlen=2,
+                                    maxreqnum=2)]],
          name="single_cell_subob_2")
 
 single_cell_subob_3 = Pack(
          initial_strats=[],
          ver_strats=[subset_verified],
          inferral_strats=[],
-         expansion_strats=[[partial(all_cell_insertions, maxreqlen=3)]],
+         expansion_strats=[[partial(all_cell_insertions, maxreqlen=3,
+                                    maxreqnum=6)]],
          name="single_cell_subob_3")
 
 single_cell_subob_4 = Pack(
          initial_strats=[],
          ver_strats=[subset_verified],
          inferral_strats=[],
-         expansion_strats=[[partial(all_cell_insertions, maxreqlen=4)]],
+         expansion_strats=[[partial(all_cell_insertions, maxreqlen=4,
+                                    maxreqnum=24)]],
          name="single_cell_subob_4")
 
 single_cell_subob_5 = Pack(
          initial_strats=[],
          ver_strats=[subset_verified],
          inferral_strats=[],
-         expansion_strats=[[partial(all_cell_insertions, maxreqlen=5)]],
+         expansion_strats=[[partial(all_cell_insertions, maxreqlen=5,
+                                    maxreqnum=120)]],
          name="single_cell_subob_5")
 
 single_cell_subob_2_2 = Pack(
