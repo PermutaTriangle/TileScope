@@ -12,9 +12,9 @@ def all_cell_insertions(tiling, **kwargs):
 
     The cell insertion strategy is a batch strategy that considers each active
     cells, excluding positive cells. For each of these cells, the strategy
-    considers all patterns (up to some maximum length given by kwargs) and
-    returns two tilings; one which requires the pattern in the cell and one
-    where the pattern is obstructed.
+    considers all patterns (up to some maximum length given by maxreqlen, and
+    some maximum number given by maxreqnum) and returns two tilings; one which
+    requires the pattern in the cell and one where the pattern is obstructed.
 
     TODO:
         - Have a flag to insert into positive cells that contain the maximal
@@ -30,25 +30,36 @@ def all_cell_insertions(tiling, **kwargs):
     if (not isinstance(extra_basis, list) or
             not all(isinstance(p, Perm) for p in extra_basis)):
         raise TypeError("'extra_basis' flag should be a list of Perm to avoid")
+    maxreqnum = kwargs.get('maxreqnum')
+    if not maxreqnum:
+        maxreqnum = 1
 
     active = tiling.active_cells
     positive = tiling.positive_cells
     bdict = tiling.cell_basis()
-    for cell in (active - positive):
+    for cell in active:
+        if len(bdict[cell][1]) >= maxreqnum:
+            continue
         for length in range(1, maxreqlen + 1):
             for patt in Av(bdict[cell][0] + extra_basis).of_length(length):
-                yield Strategy(
-                    formal_step="Insert {} into cell {}.".format(patt, cell),
-                    comb_classes=[
-                            tiling.add_single_cell_obstruction(patt, cell),
-                            tiling.add_single_cell_requirement(patt, cell)],
-                    ignore_parent=ignore_parent,
-                    inferable=[True for _ in range(2)],
-                    possibly_empty=[any(len(r) > 1 
-                                        for r in tiling.requirements),
-                                    True],
-                    workable=[True for _ in range(2)],
-                    constructor='disjoint')
+                if not any(patt in perm for perm in bdict[cell][1]):
+                    if (tiling.dimensions != (1, 1) or
+                            all(patt > perm for perm in bdict[cell][1])):
+                        yield Strategy(
+                            formal_step="Insert {} into cell {}.".format(patt,
+                                                                         cell),
+                            comb_classes=[
+                                tiling.add_single_cell_obstruction(patt,
+                                                                   cell),
+                                tiling.add_single_cell_requirement(patt,
+                                                                   cell)],
+                            ignore_parent=ignore_parent,
+                            inferable=[True for _ in range(2)],
+                            possibly_empty=[any(len(r) > 1
+                                                for r in tiling.requirements),
+                                            True],
+                            workable=[True for _ in range(2)],
+                            constructor='disjoint')
 
 
 def root_requirement_insertion(tiling, **kwargs):
@@ -100,6 +111,7 @@ def all_requirement_extensions(tiling, **kwargs):
                         workable=[True for _ in range(2)],
                         constructor='disjoint')
 
+
 def all_row_insertions(tiling, **kwargs):
     """Insert a list requirement into every possibly empty row."""
     positive_cells = tiling.positive_cells
@@ -107,8 +119,10 @@ def all_row_insertions(tiling, **kwargs):
         row_cells = tiling.cells_in_row(row)
         if any(c in positive_cells for c in row_cells):
             continue
-        row_req = tuple(Requirement.single_cell(Perm((0, )), c) for c in row_cells)
-        row_obs = tuple(Obstruction.single_cell(Perm((0, )), c) for c in row_cells)
+        row_req = tuple(Requirement.single_cell(Perm((0, )), c)
+                        for c in row_cells)
+        row_obs = tuple(Obstruction.single_cell(Perm((0, )), c)
+                        for c in row_cells)
         yield Strategy(
                     formal_step="Either row {} is empty or not.".format(row),
                     comb_classes=[Tiling(tiling.obstructions + row_obs, 
@@ -122,6 +136,7 @@ def all_row_insertions(tiling, **kwargs):
                     workable=[True for _ in range(2)],
                     constructor='disjoint')
 
+
 def all_col_insertions(tiling, **kwargs):
     """Insert a list requirement into every possibly empty column."""
     positive_cells = tiling.positive_cells
@@ -129,8 +144,10 @@ def all_col_insertions(tiling, **kwargs):
         col_cells = tiling.cells_in_col(col)
         if any(c in positive_cells for c in col_cells):
             continue
-        col_req = tuple(Requirement.single_cell(Perm((0, )), c) for c in col_cells)
-        col_obs = tuple(Obstruction.single_cell(Perm((0, )), c) for c in col_cells)
+        col_req = tuple(Requirement.single_cell(Perm((0, )), c)
+                        for c in col_cells)
+        col_obs = tuple(Obstruction.single_cell(Perm((0, )), c)
+                        for c in col_cells)
         yield Strategy(
                     formal_step="Either col {} is empty or not.".format(col),
                     comb_classes=[Tiling(tiling.obstructions + col_obs, 
@@ -143,7 +160,3 @@ def all_col_insertions(tiling, **kwargs):
                                     True],
                     workable=[True for _ in range(2)],
                     constructor='disjoint')
-        
-
-
-         
