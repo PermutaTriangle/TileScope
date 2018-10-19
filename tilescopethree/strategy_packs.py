@@ -22,6 +22,24 @@ from tilescopethree.strategies import (all_cell_insertions,
                                        requirement_list_placement,
                                        partial_requirement_placement,
                                        subobstruction_inferral)
+
+all_the_strategies = Pack(
+        initial_strats=[partial(factor, unions=True)],
+        ver_strats=[subset_verified, globally_verified, database_verified],
+        inferral_strats=[row_and_column_separation, obstruction_transitivity],
+        expansion_strats=[[all_point_insertions, all_row_insertions,
+                           all_col_insertions],
+                          [row_placements,
+                           col_placements,
+                           partial(row_placements, positive=False),
+                           partial(col_placements, positive=False),
+                           partial_requirement_placement,
+                           requirement_placement,
+                           requirement_list_placement],
+                          [requirement_corroboration]],
+        name="all_the_strategies"
+)
+
 single_cell_subob_2 = Pack(
          initial_strats=[],
          ver_strats=[subset_verified],
@@ -285,7 +303,7 @@ partial_point_placements_with_subobstruction_inferral = Pack(
 
 partial_point_placements_with_subobstruction_inferral_db = Pack(
          initial_strats=[partial_requirement_placement],
-         ver_strats=[subset_verified, globally_verified],
+         ver_strats=[subset_verified, globally_verified, database_verified],
          inferral_strats=[row_and_column_separation, obstruction_transitivity,
                           subobstruction_inferral],
          expansion_strats=[[factor], [all_point_insertions],
@@ -302,7 +320,7 @@ partial_point_placements = Pack(
 
 partial_point_placements_db = Pack(
          initial_strats=[partial_requirement_placement],
-         ver_strats=[subset_verified, globally_verified],
+         ver_strats=[subset_verified, globally_verified, database_verified],
          inferral_strats=[row_and_column_separation, obstruction_transitivity],
          expansion_strats=[[factor], [all_point_insertions],
                            [requirement_corroboration]],
