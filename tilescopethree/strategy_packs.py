@@ -18,8 +18,7 @@ from tilescopethree.strategies import (all_cell_insertions,
                                        row_placements,
                                        requirement_list_placement,
                                        partial_requirement_placement,
-                                       subobstruction_inferral,
-                                       rie_verified)
+                                       subobstruction_inferral)
 
 single_cell_subob_2 = Pack(
          initial_strats=[],
@@ -52,20 +51,6 @@ single_cell_subob_5 = Pack(
          expansion_strats=[[partial(all_cell_insertions, maxreqlen=5,
                                     maxreqnum=2)]],
          name="single_cell_subob_5")
-
-cut_out_rie_3 = Pack(
-         initial_strats=[],
-         ver_strats=[subset_verified, rie_verified],
-         inferral_strats=[],
-         expansion_strats=[[partial(all_cell_insertions, maxreqlen=3)]],
-         name="cut_out_rie_3")
-
-cut_out_rie_4 = Pack(
-         initial_strats=[],
-         ver_strats=[subset_verified, rie_verified],
-         inferral_strats=[],
-         expansion_strats=[[partial(all_cell_insertions, maxreqlen=4)]],
-         name="cut_out_rie_4")
 
 positive_row_placements = Pack(
         initial_strats=[factor, requirement_corroboration,
