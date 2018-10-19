@@ -12,9 +12,9 @@ def all_cell_insertions(tiling, **kwargs):
 
     The cell insertion strategy is a batch strategy that considers each active
     cells, excluding positive cells. For each of these cells, the strategy
-    considers all patterns (up to some maximum length given by kwargs) and
-    returns two tilings; one which requires the pattern in the cell and one
-    where the pattern is obstructed.
+    considers all patterns (up to some maximum length given by maxreqlen, and
+    some maximum number given by maxreqnum) and returns two tilings; one which
+    requires the pattern in the cell and one where the pattern is obstructed.
 
     TODO:
         - Have a flag to insert into positive cells that contain the maximal
