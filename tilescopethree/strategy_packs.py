@@ -19,38 +19,65 @@ from tilescopethree.strategies import (all_cell_insertions,
                                        requirement_list_placement,
                                        partial_requirement_placement,
                                        subobstruction_inferral)
-
 single_cell_subob_2 = Pack(
          initial_strats=[],
          ver_strats=[subset_verified],
          inferral_strats=[],
-         expansion_strats=[[partial(all_cell_insertions, maxreqlen=2,
-                                    maxreqnum=2)]],
+         expansion_strats=[[partial(all_cell_insertions, maxreqlen=2)]],
          name="single_cell_subob_2")
 
 single_cell_subob_3 = Pack(
          initial_strats=[],
          ver_strats=[subset_verified],
          inferral_strats=[],
-         expansion_strats=[[partial(all_cell_insertions, maxreqlen=3,
-                                    maxreqnum=2)]],
+         expansion_strats=[[partial(all_cell_insertions, maxreqlen=3)]],
          name="single_cell_subob_3")
 
 single_cell_subob_4 = Pack(
          initial_strats=[],
          ver_strats=[subset_verified],
          inferral_strats=[],
-         expansion_strats=[[partial(all_cell_insertions, maxreqlen=4,
-                                    maxreqnum=2)]],
+         expansion_strats=[[partial(all_cell_insertions, maxreqlen=4)]],
          name="single_cell_subob_4")
 
 single_cell_subob_5 = Pack(
          initial_strats=[],
          ver_strats=[subset_verified],
          inferral_strats=[],
+         expansion_strats=[[partial(all_cell_insertions, maxreqlen=5)]],
+         name="single_cell_subob_5")
+
+single_cell_subob_2_2 = Pack(
+         initial_strats=[],
+         ver_strats=[subset_verified],
+         inferral_strats=[],
+         expansion_strats=[[partial(all_cell_insertions, maxreqlen=2,
+                                    maxreqnum=2)]],
+         name="single_cell_subob_2_2")
+
+single_cell_subob_3_2 = Pack(
+         initial_strats=[],
+         ver_strats=[subset_verified],
+         inferral_strats=[],
+         expansion_strats=[[partial(all_cell_insertions, maxreqlen=3,
+                                    maxreqnum=2)]],
+         name="single_cell_subob_3_2")
+
+single_cell_subob_4_2 = Pack(
+         initial_strats=[],
+         ver_strats=[subset_verified],
+         inferral_strats=[],
+         expansion_strats=[[partial(all_cell_insertions, maxreqlen=4,
+                                    maxreqnum=2)]],
+         name="single_cell_subob_4_2")
+
+single_cell_subob_5_2 = Pack(
+         initial_strats=[],
+         ver_strats=[subset_verified],
+         inferral_strats=[],
          expansion_strats=[[partial(all_cell_insertions, maxreqlen=5,
                                     maxreqnum=2)]],
-         name="single_cell_subob_5")
+         name="single_cell_subob_5_2")
 
 positive_row_placements = Pack(
         initial_strats=[factor, requirement_corroboration,
@@ -87,20 +114,35 @@ negative_row_placements = Pack(
         name="negative_row_placements"
 )
 
+negative_row_placements_db = Pack(
+        initial_strats=[factor, requirement_corroboration],
+        ver_strats=[subset_verified, globally_verified, database_verified],
+        inferral_strats=[row_and_column_separation, obstruction_transitivity],
+        expansion_strats=[[partial(row_placements, positive=False)]],
+        name="negative_row_placements_db"
+)
+
 negative_col_placements = Pack(
         initial_strats=[factor, requirement_corroboration],
         ver_strats=[subset_verified, globally_verified],
         inferral_strats=[row_and_column_separation, obstruction_transitivity],
-        expansion_strats=[[partial(row_placements, row=False,
-                                   positive=False)]],
+        expansion_strats=[[partial(col_placements, positive=False)]],
         name="negative_col_placements"
+)
+
+negative_col_placements_db = Pack(
+        initial_strats=[factor, requirement_corroboration],
+        ver_strats=[subset_verified, globally_verified, database_verified],
+        inferral_strats=[row_and_column_separation, obstruction_transitivity],
+        expansion_strats=[[partial(col_placements, positive=False)]],
+        name="negative_col_placements_db"
 )
 
 negative_row_col_placements = Pack(
         initial_strats=[factor, requirement_corroboration],
         ver_strats=[subset_verified, globally_verified],
         inferral_strats=[row_and_column_separation, obstruction_transitivity],
-        expansion_strats=[[partial(row_placements, row=False, positive=False),
+        expansion_strats=[[partial(col_placements, positive=False),
                            partial(row_placements, positive=False)]],
         name="negative_row_col_placements"
 )
@@ -109,7 +151,7 @@ negative_row_col_placements_db = Pack(
         initial_strats=[factor, requirement_corroboration],
         ver_strats=[subset_verified, globally_verified, database_verified],
         inferral_strats=[row_and_column_separation, obstruction_transitivity],
-        expansion_strats=[[partial(row_placements, row=False, positive=False),
+        expansion_strats=[[partial(col_placements, positive=False),
                            partial(row_placements, positive=False)]],
         name="negative_row_col_placements_db"
 )
@@ -143,6 +185,15 @@ partial_point_placements_with_subobstruction_inferral = Pack(
                            [requirement_corroboration]],
          name="partial_point_placements_with_subobstruction_inferral")
 
+partial_point_placements_with_subobstruction_inferral_db = Pack(
+         initial_strats=[partial_requirement_placement],
+         ver_strats=[subset_verified, globally_verified],
+         inferral_strats=[row_and_column_separation, obstruction_transitivity,
+                          subobstruction_inferral],
+         expansion_strats=[[factor], [all_point_insertions],
+                           [requirement_corroboration]],
+         name="partial_point_placements_with_subobstruction_inferral_db")
+
 partial_point_placements = Pack(
          initial_strats=[partial_requirement_placement],
          ver_strats=[subset_verified, globally_verified],
@@ -150,6 +201,14 @@ partial_point_placements = Pack(
          expansion_strats=[[factor], [all_point_insertions],
                            [requirement_corroboration]],
          name="partial_point_placements")
+
+partial_point_placements_db = Pack(
+         initial_strats=[partial_requirement_placement],
+         ver_strats=[subset_verified, globally_verified],
+         inferral_strats=[row_and_column_separation, obstruction_transitivity],
+         expansion_strats=[[factor], [all_point_insertions],
+                           [requirement_corroboration]],
+         name="partial_point_placements_db")
 
 point_placements = Pack(
          initial_strats=[requirement_placement],
