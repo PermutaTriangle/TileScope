@@ -6,7 +6,7 @@ from itertools import combinations
 from comb_spec_searcher import ProofTree
 from functools import partial, reduce
 from permuta import Perm
-from grids_three import Tiling
+from grids_three import Tiling, Obstruction, Requirement
 from grids_three.misc import union_reduce
 from operator import add, mul
 from sympy import Function, Eq, var
@@ -15,6 +15,8 @@ from sympy.abc import x
 from tilescopethree.strategies.equivalence_strategies.point_placements import place_point_of_requirement
 from tilescopethree.strategies.equivalence_strategies.fusion import fuse_tiling
 from tilescopethree.strategies import row_and_column_separation
+from tilescopethree.strategies.batch_strategies.list_requirement_placements import row_placements
+
 
 
 class Rule(object):
@@ -38,6 +40,10 @@ class Rule(object):
             patt = Perm.to_standard(patt)
             avoids = start_tiling.add_single_cell_obstruction(patt, cell)
             contains = start_tiling.add_single_cell_requirement(patt, cell)
+            # print(avoids)
+            # print(avoids.forward_map)
+            # print(contains)
+            # print(contains.forward_map)
             rule = ([avoids, contains],
                     [{c: set([avoids.forward_map[c]])
                       for c in start_tiling.active_cells
@@ -69,12 +75,20 @@ class Rule(object):
         elif "The tiling is a subset of the class" in formal_step:
             rule = ([], [])
             self.constructor = "verified"
+        elif "Placing row" in formal_step or "Placing col" in formal_step:
+            row = "row" in formal_step
+            direction = int(formal_step.split(".")[0][-1])
+            positive = bool(int(formal_step.split("|")[1]))
+            rule = list(row_placements(start_tiling, row=row, positive=positive,
+                                       regions=True, direction=direction))[0]
+            # print(rule)
+            self.constructor = "disjoint"
         else:
             raise NotImplementedError("Not tracking regions for: " + formal_step)
         self.start_tiling = start_tiling
-        if rule is None:
-            print(start_tiling.to_old_tiling())
-            print(formal_step)
+        # if rule is None:
+            # print(start_tiling)
+            # print(formal_step)
         self.end_tilings, self.regions = rule
         empty = [t.is_empty() for t in self.end_tilings]
         self.end_tilings = [t for i, t in enumerate(self.end_tilings)
@@ -110,7 +124,7 @@ class Rule(object):
                     if out_tiling_region:
                         subs[variable] = 1
                 else:
-                    # print(out_tiling.to_old_tiling())
+                    # print(out_tiling)
                     # print(out_strat_region)
                     # print(out_tiling_region)
                     assert out_strat_region == out_tiling_region, "region not the same as strategy implied region so need a new substitution"
@@ -127,7 +141,7 @@ class Rule(object):
                                         for region in regions], variables,
                                        root_func, root_class)
             # print("Counting:")
-            # print(self.start_tiling.to_old_tiling())
+            # print(self.start_tiling)
             # print("obs:", [o for o in self.start_tiling.obstructions if not o.is_single_cell()])
             # print("reqs", self.start_tiling.requirements)
             # print(rhs)
@@ -143,7 +157,7 @@ class Rule(object):
             fuse_variable = None
             fuse_type = None
             subs = {}
-            for i, variable, region in zip(range(len(variables)), variables, regions):
+            for variable, region in zip(variables, regions):
                 start_region = region[self.start_tiling] if self.start_tiling in region else set()
                 row = "row" in self.formal_step
                 row_index = int(self.formal_step.split(' ')[2])
@@ -152,7 +166,8 @@ class Rule(object):
                                        if ((row and c[1] == row_index) or
                                            (not row and c[0] == row_index)))
                 curr_region = region[fuse_tiling] if fuse_tiling in region else set()
-                # print(self.start_tiling.to_old_tiling())
+                # print(self.start_tiling)
+                # print(fuse_tiling)
                 # print(curr_region)
                 # print(set(cells_to_track))
                 if curr_region == set(cells_to_track):
@@ -172,6 +187,7 @@ class Rule(object):
                             assert fuse_region == start_region, "region fusion happens different to start region"
                 else:
                     subs = {**subs, **get_subs(0)}
+
             assert fuse_variable is not None, "no fuse variable found"
             assert fuse_type is not None, "fusion type unknown"
             out_func = get_function(self.end_labels[0])
@@ -214,16 +230,22 @@ class Specification(object):
             formal_step = node.formal_step
             if "Greedily placing point" in formal_step:
                 continue
-            if not (start_tiling not in self.rules or node.strategy_verified):
-                print(start_tiling)
-                print(formal_step)
-                print(start_label)
+            # if not (start_tiling not in self.rules or node.strategy_verified):
+                # print(start_tiling)
+                # print(formal_step)
+                # print(start_label)
             # assert (start_tiling not in self.rules or node.strategy_verified), "More than one rule with same left hand side"
             self.rules[start_tiling] = Rule(start_tiling, end_tilings,
                                             start_label, end_labels,
                                             formal_step)
         self.fusion_regions = self._regions_to_track()
         self.regions = self._get_regions(tree)
+        for i, region in enumerate(self.regions):
+            print("REGION {}".format(i))
+            for t, r in region.items():
+                print(t)
+                print(r)
+        print("DONE")
         self.variables = var(["y[{}]".format(i)
                               for i in range(len(self.regions))])
         self.functions = {}
@@ -253,6 +275,8 @@ class Specification(object):
                 cells_to_track = tuple(c for c in end_tiling.active_cells
                                        if ((row and c[1] == row_index) or
                                            (not row and c[0] == row_index)))
+                print(end_tiling)
+                print(set(cells_to_track))
                 regions.append((end_tiling, set(cells_to_track)))
         return regions
 
@@ -260,33 +284,34 @@ class Specification(object):
         """Return a list where each entry is a dictionary pointing from tilings to a
         region that needs tracked by a catalytic variable."""
         regions = []
-        print(len(self.fusion_regions))
+        # print(len(self.fusion_regions))
         for tiling, region in self.fusion_regions:
-            print("============================================================Tracking============================================================")
-            print(tiling.to_old_tiling())
+            # print("============================================================Tracking============================================================")
+            # print(tiling)
             tiling_to_region = {tiling: set(region)}
             queue = [tiling]
             while queue:
                 curr = queue.pop(-1)
-                if curr not in self.rules:
-                    print(curr.to_old_tiling())
+                # if curr not in self.rules:
+                #     print(curr)
                 assert curr in self.rules, "A tiling doesn't have a rule coming from it"
                 rule = self.rules[curr]
                 if "The tiling is a subset of the class" in rule.formal_step:
                     continue
                 assert len(rule.regions) == len(rule.end_tilings), "length of regions and end_tilings do not match up in rule"
-                print()
-                print(curr.to_old_tiling())
-                print(rule.formal_step)
-                print(tiling_to_region[curr])
+                # print()
+                # print(curr)
+                # print(rule.formal_step)
+                # print(tiling_to_region[curr])
                 for t, r in zip(rule.end_tilings, rule.regions):
                     region = union_reduce(r[c] for c in tiling_to_region[curr]
                                           if c in r)
                     if t in tiling_to_region:
-                        print(t.to_old_tiling())
-                        print("need to track:", region)
-                        print("already tracking:", tiling_to_region[t])
-                        if (region or tiling_to_region[t]) and not region == tiling_to_region[t]:
+                        # print(t)
+                        # print("need to track:", region)
+                        # print("already tracking:", tiling_to_region[t])
+
+                        if (region and tiling_to_region[t] and not region == tiling_to_region[t]):
                             if not any(r[t] == region for r in regions):
                                 self.fusion_regions.append((t, region))
 
@@ -300,7 +325,7 @@ class Specification(object):
                         if region:
                             tiling_to_region[t] = region
                             queue.append(t)
-            print("Already tracking region:", tiling_to_region in regions)
+            # print("Already tracking region:", tiling_to_region in regions)
             if tiling_to_region in regions:
                 continue
             regions.append(tiling_to_region)
