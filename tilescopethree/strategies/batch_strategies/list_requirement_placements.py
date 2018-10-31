@@ -25,7 +25,7 @@ def requirement_list_placement(tiling, **kwargs):
                         constructor='disjoint')
 
 
-def row_placements(tiling, row=True, positive=True, **kwargs):
+def row_placements(tiling, row=True, positive=True, regions=False, **kwargs):
     """Places the points in a row (or col if row=False) in the given
     direction."""
     if row:
@@ -38,6 +38,11 @@ def row_placements(tiling, row=True, positive=True, **kwargs):
         y = tiling.dimensions[1]
         only_cell_in_col = tiling.only_cell_in_row
         directions = [DIR_EAST, DIR_WEST]
+
+    if kwargs.get("direction") is not None:
+        directions = [kwargs["direction"]]
+    if regions:
+        forward_maps = []
     for i in range(x):
         place = True
         cells_in_row = []
@@ -60,15 +65,31 @@ def row_placements(tiling, row=True, positive=True, **kwargs):
                                                                 (cell,))
                                                     for cell in cells_in_row),
                                               tiling.requirements)
+                    if regions:
+                        forward_maps.append(
+                            {c: set([empty_row_tiling.forward_map[c]])
+                             for c in tiling.active_cells
+                             if (c in empty_row_tiling.forward_map and
+                                 empty_row_tiling.forward_map[c] in
+                                 empty_row_tiling.active_cells)})
                 for direction in directions:
-                    tilings = place_requirement_list(tiling, req_list,
-                                                     direction)
+                    if regions:
+                        tilings, placed_maps = place_requirement_list(
+                                                   tiling, req_list, direction,
+                                                   regions=regions)
+                        if not positive:
+                            tilings = [empty_row_tiling] + tilings
+                        forward_maps.extend(placed_maps)
+                        yield tilings, forward_maps
+                    else:
+                        tilings = place_requirement_list(tiling, req_list,
+                                                         direction)
                     if not positive:
                         tilings = [empty_row_tiling] + tilings
                     yield Strategy(
-                        formal_step=("Placing {} {} in direction {}."
+                        formal_step=("Placing {} {} in direction {}.|{}|"
                                      "".format("row" if row else "col",
-                                               i, direction)),
+                                               i, direction, int(positive))),
                         comb_classes=tilings,
                         ignore_parent=False,
                         possibly_empty=[True for _ in tilings],
@@ -81,7 +102,7 @@ def col_placements(tiling, **kwargs):
     yield from row_placements(tiling, row=False, **kwargs)
 
 
-def place_requirement_list(tiling, req_list, direction):
+def place_requirement_list(tiling, req_list, direction, regions=False):
     """Return the list of tilings obtained by placing the direction-most point
     of a requirement list. This represents a batch strategy, where the
     direction-most point of each requirement in the list is placed."""
@@ -94,6 +115,8 @@ def place_requirement_list(tiling, req_list, direction):
     # For each tiling, compute the tiling where this point is placed furthest
     # in that direction.
     res = []
+    if regions:
+        forward_maps = []
     for (idx, cell), req in zip(min_points, req_list):
         # Placing the forced occurrence of the point in the requirement
         new_req, forced_obstructions = req.place_forced_point(idx, direction)
@@ -122,8 +145,28 @@ def place_requirement_list(tiling, req_list, direction):
                                             for r in reqs))
                    for reqs in other_reqs] + [new_req] + [
                         [Requirement.single_cell(Perm((0,)), point_cell)]]
-        res.append(Tiling(newobs, newreqs))
-    return res
+        placed_tiling = Tiling(newobs, newreqs)
+        res.append(placed_tiling)
+        if regions:
+            def cell_map(c):
+                mindex, minval = c
+                maxdex = mindex + 1
+                maxval = minval + 1
+                if mindex >= cell[0]: maxdex += 2
+                if minval >= cell[1]: maxval += 2
+                if mindex > cell[0]: mindex += 2
+                if minval > cell[1]: minval += 2
+                return set([placed_tiling.forward_map[(x, y)]
+                            for x in range(mindex, maxdex)
+                            for y in range(minval, maxval)
+                            if ((x, y) in placed_tiling.forward_map and
+                                placed_tiling.forward_map[(x, y)] in
+                                placed_tiling.active_cells)])
+            forward_maps.append({c: cell_map(c) for c in tiling.active_cells})
+    if regions:
+        return res, forward_maps
+    else:
+        return res
 
 
 def minimum_points(req_list, direction):
