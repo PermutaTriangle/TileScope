@@ -87,9 +87,10 @@ def row_placements(tiling, row=True, positive=True, regions=False, **kwargs):
                     if not positive:
                         tilings = [empty_row_tiling] + tilings
                     yield Strategy(
-                        formal_step=("Placing {} {} in direction {}.|{}|"
+                        formal_step=("Placing {} {} in direction {}.|{}|{}|"
                                      "".format("row" if row else "col",
-                                               i, direction, int(positive))),
+                                               i, direction,
+                                               direction, int(positive))),
                         comb_classes=tilings,
                         ignore_parent=False,
                         possibly_empty=[True for _ in tilings],
