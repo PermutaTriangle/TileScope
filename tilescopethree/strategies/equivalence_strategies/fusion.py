@@ -11,14 +11,14 @@ def fusion(tiling, **kwargs):
             yield Strategy(("Fuse rows {} and {}|{}|."
                             "").format(row_index, row_index + 1, row_index),
                            [fuse_tiling(tiling, row_index, True)],
-                           inferable=[True], workable=[True], 
+                           inferable=[True], workable=[True],
                            possibly_empty=[False], constructor='other')
     for col_index in range(tiling.dimensions[0] - 1):
         if fusable(tiling, col_index, False):
             yield Strategy(("Fuse columns {} and {}|{}|."
                             "").format(col_index, col_index + 1, col_index),
                            [fuse_tiling(tiling, col_index, False)],
-                           inferable=[True], workable=[True], 
+                           inferable=[True], workable=[True],
                            possibly_empty=[False], constructor='other')
 
 def fusable(tiling, row_index, row):
