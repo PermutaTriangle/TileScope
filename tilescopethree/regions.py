@@ -58,3 +58,16 @@ def parse_formal_step(formal_step):
         return None
     else:
         raise NotImplementedError("Not tracking regions for: " + formal_step)
+
+
+def get_fuse_region(start_tiling, formal_step):
+    """Return the cells in the row or columns before fusion. Returns a tuple,
+    the first is the first row, the second is the second row. When fused the
+    second row merge with the first."""
+    _, ri, _ = formal_step.split("|")
+    ri = int(ri)
+    row = "row" in formal_step
+    return ([c for c in start_tiling.active_cells
+             if ((row and c[1] == ri) or (not row and c[0] == ri))],
+            [c for c in start_tiling.active_cells
+              if ((row and c[1] == ri + 1) or (not row and c[0] == ri + 1))])
