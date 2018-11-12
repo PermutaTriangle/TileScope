@@ -13,7 +13,7 @@ and have a unique function/variable assigneb to it.
 """
 
 from collections import deque
-from itertools import chain
+from itertools import chain, product
 from functools import reduce
 from operator import add, mul
 
@@ -102,16 +102,21 @@ class Colour:
             for end_tiling, traced_region in rule.trace_region(coloured_region):
                 if traced_region:
                     if end_tiling in self.regions:
-                        print("Already coloured.")
-                        if frozenset(traced_region) == self.regions[end_tiling]:
-                            print("repeat")
-                        else:
+                        if not frozenset(traced_region) == self.regions[end_tiling]:
                             new_colours.append((end_tiling, traced_region))
-                            print("New: {}, Old: {}".format(frozenset(traced_region), self.regions[end_tiling]))
                     else:
                         self.regions[end_tiling] = frozenset(traced_region)
                         queue.append(end_tiling)
         return new_colours
+
+    def is_subset(self, other):
+        """Return True if other colour is a subset of self."""
+        try:
+            return all((self.get_coloured_region(tiling) ==
+                        other.get_coloured_region(tiling))
+                       for tiling in other.regions)
+        except AttributeError:
+            raise AttributeError("Checking for a subset uses a Colour object.")
 
     def __str__(self):
         s = "The colour of the following tilings regions\n"
@@ -177,8 +182,16 @@ class ColouredSpecification:
         res = None
         for colour in self.colours:
             if region == colour.get_coloured_region(tiling):
-                assert res is None
-                res = colour
+                # print(self.get_label(tiling))
+                # if res is not None:
+                #     print("COLOUR 1:")
+                #     for t, r in sorted(res.regions.items(), key=lambda x: self.get_label(x[0])):
+                #         print(self.get_label(t), r)
+                #     print("COLOUR 2:")
+                #     for t, r in sorted(colour.regions.items(), key=lambda x: self.get_label(x[0])):
+                        # print(self.get_label(t), r)
+                # assert res is None, "Same region twice"
+                return colour
         return res
 
     def find_colours(self, tiling, region):
@@ -208,40 +221,45 @@ class ColouredSpecification:
 
                 # Find the colour/variable that the fusion step happens to.
                 colour = self.find_colour(rule.end_tilings[0],
-                                           left_fuse_region)
+                                          left_fuse_region)
+
+                # print(rule.start_tiling)
+                # print(left_fuse_region)
+                # print(self.get_label(rule.start_tiling))
                 fuse_variable = colour.get_variable()
 
-                both_colours = self.find_colours(rule.start_tiling,
-                                                 (left_fuse_region +
-                                                  right_fuse_region))
+                # both_colours = self.find_colours(rule.start_tiling,
+                #                                  (left_fuse_region +
+                #                                   right_fuse_region))
                 left_colours = [c for c in self.find_colours(rule.start_tiling,
-                                                             left_fuse_region)
-                                if c not in both_colours]
+                                                             left_fuse_region)]
+                                # if c not in both_colours]
                 right_colours = [c for c in self.find_colours(rule.start_tiling,
-                                                              right_fuse_region)
-                                if c not in both_colours]
-                both_variable = reduce(mul, [c.get_variable()
-                                             for c in both_colours], 1)
-                print("both:", both_variable)
+                                                              right_fuse_region)]
+                                # if c not in both_colours]
+                # both_variable = reduce(mul, [c.get_variable()
+                #                              for c in both_colours], 1)
+                # print("both:", both_variable)
                 left_variable = reduce(mul, [c.get_variable()
                                              for c in left_colours], 1)
-                print("left:", left_variable)
+                # print("left:", left_variable)
                 right_variable = reduce(mul, [c.get_variable()
                                               for c in right_colours], 1)
-                print("right:", right_variable)
-                print("fuse:", fuse_variable)
+                # print("right:", right_variable)
+                # print("fuse:", fuse_variable)
                 rhs_func = self.get_function(rule.end_tilings[0])
-                if both_variable == 1:
-                    if left_variable == 1 and right_variable == 1:
-                        raise NotImplementedError("Track nothing not implemented.")
-                    rhs = (1/(left_variable-right_variable) *
-                           (right_variable*rhs_func.subs({fuse_variable:
-                                                          left_variable}) -
-                            left_variable*rhs_func.subs({fuse_variable:
-                                                         right_variable})))
-                else:
-                    rhs = rhs_func * sympy.Function("DOITYOURSELF")(sympy.abc.x)
-                    # raise NotImplementedError("Can't handle non-trivial both variable.")
+                # if both_variable == 1:
+                if left_variable == 1 and right_variable == 1:
+                    # derivative with respect to fuse variable
+                    raise NotImplementedError("Track nothing not implemented.")
+                rhs = (1/(right_variable - left_variable) *
+                        (right_variable*rhs_func.subs({fuse_variable:
+                                                        fuse_variable/left_variable}) -
+                         left_variable*rhs_func.subs({fuse_variable:
+                                                        fuse_variable/right_variable})))
+                # else:
+                #     rhs = rhs_func * sympy.Function("DOITYOURSELF")(sympy.abc.x)
+                #     raise NotImplementedError("Can't handle non-trivial both variable.")
             else:
                 raise NotImplementedError("Can't do it :(")
             subs = {colour.get_variable(): 1 for colour in self.colours
@@ -257,11 +275,26 @@ class ColouredSpecification:
 
         return equations
 
-
     def add_colour(self, start_tiling, region):
         """Add a new colour to the specification."""
         new_colour = Colour(start_tiling, region, self)
         self.colours.append(new_colour)
+
+    def cleanup_colours(self):
+        """Remove all colours that are a subset of another colour."""
+        indices_to_remove = []
+        for i in range(len(self.colours) - 1):
+            for j in range(i + 1, len(self.colours)):
+                if i in indices_to_remove or j in indices_to_remove:
+                    continue
+                colour1 = self.colours[i]
+                colour2 = self.colours[j]
+                if colour1.is_subset(colour2):
+                    indices_to_remove.append(j)
+                elif colour2.is_subset(colour1):
+                    indices_to_remove.append(i)
+        self.colours = [colour for i, colour in enumerate(self.colours)
+                        if i not in indices_to_remove]
 
     def __add_rules(self, proof_tree):
         """Will add the rules implied by the proof tree."""
@@ -281,6 +314,14 @@ class ColouredSpecification:
                     self.rules[start_tiling] = Rule(start_tiling,
                                                     node.formal_step,
                                                     constructor)
+
+    def pretty_print_equations(self):
+        """Return a string for all equations which can be read by Maple."""
+        equations = "eqs := [\n"
+        equations += ",\n".join("{} = {}".format(eq.lhs, eq.rhs)
+                              for eq in self.get_equations())
+        equations += "\n]:"
+        return equations
 
     def show_rules(self):
         for start, rule in self.rules.items():
@@ -302,19 +343,39 @@ class ColouredSpecification:
 if __name__ == "__main__":
     import json
     from comb_spec_searcher import ProofTree
-    with open("tree.txt", 'r') as f:
-        string = list(f)[0]
-        d = json.loads(string)
-        tree = ProofTree.from_dict(Tiling, d)
 
-    colourspec = ColouredSpecification(tree)
-    for rule in colourspec.get_rules():
-        if rule.constructor == "other":
-            region, _ = get_fuse_region(rule.start_tiling, rule.formal_step)
-            colourspec.add_colour(rule.end_tilings[0], region)
+    # with open("all_fusion_trees.txt", 'r') as f:
+    #     for line in f:
+    #         d = json.loads(line)
+    #         tree = ProofTree.from_dict(Tiling, d)
 
-    for eq in colourspec.get_equations():
-        print(eq)
+    #         try:
+    #             colourspec = ColouredSpecification(tree)
+    #             for rule in colourspec.get_rules():
+    #                 if rule.constructor == "other":
+    #                     region, _ = get_fuse_region(rule.start_tiling, rule.formal_step)
+    #                     colourspec.add_colour(rule.end_tilings[0], region)
+    #             colourspec.cleanup_colours()
+    #             print(colourspec.pretty_print_equations())
+    #         except (AssertionError, ValueError, NotImplementedError) as e:
+    #             print(e)
 
-
+    from tilescopethree import TileScopeTHREE, StrategyPacks
+    with open("some_bases.txt", 'r') as f:
+        for line in f:
+            print(line.strip())
+            tiling = Tiling.from_string(line.strip())
+            tilescope = TileScopeTHREE(tiling, StrategyPacks.negative_row_placements_fusion)
+            tree = tilescope.auto_search(max_time=30)
+            if tree is not None:
+                try:
+                    colourspec = ColouredSpecification(tree)
+                    for rule in colourspec.get_rules():
+                        if rule.constructor == "other":
+                            region, _ = get_fuse_region(rule.start_tiling, rule.formal_step)
+                            colourspec.add_colour(rule.end_tilings[0], region)
+                    colourspec.cleanup_colours()
+                    print(colourspec.pretty_print_equations())
+                except (AssertionError, ValueError, NotImplementedError, RecursionError) as e:
+                    print(e)
 

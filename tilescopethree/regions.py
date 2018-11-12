@@ -2,20 +2,29 @@
 specific strategies."""
 from functools import partial
 
+from permuta import Perm
 from grids_three import Tiling
 from tilescopethree.strategies.equivalence_strategies.point_placements import place_point_of_requirement
 from tilescopethree.strategies.inferral_strategies.row_and_column_separation import row_and_column_separation
 from tilescopethree.strategies.equivalence_strategies.fusion import fuse_tiling
 from tilescopethree.strategies.batch_strategies.list_requirement_placements import row_placements
+from tilescopethree.strategies.batch_strategies.cell_insertion import cell_insertion
 
 
 def mapping_after_initialise(start_tiling, end_tilings, forward_maps):
     """Return overall forward map implied by the forward maps given by a
     strategy and the inferral that has happened during the initialising."""
+    # print(start_tiling)
+    # for t in end_tilings:
+    #     print(t)
+    #     print(t.forward_map)
+    # for m in forward_maps:
+    #     print(m)
     return [{start_cell: frozenset(tiling.forward_map[cell]
-                                   for cell in forward_map[mapped_cell])
-             for start_cell, forward_map in zip(start_tiling.active_cells,
-                                                forward_maps)}]
+                                   for cell in forward_map[start_cell]
+                                   if cell in tiling.forward_map and tiling.forward_map[cell] in tiling.active_cells)
+             for start_cell in start_tiling.active_cells}
+            for tiling, forward_map in zip(end_tilings, forward_maps)]
 
 def parse_formal_step(formal_step):
     """Parse the formal step to get information about the strategy applied,
@@ -26,16 +35,28 @@ def parse_formal_step(formal_step):
     def unpacking_generator(start_tiling, strategy, **kwargs):
         return next(strategy(start_tiling, **kwargs))
 
+    def apply_post_map(start_tiling, strategy, **kwargs):
+        end_tilings, forward_maps = strategy(start_tiling, **kwargs)
+        # for t in end_tilings:
+        #     print(t)
+        # for m in forward_maps:
+        #     print(m)
+        return end_tilings, mapping_after_initialise(start_tiling, end_tilings,
+                                                     forward_maps)
+
     if "Reverse of:" in formal_step:
         raise ValueError("Can only handle forward equivalence rules!")
     if "Placing point" in formal_step:
         _, ri, i, DIR, _ = formal_step.split("|")
         return partial(place_point_of_requirement,
-                       int(ri), int(i), int(DIR), regions=True)
+                       req_index=int(ri), point_index=int(i),
+                       force_dir=int(DIR), regions=True)
     elif "Insert " in formal_step:
         _, c1, c2, patt, _ = formal_step.split("|")
+        patt = Perm.from_string(patt)
         cell = (int(c1), int(c2))
-        return partial(cell_insertion, cell, regions=True)
+        return partial(apply_post_map, strategy=cell_insertion, patt=patt,
+                       cell=cell, regions=True)
     elif "factors of the tiling." in formal_step:
         return partial(Tiling.find_factors, regions=True)
     elif "Separated rows" in formal_step:

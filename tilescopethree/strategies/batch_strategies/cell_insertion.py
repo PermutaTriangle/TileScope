@@ -45,18 +45,30 @@ def all_cell_insertions(tiling, **kwargs):
                     if (tiling.dimensions != (1, 1) or
                             all(patt > perm for perm in bdict[cell][1])):
                         yield Strategy(
-                            formal_step="Insert {} into cell {}.".format(patt,
-                                                                         cell),
-                            comb_classes=[
-                                tiling.add_single_cell_obstruction(patt,
-                                                                   cell),
-                                tiling.add_single_cell_requirement(patt,
-                                                                   cell)],
+                            formal_step=("Insert {} into cell {}.|{}|{}|{}|"
+                                         "".format(patt, cell, cell[0],
+                                                   cell[1],
+                                                   "".join(str(i)
+                                                           for i in patt))),
+                            comb_classes=cell_insertion(tiling, patt, cell),
                             ignore_parent=ignore_parent,
                             inferable=[True for _ in range(2)],
                             possibly_empty=[True for _ in range(2)],
                             workable=[True for _ in range(2)],
                             constructor='disjoint')
+
+def cell_insertion(tiling, patt, cell, regions=False):
+    """Return a tuple, the first avoids pattern in the cell, and the second
+    contains it."""
+    if regions:
+        return ([tiling.add_single_cell_obstruction(patt, cell),
+                 tiling.add_single_cell_requirement(patt, cell)],
+                [{c: frozenset([c]) for c in tiling.active_cells},
+                 {c: frozenset([c]) for c in tiling.active_cells}])
+    else:
+        return [tiling.add_single_cell_obstruction(patt, cell),
+                tiling.add_single_cell_requirement(patt, cell)]
+
 
 
 def root_requirement_insertion(tiling, **kwargs):
