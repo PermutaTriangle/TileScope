@@ -51,11 +51,7 @@ def all_cell_insertions(tiling, **kwargs):
                                                    cell[1],
                                                    "".join(str(i)
                                                            for i in patt))),
-                            comb_classes=[
-                                tiling.add_single_cell_obstruction(patt,
-                                                                   cell),
-                                tiling.add_single_cell_requirement(patt,
-                                                                   cell)],
+                            comb_classes=cell_insertion(tiling, patt, cell),
                             ignore_parent=ignore_parent,
                             inferable=[True for _ in range(2)],
                             possibly_empty=[any(len(r) > 1
@@ -63,6 +59,19 @@ def all_cell_insertions(tiling, **kwargs):
                                             True],
                             workable=[True for _ in range(2)],
                             constructor='disjoint')
+
+def cell_insertion(tiling, patt, cell, regions=False):
+    """Return a tuple, the first avoids pattern in the cell, and the second
+    contains it."""
+    if regions:
+        return ([tiling.add_single_cell_obstruction(patt, cell),
+                 tiling.add_single_cell_requirement(patt, cell)],
+                [{c: frozenset([c]) for c in tiling.active_cells},
+                 {c: frozenset([c]) for c in tiling.active_cells}])
+    else:
+        return [tiling.add_single_cell_obstruction(patt, cell),
+                tiling.add_single_cell_requirement(patt, cell)]
+
 
 
 def root_requirement_insertion(tiling, **kwargs):
