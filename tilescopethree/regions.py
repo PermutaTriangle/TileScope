@@ -20,9 +20,14 @@ def mapping_after_initialise(start_tiling, end_tilings, forward_maps):
     #     print(t.forward_map)
     # for m in forward_maps:
     #     print(m)
+    for tiling in end_tilings:
+        if tiling.is_empty():
+            tiling.forward_map = {}
     return [{start_cell: frozenset(tiling.forward_map[cell]
                                    for cell in forward_map[start_cell]
-                                   if cell in tiling.forward_map and tiling.forward_map[cell] in tiling.active_cells)
+                                   if (cell in tiling.forward_map and
+                                       tiling.forward_map[cell] in
+                                       tiling.active_cells))
              for start_cell in start_tiling.active_cells}
             for tiling, forward_map in zip(end_tilings, forward_maps)]
 
@@ -36,6 +41,8 @@ def parse_formal_step(formal_step):
         return next(strategy(start_tiling, **kwargs))
 
     def apply_post_map(start_tiling, strategy, **kwargs):
+        # print(start_tiling)
+        # print(strategy)
         end_tilings, forward_maps = strategy(start_tiling, **kwargs)
         # for t in end_tilings:
         #     print(t)
@@ -45,6 +52,8 @@ def parse_formal_step(formal_step):
                                                      forward_maps)
 
     if "Reverse of:" in formal_step:
+        if "reverse" in formal_step:
+            return partial(Tiling.reverse, regions=True)
         raise ValueError("Can only handle forward equivalence rules!")
     if "Placing point" in formal_step:
         _, ri, i, DIR, _ = formal_step.split("|")
@@ -72,9 +81,12 @@ def parse_formal_step(formal_step):
     elif "Placing row" in formal_step or "Placing col" in formal_step:
         row = "row" in formal_step
         _, direction, positive, _ = formal_step.split("|")
-        return partial(unpacking_generator, strategy=row_placements,
-                       row=row, positive=bool(int(positive)),
-                       direction=int(direction), regions=True)
+        return partial(apply_post_map,
+                       strategy=partial(unpacking_generator,
+                                        strategy=row_placements,
+                                        row=row, positive=bool(int(positive)),
+                                        direction=int(direction),
+                                        regions=True))
     elif "The tiling is a subset of the class" in formal_step:
         return None
     else:
@@ -88,7 +100,9 @@ def get_fuse_region(start_tiling, formal_step):
     _, ri, _ = formal_step.split("|")
     ri = int(ri)
     row = "row" in formal_step
-    return ([c for c in start_tiling.active_cells
-             if ((row and c[1] == ri) or (not row and c[0] == ri))],
-            [c for c in start_tiling.active_cells
-              if ((row and c[1] == ri + 1) or (not row and c[0] == ri + 1))])
+    return (frozenset([c for c in start_tiling.active_cells
+                       if (((row and c[1] == ri) or
+                           (not row and c[0] == ri)))]),
+            frozenset([c for c in start_tiling.active_cells
+                       if (((row and c[1] == ri + 1) or
+                           (not row and c[0] == ri + 1)))]))
