@@ -66,12 +66,8 @@ def row_placements(tiling, row=True, positive=True, regions=False, **kwargs):
                                                     for cell in cells_in_row),
                                               tiling.requirements)
                     if regions:
-                        forward_maps.append(
-                            {c: set([empty_row_tiling.forward_map[c]])
-                             for c in tiling.active_cells
-                             if (c in empty_row_tiling.forward_map and
-                                 empty_row_tiling.forward_map[c] in
-                                 empty_row_tiling.active_cells)})
+                        forward_maps.append({c: c
+                                             for c in tiling.active_cells})
                 for direction in directions:
                     if regions:
                         tilings, placed_maps = place_requirement_list(
@@ -157,12 +153,8 @@ def place_requirement_list(tiling, req_list, direction, regions=False):
                 if minval >= cell[1]: maxval += 2
                 if mindex > cell[0]: mindex += 2
                 if minval > cell[1]: minval += 2
-                return set([placed_tiling.forward_map[(x, y)]
-                            for x in range(mindex, maxdex)
-                            for y in range(minval, maxval)
-                            if ((x, y) in placed_tiling.forward_map and
-                                placed_tiling.forward_map[(x, y)] in
-                                placed_tiling.active_cells)])
+                return frozenset([(x, y) for x in range(mindex, maxdex)
+                                  for y in range(minval, maxval)])
             forward_maps.append({c: cell_map(c) for c in tiling.active_cells})
     if regions:
         return res, forward_maps
