@@ -92,11 +92,13 @@ class TileScopePack(StrategyPack):
     # The base packs are given as class methods below.
 
     @classmethod
-    def pattern_placements(cls, length=1):
+    def pattern_placements(cls, length=1, partial_placements=False):
         if not isinstance(length, int) or length < 1:
             raise ValueError("The length {} makes no sense".format(length))
+        placement = (partial_point_placement
+                     if partial_placements else requirement_placement)
         return TileScopePack(
-                initial_strats=[requirement_placement],
+                initial_strats=[placement],
                 ver_strats=[subset_verified, globally_verified],
                 inferral_strats=[row_and_column_separation,
                                  obstruction_transitivity],
@@ -104,15 +106,17 @@ class TileScopePack(StrategyPack):
                                   [partial(all_cell_insertions,
                                            maxreqlen=length)],
                                   [requirement_corroboration]],
-                name="{}{}_placements".format("length_{}".format(length)
-                                              if length > 1 else "",
-                                              "pattern"
-                                              if length > 1 else "point"))
+                name="{}{}{}_placements".format(
+                            "length_{}_".format(length) if length > 1 else "",
+                            "partial_" if partial_placements else "",
+                            "pattern" if length > 1 else "point"))
 
     @classmethod
-    def point_placements(cls, length=1):
+    def point_placements(cls, length=1, partial_placements=False):
         if not isinstance(length, int) or length < 1:
             raise ValueError("The length {} makes no sense".format(length))
+        placement = (partial_point_placement
+                     if partial_placements else requirement_placement)
         return TileScopePack(
                 initial_strats=[factor, requirement_corroboration],
                 ver_strats=[subset_verified, globally_verified],
@@ -120,9 +124,10 @@ class TileScopePack(StrategyPack):
                                  obstruction_transitivity],
                 expansion_strats=[[partial(all_cell_insertions,
                                            maxreqlen=length)],
-                                  [requirement_placement]],
-                name="{}point_placements".format("length_{}_".format(length)
-                                                 if length > 1 else ""))
+                                  [placement]],
+                name="{}{}point_placements".format(
+                            "length_{}_".format(length) if length > 1 else "",
+                            "partial_" if partial_placements else ""))
 
     @classmethod
     def insertion_point_placements(cls, length=1):
@@ -163,7 +168,7 @@ class TileScopePack(StrategyPack):
 
 if __name__ == "__main__":
     print("HERE")
-    point_placements = TileScopePack.row_and_col_placements(col_only=True)
+    point_placements = TileScopePack.point_placements(partial_placements=False)
 
     print(point_placements.name)
 
