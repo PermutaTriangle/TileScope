@@ -9,7 +9,7 @@ from tilescopethree.strategies import (all_cell_insertions,
                                        fusion_with_interleaving,
                                        factor, one_by_one_verification,
                                        globally_verified,
-                                       fundamentally_verified,
+                                       elementary_verified,
                                        obstruction_transitivity,
                                        point_placement, requirement_placement,
                                        verify_points,
@@ -734,19 +734,19 @@ length_4_root_requirement_with_point_placements_db = Pack(
                             partial(root_requirement_insertion, maxreqlen=4)]],
          name="length_4_root_requirement_with_point_placements_db")
 
-fundamental_point_placement = Pack(
+elementary_point_placement = Pack(
          initial_strats=[point_placement],
-         ver_strats=[fundamentally_verified],
+         ver_strats=[elementary_verified],
          inferral_strats=[row_and_column_separation, obstruction_transitivity],
          expansion_strats=[[factor], [all_point_insertions],
                            [requirement_corroboration]],
          iterative=True,
          forward_equivalence=True,
-         name="fundamental_point_placement")
+         name="elementary_point_placement")
 
-fundamental_length_2_requirement_with_point_placement = Pack(
+elementary_length_2_requirement_with_point_placement = Pack(
          initial_strats=[],
-         ver_strats=[fundamentally_verified],
+         ver_strats=[elementary_verified],
          inferral_strats=[row_and_column_separation, obstruction_transitivity],
          expansion_strats=[[factor],
                            [partial(all_cell_insertions, maxreqlen=2)],
@@ -754,11 +754,11 @@ fundamental_length_2_requirement_with_point_placement = Pack(
                            [requirement_corroboration]],
          iterative=True,
          forward_equivalence=True,
-         name="fundamental_length_2_requirement_with_point_placement")
+         name="elementary_length_2_requirement_with_point_placement")
 
-fundamental_length_2_requirement_with_pattern_placement = Pack(
+elementary_length_2_requirement_with_pattern_placement = Pack(
          initial_strats=[requirement_placement],
-         ver_strats=[fundamentally_verified],
+         ver_strats=[elementary_verified],
          inferral_strats=[row_and_column_separation, obstruction_transitivity],
          expansion_strats=[[factor],
                            [partial(all_cell_insertions, maxreqlen=2),
@@ -766,11 +766,11 @@ fundamental_length_2_requirement_with_pattern_placement = Pack(
                            [requirement_corroboration]],
          iterative=True,
          forward_equivalence=True,
-         name="fundamental_length_2_requirement_with_pattern_placement")
+         name="elementary_length_2_requirement_with_pattern_placement")
 
-fundamental_length_3_requirement_with_point_placement = Pack(
+elementary_length_3_requirement_with_point_placement = Pack(
          initial_strats=[],
-         ver_strats=[fundamentally_verified],
+         ver_strats=[elementary_verified],
          inferral_strats=[row_and_column_separation, obstruction_transitivity],
          expansion_strats=[[factor],
                            [partial(all_cell_insertions, maxreqlen=3)],
@@ -778,11 +778,11 @@ fundamental_length_3_requirement_with_point_placement = Pack(
                            [requirement_corroboration]],
          iterative=True,
          forward_equivalence=True,
-         name="fundamental_length_3_requirement_with_point_placement")
+         name="elementary_length_3_requirement_with_point_placement")
 
-fundamental_length_3_requirement_with_pattern_placement = Pack(
+elementary_length_3_requirement_with_pattern_placement = Pack(
          initial_strats=[requirement_placement],
-         ver_strats=[fundamentally_verified],
+         ver_strats=[elementary_verified],
          inferral_strats=[row_and_column_separation, obstruction_transitivity],
          expansion_strats=[[factor],
                            [partial(all_cell_insertions, maxreqlen=3),
@@ -790,98 +790,98 @@ fundamental_length_3_requirement_with_pattern_placement = Pack(
                            [requirement_corroboration]],
          iterative=True,
          forward_equivalence=True,
-         name="fundamental_length_3_requirement_with_pattern_placement")
+         name="elementary_length_3_requirement_with_pattern_placement")
 
-fundamental_row_placements_symmetries = Pack(
+elementary_row_placements_symmetries = Pack(
         initial_strats=[],
-        ver_strats=[partial(fundamentally_verified, symmetry=True)],
+        ver_strats=[partial(elementary_verified, symmetry=True)],
         inferral_strats=[obstruction_transitivity, row_and_column_separation],
         expansion_strats=[[factor],
                           [partial(insertion_encoding, symmetry=True)]],
         iterative=True,
         forward_equivalence=True,
-        name="fundamental_row_placements_symmetries")
+        name="elementary_row_placements_symmetries")
 
-fundamental_row_placements_symmetries_top_and_bottom = Pack(
+elementary_row_placements_symmetries_top_and_bottom = Pack(
         initial_strats=[],
-        ver_strats=[partial(fundamentally_verified, symmetry=True)],
+        ver_strats=[partial(elementary_verified, symmetry=True)],
         inferral_strats=[obstruction_transitivity, row_and_column_separation],
         expansion_strats=[[factor],
                           [partial(insertion_encoding, symmetry=True,
                                    top_and_bottom=True)]],
         iterative=True,
         forward_equivalence=True,
-        name="fundamental_row_placements_symmetries_top_and_bottom")
+        name="elementary_row_placements_symmetries_top_and_bottom")
 
-fundamental_point_placement_no_factors = Pack(
+elementary_point_placement_no_factors = Pack(
          initial_strats=[point_placement],
-         ver_strats=[fundamentally_verified],
+         ver_strats=[elementary_verified],
          inferral_strats=[row_and_column_separation, obstruction_transitivity],
          expansion_strats=[[all_point_insertions],
                            [requirement_corroboration]],
          iterative=True,
-         name="fundamental_point_placement_no_factors")
+         name="elementary_point_placement_no_factors")
 
-fundamental_length_2_requirement_with_point_placement_no_factors = Pack(
+elementary_length_2_requirement_with_point_placement_no_factors = Pack(
          initial_strats=[],
-         ver_strats=[fundamentally_verified],
+         ver_strats=[elementary_verified],
          inferral_strats=[row_and_column_separation, obstruction_transitivity],
          expansion_strats=[[partial(all_cell_insertions, maxreqlen=2)],
                            [requirement_placement],
                            [requirement_corroboration]],
          iterative=True,
-         name=("fundamental_length_2_requirement_with_point_placement_"
+         name=("elementary_length_2_requirement_with_point_placement_"
                "no_factors"))
 
-fundamental_length_2_requirement_with_pattern_placement_no_factors = Pack(
+elementary_length_2_requirement_with_pattern_placement_no_factors = Pack(
          initial_strats=[requirement_placement],
-         ver_strats=[fundamentally_verified],
+         ver_strats=[elementary_verified],
          inferral_strats=[row_and_column_separation, obstruction_transitivity],
          expansion_strats=[[partial(all_cell_insertions, maxreqlen=2),
                             partial(all_requirement_extensions, maxreqlen=2)],
                            [requirement_corroboration]],
          iterative=True,
-         name=("fundamental_length_2_requirement_with_pattern_placement_"
+         name=("elementary_length_2_requirement_with_pattern_placement_"
                "no_factors"))
 
-fundamental_length_3_requirement_with_point_placement_no_factors = Pack(
+elementary_length_3_requirement_with_point_placement_no_factors = Pack(
          initial_strats=[],
-         ver_strats=[fundamentally_verified],
+         ver_strats=[elementary_verified],
          inferral_strats=[row_and_column_separation, obstruction_transitivity],
          expansion_strats=[[partial(all_cell_insertions, maxreqlen=3)],
                            [requirement_placement],
                            [requirement_corroboration]],
          iterative=True,
-         name=("fundamental_length_3_requirement_with_point_placement_"
+         name=("elementary_length_3_requirement_with_point_placement_"
                "no_factors"))
 
-fundamental_length_3_requirement_with_pattern_placement_no_factors = Pack(
+elementary_length_3_requirement_with_pattern_placement_no_factors = Pack(
          initial_strats=[requirement_placement],
-         ver_strats=[fundamentally_verified],
+         ver_strats=[elementary_verified],
          inferral_strats=[row_and_column_separation, obstruction_transitivity],
          expansion_strats=[[partial(all_cell_insertions, maxreqlen=3),
                             partial(all_requirement_extensions, maxreqlen=3)],
                            [requirement_corroboration]],
          iterative=True,
-         name=("fundamental_length_3_requirement_with_pattern_placement_"
+         name=("elementary_length_3_requirement_with_pattern_placement_"
                "no_factors"))
 
-fundamental_row_placements_symmetries_no_factors = Pack(
+elementary_row_placements_symmetries_no_factors = Pack(
         initial_strats=[],
-        ver_strats=[partial(fundamentally_verified, symmetry=True)],
+        ver_strats=[partial(elementary_verified, symmetry=True)],
         inferral_strats=[row_and_column_separation, obstruction_transitivity],
         expansion_strats=[[partial(insertion_encoding, symmetry=True)]],
         iterative=True,
-        name="fundamental_row_placements_symmetries_no_factors")
+        name="elementary_row_placements_symmetries_no_factors")
 
-fundamental_row_placements_symmetries_top_and_bottom_no_factors = Pack(
+elementary_row_placements_symmetries_top_and_bottom_no_factors = Pack(
         initial_strats=[],
-        ver_strats=[partial(fundamentally_verified, symmetry=True)],
+        ver_strats=[partial(elementary_verified, symmetry=True)],
         inferral_strats=[row_and_column_separation, obstruction_transitivity],
         expansion_strats=[[partial(insertion_encoding, symmetry=True,
                                    top_and_bottom=True)]],
         iterative=True,
-        name="fundamental_row_placements_symmetries_top_and_bottom_no_factors")
+        name="elementary_row_placements_symmetries_top_and_bottom_no_factors")
 
 regular_insertion_encoding = Pack(
         initial_strats=[],

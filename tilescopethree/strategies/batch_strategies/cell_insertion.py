@@ -35,7 +35,6 @@ def all_cell_insertions(tiling, **kwargs):
         maxreqnum = 1
 
     active = tiling.active_cells
-    positive = tiling.positive_cells
     bdict = tiling.cell_basis()
     for cell in active:
         if len(bdict[cell][1]) >= maxreqnum:
