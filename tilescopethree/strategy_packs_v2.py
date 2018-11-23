@@ -170,41 +170,33 @@ class TileScopePack(StrategyPack):
                                                 "col" if not row_only else ""))
 
 
-col_placements = TileScopePack.row_and_col_placements(col_only=True)
-row_placements = TileScopePack.row_and_col_placements(row_only=True)
-row_and_col_placements = TileScopePack.row_and_col_placements()
+basepacks = [
+    TileScopePack.row_and_col_placements(col_only=True),
+    TileScopePack.row_and_col_placements(row_only=True),
+    TileScopePack.row_and_col_placements(),
+    TileScopePack.point_placements(partial_placements=True),
+    TileScopePack.pattern_placements(),
+    TileScopePack.pattern_placements(4),
+    TileScopePack.point_placements(4),
+]
+length_4_root_placements = TileScopePack.point_placements().add_initial(
+                            partial(root_requirement_insertion, maxreqlen=4))
+length_4_root_placements.name = "length_4_root_placements"
+basepacks.append(length_4_root_placements)
 
-partial_point_placements = TileScopePack.point_placements(
-                                                partial_placements=True)
-point_placements = TileScopePack.pattern_placements()
-length_4_pattern_placements = TileScopePack.pattern_placements(4)
-length_4_point_placements = TileScopePack.point_placements(4)
-length_4_root_placements = point_placements.add_initial(
-                        partial(root_requirement_insertion, maxreqlen=4))
+import importlib
+module = importlib.import_module(TileScopePack.__module__)
 
-row_placements_db = row_placements.add_verification(database_verified)
-col_placements_db = col_placements.add_verification(database_verified)
-row_and_col_placements_db = row_and_col_placements.add_verification(
-                                                        database_verified)
-partial_point_placements_db = partial_point_placements.add_verification(
-                                                        database_verified)
-point_placements_db = point_placements.add_verification(database_verified)
-length_4_pattern_placements_db = \
-            length_4_pattern_placements.add_verification(database_verified)
-length_4_point_placements_db = \
-            length_4_point_placements.add_verification(database_verified)
-length_4_root_placements_db = \
-            length_4_root_placements.add_verification(database_verified)
+for pack in basepacks:
+    setattr(module, pack.name, pack)
+    pack_db = pack.add_verification(database_verified)
+    setattr(module, pack_db.name, pack_db)
+    pack_sym = pack.add_symmetry()
+    setattr(module, pack_sym.name, pack_sym)
+    pack_db_sym = pack_db.add_symmetry()
+    setattr(module, pack_db_sym.name, pack_db_sym)
 
-row_placements_db_sym = row_placements_db.add_symmetry()
-col_placements_db_sym = col_placements_db.add_symmetry()
-row_and_col_placements_db_sym = row_and_col_placements_db.add_symmetry()
-partial_point_placements_db_sym = \
-                            partial_point_placements_db.add_symmetry()
-point_placements_db_sym = point_placements_db.add_symmetry()
-length_4_pattern_placements_db_sym = \
-                            length_4_pattern_placements_db.add_symmetry()
-length_4_point_placements_db_sym = \
-                            length_4_point_placements_db.add_symmetry()
-length_4_root_placements_db_sym = \
-                            length_4_root_placements_db.add_symmetry()
+delattr(module, 'pack')
+delattr(module, 'pack_sym')
+delattr(module, 'pack_db')
+delattr(module, 'pack_db_sym')
