@@ -2,16 +2,18 @@ from comb_spec_searcher import StrategyPack
 from comb_spec_searcher.utils import get_func_name
 from grids_three import Tiling
 from functools import partial
-from tilescopethree.strategies import (all_cell_insertions, col_placements,
-                                       database_verified, factor,
-                                       fundamentally_verified,
-                                       globally_verified,
+from tilescopethree.strategies import (all_cell_insertions,
+                                       col_placements as col_placements_strat,
+                                       database_verified, elementary_verified,
+                                       factor, globally_verified,
                                        obstruction_transitivity,
                                        partial_point_placement,
                                        requirement_corroboration,
                                        requirement_placement,
+                                       root_requirement_insertion,
                                        row_and_column_separation,
-                                       row_placements, subset_verified)
+                                       row_placements as row_placements_strat,
+                                       subset_verified)
 
 class TileScopePack(StrategyPack):
 
@@ -76,15 +78,15 @@ class TileScopePack(StrategyPack):
                               forward_equivalence = self.forward_equivalence,
                               iterative = self.iterative)
 
-    def make_fundamental(self):
-        if ([fundamentally_verified] == self.ver_strats and
+    def make_elementary(self):
+        if ([elementary_verified] == self.ver_strats and
                 self.forward_equivalence and self.iterative):
-            raise ValueError("The pack is already fundamental.")
-        name = "fundamental_" + self.name
+            raise ValueError("The pack is already elementary.")
+        name = "elementary_" + self.name
         return self.__class__(self.initial_strats,
                               self.inferral_strats,
                               self.expansion_strats,
-                              [fundamentally_verified], name,
+                              [elementary_verified], name,
                               symmetries = self.symmetries,
                               forward_equivalence = True,
                               iterative = True)
@@ -152,9 +154,11 @@ class TileScopePack(StrategyPack):
         both = not (row_only or col_only)
         expansion_strats = []
         if not col_only:
-            expansion_strats.append(partial(row_placements, positive=False))
+            expansion_strats.append(partial(row_placements_strat,
+                                            positive=False))
         if not row_only:
-            expansion_strats.append(partial(col_placements, positive=False))
+            expansion_strats.append(partial(col_placements_strat,
+                                            positive=False))
         return TileScopePack(
                 initial_strats=[factor, requirement_corroboration],
                 ver_strats=[subset_verified, globally_verified],
@@ -166,10 +170,41 @@ class TileScopePack(StrategyPack):
                                                 "col" if not row_only else ""))
 
 
-if __name__ == "__main__":
-    print("HERE")
-    point_placements = TileScopePack.point_placements(partial_placements=False)
+col_placements = TileScopePack.row_and_col_placements(col_only=True)
+row_placements = TileScopePack.row_and_col_placements(row_only=True)
+row_and_col_placements = TileScopePack.row_and_col_placements()
 
-    print(point_placements.name)
+partial_point_placements = TileScopePack.point_placements(
+                                                partial_placements=True)
+point_placements = TileScopePack.pattern_placements()
+length_4_pattern_placements = TileScopePack.pattern_placements(4)
+length_4_point_placements = TileScopePack.point_placements(4)
+length_4_root_placements = point_placements.add_initial(
+                        partial(root_requirement_insertion, maxreqlen=4))
 
-    print(point_placements)
+row_placements_db = row_placements.add_verification(database_verified)
+col_placements_db = col_placements.add_verification(database_verified)
+row_and_col_placements_db = row_and_col_placements.add_verification(
+                                                        database_verified)
+partial_point_placements_db = partial_point_placements.add_verification(
+                                                        database_verified)
+point_placements_db = point_placements.add_verification(database_verified)
+length_4_pattern_placements_db = \
+            length_4_pattern_placements.add_verification(database_verified)
+length_4_point_placements_db = \
+            length_4_point_placements.add_verification(database_verified)
+length_4_root_placements_db = \
+            length_4_root_placements.add_verification(database_verified)
+
+row_placements_db_sym = row_placements_db.add_symmetry()
+col_placements_db_sym = col_placements_db.add_symmetry()
+row_and_col_placements_db_sym = row_and_col_placements_db.add_symmetry()
+partial_point_placements_db_sym = \
+                            partial_point_placements_db.add_symmetry()
+point_placements_db_sym = point_placements_db.add_symmetry()
+length_4_pattern_placements_db_sym = \
+                            length_4_pattern_placements_db.add_symmetry()
+length_4_point_placements_db_sym = \
+                            length_4_point_placements_db.add_symmetry()
+length_4_root_placements_db_sym = \
+                            length_4_root_placements_db.add_symmetry()
