@@ -54,9 +54,7 @@ def all_cell_insertions(tiling, **kwargs):
                                                                    cell)],
                             ignore_parent=ignore_parent,
                             inferable=[True for _ in range(2)],
-                            possibly_empty=[any(len(r) > 1
-                                                for r in tiling.requirements),
-                                            True],
+                            possibly_empty=[True for _ in range(2)],
                             workable=[True for _ in range(2)],
                             constructor='disjoint')
 
