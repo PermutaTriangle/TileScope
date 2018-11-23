@@ -35,7 +35,6 @@ def all_cell_insertions(tiling, **kwargs):
         maxreqnum = 1
 
     active = tiling.active_cells
-    positive = tiling.positive_cells
     bdict = tiling.cell_basis()
     for cell in active:
         if len(bdict[cell][1]) >= maxreqnum:
@@ -104,7 +103,7 @@ def all_requirement_extensions(tiling, **kwargs):
                             tiling.add_single_cell_obstruction(patt, cell),
                             tiling.add_single_cell_requirement(patt, cell)],
                         ignore_parent=False,
-                        possibly_empty=[any(len(r) > 1 
+                        possibly_empty=[any(len(r) > 1
                                             for r in tiling.requirements),
                                         True],
                         inferable=[True for _ in range(2)],
@@ -125,9 +124,9 @@ def all_row_insertions(tiling, **kwargs):
                         for c in row_cells)
         yield Strategy(
                     formal_step="Either row {} is empty or not.".format(row),
-                    comb_classes=[Tiling(tiling.obstructions + row_obs, 
+                    comb_classes=[Tiling(tiling.obstructions + row_obs,
                                          tiling.requirements),
-                                  Tiling(tiling.obstructions, 
+                                  Tiling(tiling.obstructions,
                                          tiling.requirements + (row_req,))],
                     ignore_parent=False,
                     inferable=[True for _ in range(2)],
@@ -150,9 +149,9 @@ def all_col_insertions(tiling, **kwargs):
                         for c in col_cells)
         yield Strategy(
                     formal_step="Either col {} is empty or not.".format(col),
-                    comb_classes=[Tiling(tiling.obstructions + col_obs, 
+                    comb_classes=[Tiling(tiling.obstructions + col_obs,
                                          tiling.requirements),
-                                  Tiling(tiling.obstructions, 
+                                  Tiling(tiling.obstructions,
                                          tiling.requirements + (col_req,))],
                     ignore_parent=False,
                     inferable=[True for _ in range(2)],
