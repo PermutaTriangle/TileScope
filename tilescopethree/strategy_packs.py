@@ -7,7 +7,7 @@ from tilescopethree.strategies import (all_cell_insertions,
                                        database_verified,
                                        empty_cell_inferral, factor, fusion,
                                        fusion_with_interleaving,
-                                       factor,
+                                       factor, one_by_one_verification,
                                        globally_verified,
                                        fundamentally_verified,
                                        obstruction_transitivity,
@@ -24,8 +24,8 @@ from tilescopethree.strategies import (all_cell_insertions,
                                        subobstruction_inferral)
 
 all_the_strategies = Pack(
-        initial_strats=[partial(factor, unions=True)],
-        ver_strats=[subset_verified, globally_verified, database_verified],
+        initial_strats=[partial(factor, unions=True), fusion],
+        ver_strats=[subset_verified, globally_verified],
         inferral_strats=[row_and_column_separation, obstruction_transitivity],
         expansion_strats=[[all_point_insertions, all_row_insertions,
                            all_col_insertions],
@@ -37,6 +37,7 @@ all_the_strategies = Pack(
                            requirement_placement,
                            requirement_list_placement],
                           [requirement_corroboration]],
+        forward_equivalence=True,
         name="all_the_strategies"
 )
 
@@ -234,12 +235,30 @@ negative_row_placements = Pack(
         name="negative_row_placements"
 )
 
+negative_row_placements_with_fusion = Pack(
+        initial_strats=[factor, requirement_corroboration, fusion],
+        ver_strats=[subset_verified, globally_verified],
+        inferral_strats=[row_and_column_separation, obstruction_transitivity],
+        expansion_strats=[[partial(row_placements, positive=False)]],
+        forward_equivalence=True,
+        name="negative_row_placements_with_fusion"
+)
+
 negative_row_placements_db = Pack(
         initial_strats=[factor, requirement_corroboration],
         ver_strats=[subset_verified, globally_verified, database_verified],
         inferral_strats=[row_and_column_separation, obstruction_transitivity],
         expansion_strats=[[partial(row_placements, positive=False)]],
         name="negative_row_placements_db"
+)
+
+negative_row_placements_fusion = Pack(
+        initial_strats=[factor, requirement_corroboration, fusion],
+        ver_strats=[subset_verified, globally_verified],
+        inferral_strats=[row_and_column_separation, obstruction_transitivity],
+        expansion_strats=[[partial(row_placements, positive=False)]],
+        forward_equivalence=True,
+        name="negative_row_placements_fusion"
 )
 
 negative_col_placements = Pack(
@@ -337,6 +356,24 @@ point_placements = Pack(
          expansion_strats=[[factor], [all_point_insertions],
                            [requirement_corroboration]],
          name="point_placements")
+
+
+point_placements_subset_verified = Pack(
+         initial_strats=[requirement_placement],
+         ver_strats=[subset_verified],
+         inferral_strats=[row_and_column_separation, obstruction_transitivity],
+         expansion_strats=[[factor], [all_point_insertions],
+                           [requirement_corroboration]],
+         name="point_placements_subset_verified")
+
+point_placements_one_by_one = Pack(
+         initial_strats=[requirement_placement],
+         ver_strats=[one_by_one_verification],
+         inferral_strats=[row_and_column_separation, obstruction_transitivity],
+         expansion_strats=[[factor], [all_point_insertions],
+                           [requirement_corroboration]],
+         name="point_placements_one_by_one")
+
 
 insertion_point_placements = Pack(
          initial_strats=[factor, requirement_corroboration,

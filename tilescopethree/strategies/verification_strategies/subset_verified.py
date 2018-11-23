@@ -24,7 +24,7 @@ def subset_verified(tiling, basis, **kwargs):
 
 def one_by_one_verified(tiling, basis, **kwargs):
     """Return true if tiling is a subset of the Av(basis)."""
-    if basis is None:
+    if basis is None or tiling.dimensions != (1, 1):
         return False
     rootbasis = [ob.patt for ob in tiling.obstructions]
     if kwargs.get('symmetry'):
@@ -35,3 +35,9 @@ def one_by_one_verified(tiling, basis, **kwargs):
     if any(basis == patts for patts in all_patts):
         return False
     return True
+
+def one_by_one_verification(tiling, basis, **kwargs):
+    """Return a verification if one-by-one verified."""
+    if one_by_one_verified(tiling, basis, **kwargs):
+        return VerificationStrategy(
+                        formal_step="The tiling is a subclass of the class.")
