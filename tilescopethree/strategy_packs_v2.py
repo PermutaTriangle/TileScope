@@ -3,16 +3,19 @@ from comb_spec_searcher.utils import get_func_name
 from grids_three import Tiling
 from functools import partial
 from tilescopethree.strategies import (all_cell_insertions,
+                                       all_col_insertions, all_row_insertions,
                                        col_placements as col_placements_strat,
                                        database_verified, elementary_verified,
                                        factor, globally_verified,
                                        obstruction_transitivity,
-                                       partial_point_placement,
+                                       partial_requirement_placement,
                                        requirement_corroboration,
+                                       requirement_list_placement,
                                        requirement_placement,
                                        root_requirement_insertion,
                                        row_and_column_separation,
                                        row_placements as row_placements_strat,
+                                       subobstruction_inferral,
                                        subset_verified)
 
 class TileScopePack(StrategyPack):
@@ -94,10 +97,33 @@ class TileScopePack(StrategyPack):
     # The base packs are given as class methods below.
 
     @classmethod
+    def all_the_strategies(cls, length=1):
+        return TileScopePack(
+                initial_strats=[partial(factor, unions=True)],
+                ver_strats=[subset_verified, globally_verified],
+                inferral_strats=[row_and_column_separation,
+                                 obstruction_transitivity],
+                expansion_strats=[[partial(all_cell_insertions,
+                                           maxreqlen=length),
+                                   all_row_insertions,
+                                   all_col_insertions],
+                                  [row_placements_strat,
+                                   col_placements_strat,
+                                   partial(row_placements_strat,
+                                           positive=False),
+                                   partial(col_placements_strat,
+                                           positive=False),
+                                   partial_requirement_placement,
+                                   requirement_placement,
+                                   requirement_list_placement],
+                                  [requirement_corroboration]],
+                name="all_the_strategies")
+
+    @classmethod
     def pattern_placements(cls, length=1, partial_placements=False):
         if not isinstance(length, int) or length < 1:
             raise ValueError("The length {} makes no sense".format(length))
-        placement = (partial_point_placement
+        placement = (partial_requirement_placement
                      if partial_placements else requirement_placement)
         return TileScopePack(
                 initial_strats=[placement],
@@ -117,7 +143,7 @@ class TileScopePack(StrategyPack):
     def point_placements(cls, length=1, partial_placements=False):
         if not isinstance(length, int) or length < 1:
             raise ValueError("The length {} makes no sense".format(length))
-        placement = (partial_point_placement
+        placement = (partial_requirement_placement
                      if partial_placements else requirement_placement)
         return TileScopePack(
                 initial_strats=[factor, requirement_corroboration],
@@ -178,6 +204,7 @@ basepacks = [
     TileScopePack.pattern_placements(),
     TileScopePack.pattern_placements(4),
     TileScopePack.point_placements(4),
+    TileScopePack.all_the_strategies(),
 ]
 length_4_root_placements = TileScopePack.point_placements().add_initial(
                             partial(root_requirement_insertion, maxreqlen=4))
@@ -188,15 +215,15 @@ import importlib
 module = importlib.import_module(TileScopePack.__module__)
 
 for pack in basepacks:
-    setattr(module, pack.name, pack)
-    pack_db = pack.add_verification(database_verified)
-    setattr(module, pack_db.name, pack_db)
-    pack_sym = pack.add_symmetry()
-    setattr(module, pack_sym.name, pack_sym)
-    pack_db_sym = pack_db.add_symmetry()
-    setattr(module, pack_db_sym.name, pack_db_sym)
+    new_packs = [pack]
+    for new_pack in tuple(new_packs):
+        new_packs.append(new_pack.add_verification(database_verified))
+    for new_pack in tuple(new_packs):
+        new_packs.append(new_pack.add_symmetry())
+    for new_pack in tuple(new_packs):
+        new_packs.append(new_pack.add_inferral(subobstruction_inferral))
+    for new_pack in new_packs:
+        setattr(module, new_pack.name, new_pack)
 
 delattr(module, 'pack')
-delattr(module, 'pack_sym')
-delattr(module, 'pack_db')
-delattr(module, 'pack_db_sym')
+delattr(module, 'new_pack')
