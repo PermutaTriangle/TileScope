@@ -9,6 +9,7 @@ from tilescopethree.strategies.inferral_strategies.row_and_column_separation imp
 from tilescopethree.strategies.equivalence_strategies.fusion import fuse_tiling
 from tilescopethree.strategies.batch_strategies.list_requirement_placements import row_placements
 from tilescopethree.strategies.batch_strategies.cell_insertion import cell_insertion
+from tilescopethree.strategies.equivalence_strategies.fusion_with_interleaving import fuse_tiling as fancy_fuse_tiling
 
 
 def mapping_after_initialise(start_tiling, end_tilings, forward_maps):
@@ -72,19 +73,28 @@ def parse_formal_step(formal_step):
         return partial(row_and_column_separation, regions=True)
     elif "Fuse rows" in formal_step:
         _, row_index, _ = formal_step.split("|")
-        return partial(fuse_tiling, row_index=int(row_index),
+        if "fancily" in formal_step:
+            fusion = fancy_fuse_tiling
+        else:
+            fusion = fuse_tiling
+        return partial(fusion, row_index=int(row_index),
                        row=True, regions=True)
     elif "Fuse columns" in formal_step:
         _, col_index, _ = formal_step.split("|")
-        return partial(fuse_tiling, row_index=int(col_index),
+        if "fancily" in formal_step:
+            fusion = fancy_fuse_tiling
+        else:
+            fusion = fuse_tiling
+        return partial(fusion, row_index=int(col_index),
                        row=False, regions=True)
     elif "Placing row" in formal_step or "Placing col" in formal_step:
         row = "row" in formal_step
-        _, direction, positive, _ = formal_step.split("|")
+        _, idx, direction, positive, _ = formal_step.split("|")
         return partial(apply_post_map,
                        strategy=partial(unpacking_generator,
                                         strategy=row_placements,
                                         row=row, positive=bool(int(positive)),
+                                        index=int(idx),
                                         direction=int(direction),
                                         regions=True))
     elif "The tiling is a subset of the class" in formal_step:

@@ -38,12 +38,16 @@ def row_placements(tiling, row=True, positive=True, regions=False, **kwargs):
         y = tiling.dimensions[1]
         only_cell_in_col = tiling.only_cell_in_row
         directions = [DIR_EAST, DIR_WEST]
+    rows = range(x)
+    if kwargs.get("index") is not None:
+        rows = [kwargs.get("index")]
+
 
     if kwargs.get("direction") is not None:
         directions = [kwargs["direction"]]
     if regions:
         forward_maps = []
-    for i in range(x):
+    for i in rows:
         place = True
         cells_in_row = []
         for j in range(y):
@@ -66,7 +70,7 @@ def row_placements(tiling, row=True, positive=True, regions=False, **kwargs):
                                                     for cell in cells_in_row),
                                               tiling.requirements)
                     if regions:
-                        forward_maps.append({c: c
+                        forward_maps.append({c: frozenset([c])
                                              for c in tiling.active_cells})
                 for direction in directions:
                     if regions:
@@ -83,10 +87,10 @@ def row_placements(tiling, row=True, positive=True, regions=False, **kwargs):
                     if not positive:
                         tilings = [empty_row_tiling] + tilings
                     yield Strategy(
-                        formal_step=("Placing {} {} in direction {}.|{}|{}|"
+                        formal_step=("Placing {} {} in direction {}.|{}|{}|{}|"
                                      "".format("row" if row else "col",
                                                i, direction,
-                                               direction, int(positive))),
+                                               i, direction, int(positive))),
                         comb_classes=tilings,
                         ignore_parent=False,
                         possibly_empty=[True for _ in tilings],

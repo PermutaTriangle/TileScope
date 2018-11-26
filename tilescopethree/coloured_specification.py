@@ -29,10 +29,11 @@ class Rule:
     def __init__(self, start_tiling, formal_step, constructor):
         self.start_tiling = start_tiling
         self.formal_step = formal_step
+
         self.constructor = constructor
         strategy = parse_formal_step(formal_step)
+
         self.end_tilings, self.forwards_maps = [], []
-        print(strategy(start_tiling))
         for tiling, mapping in zip(*(strategy(start_tiling))):
             if not tiling.is_empty():
                 self.end_tilings.append(tiling)
@@ -187,7 +188,7 @@ class ColouredSpecification:
     def get_variables(self, tiling):
         """Return the variables implied by the colours for a tiling."""
         return tuple(colour.get_variable() for colour in self.colours
-                        if colour.is_coloured(tiling))
+                     if colour.is_coloured(tiling))
 
     def is_verified(self, tiling):
         """Return True if the tiling is verified."""
@@ -201,6 +202,7 @@ class ColouredSpecification:
         try:
             return self.rules[start_tiling]
         except KeyError:
+            print(repr(start_tiling))
             raise KeyError("No rule with tiling as left hand side in the "
                            "specification.")
 
@@ -266,10 +268,10 @@ class ColouredSpecification:
                               for tiling, sub in zip(rule.end_tilings, subs)],
                              1)
             elif rule.constructor == "other":
-                print("================NEW RULE================")
-                print(self.get_label(rule.start_tiling))
-                print(rule.start_tiling)
-                print(rule.formal_step)
+                # print("================NEW RULE================")
+                # print(self.get_label(rule.start_tiling))
+                # print(rule.start_tiling)
+                # print(rule.formal_step)
                 left_fuse_region, right_fuse_region = get_fuse_region(
                                                             rule.start_tiling,
                                                             rule.formal_step)
@@ -282,31 +284,37 @@ class ColouredSpecification:
                                                left_fuse_region)
                 fuse_region = fuse_colour.get_coloured_region(
                                                             rule.start_tiling)
-                print(fuse_region)
-                print(left_fuse_region)
-                print(right_fuse_region)
-                print(both_fuse_region)
+                # print(fuse_region)
+                # print(left_fuse_region)
+                # print(right_fuse_region)
+                # print(both_fuse_region)
                 fuse_type = ("left" if fuse_region == left_fuse_region else
                              "right" if fuse_region == right_fuse_region else
                              "both" if fuse_region == both_fuse_region else
                              "empty" if not fuse_region else None)
+                print(rule.start_tiling)
+                print(left_fuse_region)
+                print(right_fuse_region)
+                print(both_fuse_region)
+                print(fuse_region)
                 assert fuse_type is not None, "unknown fuse type"
 
                 fuse_variable = fuse_colour.get_variable()
                 if fuse_type == "empty":
-                    label = self.get_label(rule.start_tiling)
-                    variables = self.get_variables(rule.start_tiling)
-                    if fuse_variable in variables:
-                        raise NotImplementedError("Not implemented case empty where the empty part moves.")
-                    x = sympy.abc.x
-                    new_func = "G_{}".format(label)
-                    newlhs = sympy.Function(new_func)(x, fuse_variable,
-                                                      *variables)
-                    dummy_eq = sympy.Eq(lhs, newlhs.subs({fuse_variable: 1}))
-                    print(dummy_eq)
-                    equations.add(dummy_eq)
-                    lhs = newlhs
-                    fuse_type = "left"
+                    raise NotImplementedError("Not done the empty case :(")
+                    # label = self.get_label(rule.start_tiling)
+                    # variables = self.get_variables(rule.start_tiling)
+                    # if fuse_variable in variables:
+                    #     raise NotImplementedError("Not implemented case empty where the empty part moves.")
+                    # x = sympy.abc.x
+                    # new_func = "G_{}".format(label)
+                    # newlhs = sympy.Function(new_func)(x, fuse_variable,
+                    #                                   *variables)
+                    # dummy_eq = sympy.Eq(lhs, newlhs.subs({fuse_variable: 1}))
+                    # print(dummy_eq)
+                    # equations.add(dummy_eq)
+                    # lhs = newlhs
+                    # fuse_type = "left"
                 if fuse_type == "both":
                     raise NotImplementedError(("Not implemented fuse type '{}'"
                                                "".format(fuse_type)))
@@ -328,17 +336,17 @@ class ColouredSpecification:
                                         if c != fuse_colour],
                                        (fuse_variable
                                         if fuse_type == "left" else 1))
-                print("left:", left_variable)
+                # print("left:", left_variable)
                 right_variable = reduce(mul,
                                        [1/c.get_variable()
                                         for c in left_colours
                                         if c != fuse_colour],
                                        (fuse_variable
                                         if fuse_type == "right" else 1))
-                print("right:", right_variable)
-                print("fuse:", fuse_variable)
+                # print("right:", right_variable)
+                # print("fuse:", fuse_variable)
 
-                print("start_func:", rhs_func)
+                # print("start_func:", rhs_func)
                 # if both_variable == 1:
                 # if left_variable == 1 and right_variable == 1:
                 #     # derivative with respect to fuse variable
@@ -353,6 +361,13 @@ class ColouredSpecification:
                 #     raise NotImplementedError("Can't handle non-trivial both variable.")
             else:
                 raise NotImplementedError("Can't do it :(")
+            # print("!================================NEW EQUATION!================================")
+            # print(rule.start_tiling)
+            # print(lhs, "=", rhs)
+            # for et in rule.end_tilings:
+            #     print(et)
+            #     print(self.get_function(et))
+            #     print(self.get_variables(et))
             equations.add(sympy.Eq(lhs, rhs))
         for tiling in self.verified_nodes:
             lhs = self.get_function(tiling)
@@ -586,10 +601,10 @@ if __name__ == "__main__":
         print(colourspec.sage_input())
         print(colourspec.pretty_print_equations())
         # colourspec.show_colours()
-        # for tiling, label in colourspec.labels.items():
-        #     print(label)
-        #     print(tiling)
-        #     print([len(list(tiling.gridded_perms_of_length(i))) for i in range(8)])
+        for tiling, label in colourspec.labels.items():
+            print(label)
+            print(tiling)
+            print([len(list(tiling.gridded_perms_of_length(i))) for i in range(8)])
 
         # except (AssertionError, ValueError, NotImplementedError) as e:
         #     print(e)
