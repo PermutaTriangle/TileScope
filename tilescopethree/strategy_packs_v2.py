@@ -6,7 +6,9 @@ from tilescopethree.strategies import (all_cell_insertions,
                                        all_col_insertions, all_row_insertions,
                                        col_placements as col_placements_strat,
                                        database_verified, elementary_verified,
-                                       factor, globally_verified,
+                                       factor, fusion,
+                                       fusion_with_interleaving,
+                                       globally_verified,
                                        obstruction_transitivity,
                                        partial_requirement_placement,
                                        requirement_corroboration,
@@ -16,7 +18,7 @@ from tilescopethree.strategies import (all_cell_insertions,
                                        row_and_column_separation,
                                        row_placements as row_placements_strat,
                                        subobstruction_inferral,
-                                       subset_verified)
+                                       subset_verified, verify_points)
 
 class TileScopePack(StrategyPack):
 
@@ -93,6 +95,17 @@ class TileScopePack(StrategyPack):
                               symmetries = self.symmetries,
                               forward_equivalence = True,
                               iterative = True)
+
+    def make_fusion(self, interleaving=False):
+        try:
+            if interleaving:
+                with_fuse = self.add_initial(fusion)
+            else:
+                with_fuse = self.add_initial(fusion_with_interleaving)
+        except ValueError as e:
+            raise ValueError(e)
+        with_fuse.forward_equivalence = True
+        return with_fuse
 
     # The base packs are given as class methods below.
 
@@ -187,7 +200,7 @@ class TileScopePack(StrategyPack):
                                             positive=False))
         return TileScopePack(
                 initial_strats=[factor, requirement_corroboration],
-                ver_strats=[subset_verified, globally_verified],
+                ver_strats=[verify_points],
                 inferral_strats=[row_and_column_separation,
                                 obstruction_transitivity],
                 expansion_strats=[expansion_strats],
@@ -201,7 +214,7 @@ basepacks = [
     TileScopePack.row_and_col_placements(row_only=True),
     TileScopePack.row_and_col_placements(),
     TileScopePack.point_placements(partial_placements=True),
-    TileScopePack.pattern_placements(),
+    TileScopePack.point_placements(),
     TileScopePack.pattern_placements(4),
     TileScopePack.point_placements(4),
     TileScopePack.all_the_strategies(),
@@ -213,6 +226,14 @@ basepacks.append(length_4_root_placements)
 
 import importlib
 module = importlib.import_module(TileScopePack.__module__)
+
+for pack in basepacks:
+    fusion_pack = pack.make_fusion()
+    other_fusion = pack.make_fusion(interleaving=True)
+    setattr(module, fusion_pack.name, fusion_pack)
+    setattr(module, other_fusion.name, other_fusion)
+delattr(module, 'fusion_pack')
+delattr(module, 'other_fusion')
 
 for pack in basepacks:
     new_packs = [pack]
@@ -227,3 +248,4 @@ for pack in basepacks:
 
 delattr(module, 'pack')
 delattr(module, 'new_pack')
+
