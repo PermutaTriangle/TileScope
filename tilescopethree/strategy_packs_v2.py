@@ -100,9 +100,9 @@ class TileScopePack(StrategyPack):
     def make_fusion(self, interleaving=False):
         try:
             if interleaving:
-                with_fuse = self.add_initial(fusion)
-            else:
                 with_fuse = self.add_initial(fusion_with_interleaving)
+            else:
+                with_fuse = self.add_initial(fusion)
         except ValueError as e:
             raise ValueError(e)
         with_fuse.forward_equivalence = True
@@ -201,7 +201,7 @@ class TileScopePack(StrategyPack):
                                             positive=False))
         return TileScopePack(
                 initial_strats=[factor, requirement_corroboration],
-                ver_strats=[verify_points],
+                ver_strats=[subset_verified, globally_verified],
                 inferral_strats=[row_and_column_separation,
                                  obstruction_transitivity],
                 expansion_strats=[expansion_strats],
