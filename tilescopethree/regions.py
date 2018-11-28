@@ -99,6 +99,14 @@ def parse_formal_step(formal_step):
                                         regions=True))
     elif "The tiling is a subset of the class" in formal_step:
         return None
+    elif "Inserting " in formal_step:
+            front, middle, _ = formal_step.split("~")
+            _, _, patt, cell1, cell2 = front.split(' ')
+            patt = patt[:-1]
+            patt = Perm.to_standard(patt)
+            cell = (int(cell1[1:-1]), int(cell2[:-2]))
+            return partial(apply_post_map, strategy=cell_insertion, patt=patt,
+                       cell=cell, regions=True)
     else:
         raise NotImplementedError("Not tracking regions for: " + formal_step)
 

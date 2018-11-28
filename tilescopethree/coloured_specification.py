@@ -22,6 +22,9 @@ from regions import get_fuse_region, parse_formal_step
 
 import sympy
 
+from grids_three import Obstruction, Requirement
+from permuta import Perm
+
 class Rule:
     """A class for a combinatorial rule of tilings. It keeps track of how the
     regions of the tiling change when the strategy is applied."""
@@ -52,6 +55,7 @@ class Rule:
         res = []
         for end_tiling, forward_map in zip(self.end_tilings,
                                            self.forwards_maps):
+
             traced_region = set(chain(*[forward_map[c] if c in forward_map else set()
                                       for c in region_to_trace]))
             res.append((end_tiling, traced_region))
@@ -128,12 +132,23 @@ class Colour:
         except AttributeError:
             raise AttributeError("Checking for a subset uses a Colour object.")
 
+    def intersection(self, other):
+        """Return all tilings in common with the exact same region."""
+        common_tilings = set(self.regions).intersection(other.regions)
+        return set(t for t in common_tilings
+                   if (self.get_coloured_region(t) ==
+                       other.get_coloured_region(t)))
+
     def common_intersection(self, other):
         """Return True if all comon tilings are coloured the same with respect
         to other."""
         common_tilings = set(self.regions).intersection(other.regions)
         return all(self.get_coloured_region(t) == other.get_coloured_region(t)
                    for t in common_tilings)
+
+    def remove(self, tiling):
+        """Will no longer colour the given tiling."""
+        self.regions.pop(tiling)
 
     def extend(self, other):
         """Extend self with all of the regions given by self. Will raise an
@@ -292,11 +307,11 @@ class ColouredSpecification:
                              "right" if fuse_region == right_fuse_region else
                              "both" if fuse_region == both_fuse_region else
                              "empty" if not fuse_region else None)
-                print(rule.start_tiling)
-                print(left_fuse_region)
-                print(right_fuse_region)
-                print(both_fuse_region)
-                print(fuse_region)
+                # print(rule.start_tiling)
+                # print(left_fuse_region)
+                # print(right_fuse_region)
+                # print(both_fuse_region)
+                # print(fuse_region)
                 assert fuse_type is not None, "unknown fuse type"
 
                 fuse_variable = fuse_colour.get_variable()
@@ -423,11 +438,23 @@ class ColouredSpecification:
                 colour1 = self.colours[i]
                 colour2 = self.colours[j]
                 if colour1.common_intersection(colour2):
-                    print("COMMON")
+                    # print("COMMON")
                     colour1.extend(colour2)
                     indices_to_remove.append(j)
         self.colours = [colour for i, colour in enumerate(self.colours)
                         if i not in indices_to_remove]
+
+        indices_to_remove = []
+        # remove common colours
+        for i in range(len(self.colours) - 1):
+            for j in range(i + 1, len(self.colours)):
+                colour1 = self.colours[i]
+                colour2 = self.colours[j]
+                intersect = colour1.intersection(colour2)
+                for t in intersect:
+                    colour2.remove(t)
+
+
 
     def __add_rules(self, proof_tree):
         """Will add the rules implied by the proof tree."""
@@ -459,10 +486,10 @@ class ColouredSpecification:
                     add_symmetries(node)
                     constructor = "symmetry"
                     if start_tiling in self.rules:
-                        print(node.eqv_path_labels)
-                        print(start_tiling)
-                        print(formal_step)
-                        print(self.rules[start_tiling].formal_step)
+                        # print(node.eqv_path_labels)
+                        # print(start_tiling)
+                        # print(formal_step)
+                        # print(self.rules[start_tiling].formal_step)
                         assert self.rules[start_tiling].formal_step == formal_step, "on lhs twice"
                     self.rules[start_tiling] = Rule(start_tiling,
                                                     formal_step,
@@ -496,7 +523,6 @@ class ColouredSpecification:
             else:
                 return ""
         def fuse_fixer(partial_eq):
-            print(partial_eq)
             partial_eq_split = partial_eq.split("(")
             right = "(".join(x for x in partial_eq_split[1:])
             left = partial_eq_split[0]
@@ -516,9 +542,6 @@ class ColouredSpecification:
                 final_rhs = rhs
             elif "/" in rhs:
                 top, bottom = eq.rhs.expand().as_numer_denom()
-                print(eq.rhs)
-                print(top)
-                print(bottom)
                 top = top.expand()
                 bottom = str(bottom)
                 left, right = top.expand().as_ordered_terms()
@@ -529,20 +552,15 @@ class ColouredSpecification:
             elif "+" in rhs:
                 functions = rhs.split(" + ")
                 rhs_rest_and_funcs = [get_rest_and_func(func) for func in functions]
-                print("a", rhs_rest_and_funcs)
                 rhs_name_and_variables = [get_variables(func) for _, func in rhs_rest_and_funcs]
-                print("b", rhs_name_and_variables)
                 final_rhs = " + ".join("find_power_series({}{}){}".format(name, rest, substitute(name, rhs_variables)) for (rest, _), (name, rhs_variables) in zip(rhs_rest_and_funcs, rhs_name_and_variables))
             else:
                 functions = rhs.split("*F")
-                print(functions)
                 if len(functions) > 1:
                     functions = ([functions[0]] +
                                  ["F" + func for func in functions[1:]])
                 rhs_rest_and_funcs = [get_rest_and_func(func) for func in functions]
-                print("a", rhs_rest_and_funcs)
                 rhs_name_and_variables = [get_variables(func) for _, func in rhs_rest_and_funcs]
-                print("b", rhs_name_and_variables)
                 final_rhs = " * ".join("find_power_series({}{}){}".format(name, rest, substitute(name, rhs_variables)) for (rest, _), (name, rhs_variables) in zip(rhs_rest_and_funcs, rhs_name_and_variables))
             return "{} = {}".format(final_lhs, final_rhs)
 
@@ -598,13 +616,15 @@ if __name__ == "__main__":
                 colourspec.add_colour(rule.end_tilings[0], region)
         colourspec.cleanup_colours()
         colourspec.cleanup_colours()
+        colourspec.cleanup_colours()
+        colourspec.cleanup_colours()
         print(colourspec.sage_input())
         print(colourspec.pretty_print_equations())
         # colourspec.show_colours()
         for tiling, label in colourspec.labels.items():
             print(label)
             print(tiling)
-            print([len(list(tiling.gridded_perms_of_length(i))) for i in range(8)])
+            print([len(list(tiling.gridded_perms_of_length(i))) for i in range(5)])
 
         # except (AssertionError, ValueError, NotImplementedError) as e:
         #     print(e)
