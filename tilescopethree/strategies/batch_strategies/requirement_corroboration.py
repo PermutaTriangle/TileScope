@@ -27,14 +27,26 @@ def requirement_corroboration(tiling, basis, **kwargs):
         for req in reqs:
             yield Strategy(
                 formal_step="Inserting requirement {}.".format(req),
-                comb_classes=[
-                    Tiling(obstructions=tiling.obstructions,
-                           requirements=tiling.requirements + ((req,),)),
-                    Tiling(obstructions=tiling.obstructions + (
-                        Obstruction(req.patt, req.pos),),
-                           requirements=tiling.requirements)],
+                comb_classes=requirement_corroboration_helper(tiling, req),
                 ignore_parent=True,
                 possibly_empty=[True, True],
                 workable=[True for _ in range(2)],
                 inferable=[True for _ in range(2)],
                 constructor='disjoint')
+
+
+def requirement_corroboration_helper(tiling, req, regions=False):
+    if regions:
+        return ([Tiling(obstructions=tiling.obstructions,
+                       requirements=tiling.requirements + ((req,),)),
+                Tiling(obstructions=tiling.obstructions + 
+                       (Obstruction(req.patt, req.pos),),
+                       requirements=tiling.requirements)],
+                [{c: frozenset([c]) for c in tiling.active_cells},
+                 {c: frozenset([c]) for c in tiling.active_cells}])
+    else:
+        return [Tiling(obstructions=tiling.obstructions,
+                       requirements=tiling.requirements + ((req,),)),
+                Tiling(obstructions=tiling.obstructions + 
+                                    (Obstruction(req.patt, req.pos),),
+                       requirements=tiling.requirements)]
