@@ -444,7 +444,6 @@ class ColouredSpecification:
         self.colours = [colour for i, colour in enumerate(self.colours)
                         if i not in indices_to_remove]
 
-        indices_to_remove = []
         # remove common colours
         for i in range(len(self.colours) - 1):
             for j in range(i + 1, len(self.colours)):
@@ -614,10 +613,16 @@ if __name__ == "__main__":
             if rule.constructor == "other":
                 region, _ = get_fuse_region(rule.start_tiling, rule.formal_step)
                 colourspec.add_colour(rule.end_tilings[0], region)
+
+        print('I am starting with {} colours'.format(len(colourspec.colours)))
         colourspec.cleanup_colours()
+        print('I now have {} colours'.format(len(colourspec.colours)))
         colourspec.cleanup_colours()
+        print('I now have {} colours'.format(len(colourspec.colours)))
         colourspec.cleanup_colours()
+        print('I now have {} colours'.format(len(colourspec.colours)))
         colourspec.cleanup_colours()
+        print('I now have {} colours'.format(len(colourspec.colours)))
         print(colourspec.sage_input())
         print(colourspec.pretty_print_equations())
         # colourspec.show_colours()
