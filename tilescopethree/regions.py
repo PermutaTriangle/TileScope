@@ -9,6 +9,7 @@ from tilescopethree.strategies.inferral_strategies.row_and_column_separation imp
 from tilescopethree.strategies.equivalence_strategies.fusion import fuse_tiling
 from tilescopethree.strategies.batch_strategies.list_requirement_placements import row_placements
 from tilescopethree.strategies.batch_strategies.cell_insertion import cell_insertion
+from tilescopethree.strategies.batch_strategies.cell_insertion import col_insertion_helper, row_insertion_helper
 from tilescopethree.strategies.equivalence_strategies.fusion_with_interleaving import fuse_tiling as fancy_fuse_tiling
 
 
@@ -87,6 +88,18 @@ def parse_formal_step(formal_step):
             fusion = fuse_tiling
         return partial(fusion, row_index=int(col_index),
                        row=False, regions=True)
+    elif "Either row " in formal_step:
+        row = int(formal_step.split(' ')[2])
+        return partial(apply_post_map, strategy=row_insertion_helper,
+                                       row=row,
+                                       row_cells=None,
+                                       regions=True)
+    elif "Either col " in formal_step:
+        col = int(formal_step.split(' ')[2])
+        return partial(apply_post_map, strategy=col_insertion_helper,
+                                       col=col,
+                                       col_cells=None,
+                                       regions=True)
     elif "Placing row" in formal_step or "Placing col" in formal_step:
         row = "row" in formal_step
         _, idx, direction, positive, _ = formal_step.split("|")
@@ -99,6 +112,7 @@ def parse_formal_step(formal_step):
                                         regions=True))
     elif "The tiling is a subset of the class" in formal_step:
         return None
+    # TODO Make the below code handle longer requirements
     elif "Inserting " in formal_step:
             front, middle, _ = formal_step.split("~")
             _, _, patt, cell1, cell2 = front.split(' ')
