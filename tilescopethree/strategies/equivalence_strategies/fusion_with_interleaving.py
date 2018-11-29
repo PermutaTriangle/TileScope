@@ -5,6 +5,7 @@ from comb_spec_searcher import Strategy
 from grids_three import Tiling, Obstruction
 from tilescopethree.strategies.equivalence_strategies.fusion import fuse_gridded_perm
 
+
 from permuta import Perm
 
 def fusion_with_interleaving(tiling, **kwargs):
@@ -57,15 +58,23 @@ def fusable(tiling, row_index, bases, row=True, **kwargs):
         # through it in every way so that it crosses to the secoond cell
         #TODO: Should we be worried about obstruction going only to the
         #      second cell?
-        special_cell = None
-        if ob.occupies(first_cell) and not ob.occupies(second_cell):
+        if ob.occupies(first_cell):
+            # ignore the obstructions that imply skew or sum components
+            if len(ob) == 2 and ob.occupies(second_cell):
+                continue
             # the point in the first cell
             in_cell = [(idx, val) for idx, val in enumerate(ob.patt)
                        if ob.pos[idx] == first_cell]
             if row:
                 in_cell = sorted(in_cell, key=lambda x: (x[1], x[0]))
             special_cell = second_cell
-        elif ob.occupies(second_cell) and not ob.occupies(first_cell):
+            # place i points in bottom cell, rest in top.
+            for i in range(len(in_cell)):
+                maxdex = [point[0] for point in in_cell[i:]]
+                pos = [special_cell if i in maxdex else c
+                    for i, c in enumerate(ob.pos)]
+                obstructions_to_add.append(Obstruction(ob.patt, pos))
+        if ob.occupies(second_cell):
             in_cell = [(idx, val) for idx, val in enumerate(ob.patt)
                        if ob.pos[idx] == second_cell]
             if row:
@@ -73,24 +82,27 @@ def fusable(tiling, row_index, bases, row=True, **kwargs):
             else:
                 in_cell = sorted(in_cell, key=lambda x: -x[0])
             special_cell = first_cell
-        else:
-            continue
-        # place i points in bottom cell, rest in top.
-        for i in range(len(in_cell)):
-            maxdex = [point[0] for point in in_cell[i:]]
-            pos = [special_cell if i in maxdex else c
-                   for i, c in enumerate(ob.pos)]
-            obstructions_to_add.append(Obstruction(ob.patt, pos))
+            # place i points in bottom cell, rest in top.
+            for i in range(len(in_cell)):
+                maxdex = [point[0] for point in in_cell[i:]]
+                pos = [special_cell if i in maxdex else c
+                    for i, c in enumerate(ob.pos)]
+                obstructions_to_add.append(Obstruction(ob.patt, pos))
+
     # if the tiling is unchanged, then the previous obstruction imply all those
     #  obstructions that needed to be added, and therefore we can think of this
     #  as one row with a line drawn through it
     if tiling == Tiling(list(tiling.obstructions) + obstructions_to_add,
                             tiling.requirements):
         # return True
-        if (Obstruction(Perm((0, 1)), (first_cell, second_cell)) in tiling.obstructions
-                or Obstruction(Perm((0, 1)), (second_cell, first_cell)) in tiling.obstructions
-                or Obstruction(Perm((1, 0)), (first_cell, second_cell)) in tiling.obstructions
-                or Obstruction(Perm((1, 0)), (second_cell, first_cell)) in tiling.obstructions):
+        if (Obstruction(Perm((0, 1)),
+                        (first_cell, second_cell)) in tiling.obstructions or
+            Obstruction(Perm((0, 1)),
+                        (second_cell, first_cell)) in tiling.obstructions or
+            Obstruction(Perm((1, 0)),
+                        (first_cell, second_cell)) in tiling.obstructions or
+            Obstruction(Perm((1, 0)),
+                        (second_cell, first_cell)) in tiling.obstructions):
             return True
 
 
