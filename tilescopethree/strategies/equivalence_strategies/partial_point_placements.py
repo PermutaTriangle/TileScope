@@ -108,11 +108,8 @@ def partial_requirement_placement(tiling, **kwargs):
             continue
         for i in range(len(reqs[0])):
             for DIR in directions:
-                print(tiling)
-                print(DIR)
                 placedtiling = partial_place_point_of_requirement(
                                                         tiling, ri, i, DIR)
-                print(placedtiling)
                 yield EquivalenceStrategy(
                     formal_step=("Partially placing point {} of requirement {}"
                                  " with force {}").format(
