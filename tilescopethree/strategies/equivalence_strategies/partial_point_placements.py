@@ -51,7 +51,7 @@ def partial_place_point_of_requirement(tiling, req_index, point_index,
     # the 12, 21 in the cell.
     newobs = forced_obstructions + list(chain.from_iterable(
                     ob.place_point(cell, DIR_NONE, partial=True, row=row)
-                    for ob in tiling.obstructions)) + [
+                        for ob in tiling.obstructions)) + [
             Obstruction.single_cell(Perm((0, 1)), point_cell),
             Obstruction.single_cell(Perm((1, 0)), point_cell)]
     # If a point cell, make sure neighbouring cells are empty by adding the
@@ -108,8 +108,11 @@ def partial_requirement_placement(tiling, **kwargs):
             continue
         for i in range(len(reqs[0])):
             for DIR in directions:
+                print(tiling)
+                print(DIR)
                 placedtiling = partial_place_point_of_requirement(
                                                         tiling, ri, i, DIR)
+                print(placedtiling)
                 yield EquivalenceStrategy(
                     formal_step=("Partially placing point {} of requirement {}"
                                  " with force {}").format(
