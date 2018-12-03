@@ -3,13 +3,14 @@ specific strategies."""
 from functools import partial
 
 from permuta import Perm
-from grids_three import Tiling
+from grids_three import GriddedPerm, Tiling
 from tilescopethree.strategies.equivalence_strategies.point_placements import place_point_of_requirement
 from tilescopethree.strategies.inferral_strategies.row_and_column_separation import row_and_column_separation
 from tilescopethree.strategies.equivalence_strategies.fusion import fuse_tiling
 from tilescopethree.strategies.batch_strategies.list_requirement_placements import row_placements
 from tilescopethree.strategies.batch_strategies.cell_insertion import cell_insertion
 from tilescopethree.strategies.batch_strategies.cell_insertion import col_insertion_helper, row_insertion_helper
+from tilescopethree.strategies.batch_strategies.requirement_corroboration import gp_insertion
 from tilescopethree.strategies.equivalence_strategies.fusion_with_interleaving import fuse_tiling as fancy_fuse_tiling
 
 
@@ -25,6 +26,14 @@ def mapping_after_initialise(start_tiling, end_tilings, forward_maps):
     for tiling in end_tilings:
         if tiling.is_empty():
             tiling.forward_map = {}
+    # for tiling, forward_map in zip(end_tilings, forward_maps):
+    #     print(tiling)
+    #     print(forward_map)
+    #     for start_cell in start_tiling.active_cells:
+    #         print(start_cell)
+    #         for cell in forward_map[start_cell]:
+    #             print(cell, (cell in tiling.forward_map and
+    #                   tiling.forward_map[cell] in tiling.active_cells))
     return [{start_cell: frozenset(tiling.forward_map[cell]
                                    for cell in forward_map[start_cell]
                                    if (cell in tiling.forward_map and
@@ -45,9 +54,11 @@ def parse_formal_step(formal_step):
     def apply_post_map(start_tiling, strategy, **kwargs):
         # print(start_tiling)
         # print(strategy)
+        # print(kwargs)
         end_tilings, forward_maps = strategy(start_tiling, **kwargs)
         # for t in end_tilings:
         #     print(t)
+        #     print(t.forward_map)
         # for m in forward_maps:
         #     print(m)
         return end_tilings, mapping_after_initialise(start_tiling, end_tilings,
@@ -112,17 +123,41 @@ def parse_formal_step(formal_step):
                                         regions=True))
     elif "The tiling is a subset of the class" in formal_step:
         return None
-    # TODO Make the below code handle longer requirements
     elif "Inserting " in formal_step:
-            front, middle, _ = formal_step.split("~")
-            _, _, patt, cell1, cell2 = front.split(' ')
-            patt = patt[:-1]
-            patt = Perm.to_standard(patt)
-            cell = (int(cell1[1:-1]), int(cell2[:-2]))
-            return partial(apply_post_map, strategy=cell_insertion, patt=patt,
-                       cell=cell, regions=True)
+        front, _, _ = formal_step.split('~')
+        _, patt, pos, _ = formal_step.split("|")
+        position = []
+        for cell in pos.split("/"):
+            x, y = cell.split(",")
+            position.append((int(x), int(y)))
+        gp = GriddedPerm(Perm.to_standard(patt), position)
+        return partial(apply_post_map,
+                       strategy=gp_insertion, gp=gp, regions=True)
+    elif "Greedily placing points" in formal_step:
+        return partial(apply_post_map,
+                       strategy=greedy_griddings,
+                       formal_step=formal_step)
     else:
         raise NotImplementedError("Not tracking regions for: " + formal_step)
+
+def greedy_griddings(tiling, formal_step):
+    from grid_class import GridClass
+    if "reversed" in formal_step:
+        rev_til = tiling.reverse()
+        g = GridClass(rev_til.obstructions)
+        maps = [{(1, 0): frozenset([(0, 0)]),
+                 (0, 0): frozenset()},
+                {(0, 0): frozenset([(0, 0)]),
+                 (0, 0): frozenset([(1, 0), (2, 0)])}]
+    else:
+        g = GridClass(tiling.obstructions)
+        maps = [{(0, 0): frozenset([(0, 0)]),
+                 (1, 0): frozenset()},
+                {(0, 0): frozenset([(0, 0)]),
+                 (1, 0): frozenset([(1, 0), (2, 0)])}]
+    strat = g.disambiguate()
+
+    return strat, maps
 
 
 def get_fuse_region(start_tiling, formal_step):

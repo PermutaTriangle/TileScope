@@ -2,7 +2,7 @@
     Module containing the requirement corroboration strategy.
 """
 from comb_spec_searcher import Strategy
-from grids_three import Obstruction, Tiling
+from grids_three import Obstruction, Requirement, Tiling
 
 
 def requirement_corroboration(tiling, basis, **kwargs):
@@ -26,27 +26,30 @@ def requirement_corroboration(tiling, basis, **kwargs):
             continue
         for req in reqs:
             yield Strategy(
-                formal_step="Inserting requirement {}.".format(req),
-                comb_classes=requirement_corroboration_helper(tiling, req),
+                formal_step="Inserting requirement {}.|{}|{}|".format(
+                                    str(req), str(req.patt), pos_str(req.pos)),
+                comb_classes=gp_insertion(tiling, req),
                 ignore_parent=True,
                 possibly_empty=[True, True],
                 workable=[True for _ in range(2)],
                 inferable=[True for _ in range(2)],
                 constructor='disjoint')
 
+def pos_str(pos):
+    return "/".join("{},{}".format(c[0], c[1]) for c in pos)
 
-def requirement_corroboration_helper(tiling, req, regions=False):
+def gp_insertion(tiling, gp, regions=False):
+    """Return a list of size 2, where the first tiling avoids the gridded perm
+    gp and the second contains gp."""
+    tilings = [Tiling(obstructions=tiling.obstructions +
+                      (Obstruction(gp.patt, gp.pos),),
+                      requirements=tiling.requirements),
+               Tiling(obstructions=tiling.obstructions,
+                      requirements=(tiling.requirements +
+                                    ((Requirement(gp.patt, gp.pos),),)))]
     if regions:
-        return ([Tiling(obstructions=tiling.obstructions,
-                       requirements=tiling.requirements + ((req,),)),
-                Tiling(obstructions=tiling.obstructions + 
-                       (Obstruction(req.patt, req.pos),),
-                       requirements=tiling.requirements)],
-                [{c: frozenset([c]) for c in tiling.active_cells},
-                 {c: frozenset([c]) for c in tiling.active_cells}])
+        forward_maps = [{c: frozenset([c]) for c in tiling.active_cells},
+                        {c: frozenset([c]) for c in tiling.active_cells}]
+        return tilings, forward_maps
     else:
-        return [Tiling(obstructions=tiling.obstructions,
-                       requirements=tiling.requirements + ((req,),)),
-                Tiling(obstructions=tiling.obstructions + 
-                                    (Obstruction(req.patt, req.pos),),
-                       requirements=tiling.requirements)]
+        return tilings

@@ -307,6 +307,7 @@ class ColouredSpecification:
                              "right" if fuse_region == right_fuse_region else
                              "both" if fuse_region == both_fuse_region else
                              "empty" if not fuse_region else None)
+
                 # print(rule.start_tiling)
                 # print(left_fuse_region)
                 # print(right_fuse_region)
@@ -317,19 +318,20 @@ class ColouredSpecification:
                 fuse_variable = fuse_colour.get_variable()
                 if fuse_type == "empty":
                     raise NotImplementedError("Not done the empty case :(")
-                    # label = self.get_label(rule.start_tiling)
-                    # variables = self.get_variables(rule.start_tiling)
-                    # if fuse_variable in variables:
-                    #     raise NotImplementedError("Not implemented case empty where the empty part moves.")
-                    # x = sympy.abc.x
-                    # new_func = "G_{}".format(label)
-                    # newlhs = sympy.Function(new_func)(x, fuse_variable,
-                    #                                   *variables)
-                    # dummy_eq = sympy.Eq(lhs, newlhs.subs({fuse_variable: 1}))
-                    # print(dummy_eq)
-                    # equations.add(dummy_eq)
-                    # lhs = newlhs
-                    # fuse_type = "left"
+                    rhs = 0
+                    label = self.get_label(rule.start_tiling)
+                    variables = self.get_variables(rule.start_tiling)
+                    if fuse_variable in variables:
+                        raise NotImplementedError("Not implemented case empty where the empty part moves.")
+                    x = sympy.abc.x
+                    new_func = "G_{}".format(label)
+                    newlhs = sympy.Function(new_func)(x, fuse_variable,
+                                                      *variables)
+                    dummy_eq = sympy.Eq(lhs, newlhs.subs({fuse_variable: 1}))
+                    print(dummy_eq)
+                    equations.add(dummy_eq)
+                    lhs = newlhs
+                    fuse_type = "left"
                 if fuse_type == "both":
                     raise NotImplementedError(("Not implemented fuse type '{}'"
                                                "".format(fuse_type)))
@@ -629,7 +631,8 @@ if __name__ == "__main__":
         for tiling, label in colourspec.labels.items():
             print(label)
             print(tiling)
-            print([len(list(tiling.gridded_perms_of_length(i))) for i in range(5)])
+            # print(repr(tiling))
+            # print([len(list(tiling.gridded_perms_of_length(i))) for i in range(10)])
 
         # except (AssertionError, ValueError, NotImplementedError) as e:
         #     print(e)
