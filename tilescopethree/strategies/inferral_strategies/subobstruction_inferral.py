@@ -36,15 +36,16 @@ def subobstruction_inferral(tiling, **kwargs):
         for ob in sorted(subobs, key=len):
             if can_add_obstruction(ob, merged_tiling):
                 newobs.append(ob)
-                merged_tiling = Tiling(merged_tiling.obstructions + (ob,), 
-                                       merged_tiling.requirements, 
+                merged_tiling = Tiling(merged_tiling.obstructions + (ob,),
+                                       merged_tiling.requirements,
                                        remove_empty=False)
     if newobs:
         return InferralStrategy("Added the obstructions {}.".format(newobs),
-                                Tiling(tiling.obstructions + tuple(newobs), 
-                                    tiling.requirements))
+                                Tiling(tiling.obstructions + tuple(newobs),
+                                       tiling.requirements))
+
 
 def can_add_obstruction(obstruction, tiling):
     """Return true if obstruction can be added to tiling."""
-    return tiling.add_requirement(obstruction.patt, 
+    return tiling.add_requirement(obstruction.patt,
                                   obstruction.pos).merge().is_empty()
