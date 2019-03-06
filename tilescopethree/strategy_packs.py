@@ -925,7 +925,7 @@ length_4_root_requirement_with_point_placements_db = Pack(
                             partial(root_requirement_insertion, maxreqlen=4)]],
          name="length_4_root_requirement_with_point_placements_db")
 
-fundamental_point_placement = Pack(
+elementary_point_placement = Pack(
          initial_strats=[point_placement],
          ver_strats=[elementary_verified],
          inferral_strats=[row_and_column_separation, obstruction_transitivity],

@@ -30,8 +30,8 @@ def possible_tautology(tiling):
             return False
     return True
 
-def fundamentally_verified(tiling, **kwargs):
-    """A tiling is fundamentally verified if it is globally verified and has no
+def elementary_verified(tiling, **kwargs):
+    """A tiling is elementary verified if it is globally verified and has no
     interleaving cells."""
     if tiling.fully_isolated():
         if tiling.dimensions == (1, 1):
