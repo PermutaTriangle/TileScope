@@ -11,6 +11,9 @@ def subset_verified(tiling, basis, **kwargs):
     A tiling is subset verified if every obstruction and every requirement is
     localized.
     """
+    if kwargs.get("no_factors", False):
+        if len(tiling.find_factors()) > 1:
+            return
     if tiling.dimensions == (1, 1):
         if one_by_one_verified(tiling, basis, **kwargs):
             return VerificationStrategy(
@@ -35,6 +38,7 @@ def one_by_one_verified(tiling, basis, **kwargs):
     if any(basis == patts for patts in all_patts):
         return False
     return True
+
 
 def one_by_one_verification(tiling, basis, **kwargs):
     """Return a verification if one-by-one verified."""

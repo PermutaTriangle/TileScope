@@ -18,7 +18,10 @@ from tilescopethree.strategies import (all_cell_insertions,
                                        row_and_column_separation,
                                        row_placements as row_placements_strat,
                                        subobstruction_inferral,
-                                       subset_verified, verify_points)
+                                       subset_verified)
+
+import importlib
+
 
 class TileScopePack(StrategyPack):
 
@@ -34,9 +37,9 @@ class TileScopePack(StrategyPack):
                               self.inferral_strats,
                               self.expansion_strats,
                               self.ver_strats, name,
-                              symmetries = self.symmetries,
-                              forward_equivalence = self.forward_equivalence,
-                              iterative = self.iterative)
+                              symmetries=self.symmetries,
+                              forward_equivalence=self.forward_equivalence,
+                              iterative=self.iterative)
 
     def add_inferral(self, strategy):
         if strategy in self.inferral_strats:
@@ -49,9 +52,9 @@ class TileScopePack(StrategyPack):
                               inferral_strats,
                               self.expansion_strats,
                               self.ver_strats, name,
-                              symmetries = self.symmetries,
-                              forward_equivalence = self.forward_equivalence,
-                              iterative = self.iterative)
+                              symmetries=self.symmetries,
+                              forward_equivalence=self.forward_equivalence,
+                              iterative=self.iterative)
 
     def add_verification(self, strategy):
         if strategy in self.ver_strats:
@@ -64,9 +67,9 @@ class TileScopePack(StrategyPack):
                               self.inferral_strats,
                               self.expansion_strats,
                               verification_strats, name,
-                              symmetries = self.symmetries,
-                              forward_equivalence = self.forward_equivalence,
-                              iterative = self.iterative)
+                              symmetries=self.symmetries,
+                              forward_equivalence=self.forward_equivalence,
+                              iterative=self.iterative)
 
     def add_symmetry(self):
         if self.symmetries:
@@ -79,9 +82,9 @@ class TileScopePack(StrategyPack):
                               self.inferral_strats,
                               self.expansion_strats,
                               self.ver_strats, name,
-                              symmetries = symmetries,
-                              forward_equivalence = self.forward_equivalence,
-                              iterative = self.iterative)
+                              symmetries=symmetries,
+                              forward_equivalence=self.forward_equivalence,
+                              iterative=self.iterative)
 
     def make_elementary(self):
         if ([elementary_verified] == self.ver_strats and
@@ -92,9 +95,9 @@ class TileScopePack(StrategyPack):
                               self.inferral_strats,
                               self.expansion_strats,
                               [elementary_verified], name,
-                              symmetries = self.symmetries,
-                              forward_equivalence = True,
-                              iterative = True)
+                              symmetries=self.symmetries,
+                              forward_equivalence=True,
+                              iterative=True)
 
     def make_fusion(self, interleaving=False):
         try:
@@ -202,7 +205,7 @@ class TileScopePack(StrategyPack):
                 initial_strats=[factor, requirement_corroboration],
                 ver_strats=[subset_verified, globally_verified],
                 inferral_strats=[row_and_column_separation,
-                                obstruction_transitivity],
+                                 obstruction_transitivity],
                 expansion_strats=[expansion_strats],
                 name="{}{}{}_placements".format("row" if not col_only else "",
                                                 "_and_" if both else "",
@@ -224,7 +227,6 @@ length_4_root_placements = TileScopePack.point_placements().add_initial(
 length_4_root_placements.name = "length_4_root_placements"
 basepacks.append(length_4_root_placements)
 
-import importlib
 module = importlib.import_module(TileScopePack.__module__)
 
 for pack in basepacks:

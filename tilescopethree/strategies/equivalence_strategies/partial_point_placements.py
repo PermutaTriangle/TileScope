@@ -51,7 +51,7 @@ def partial_place_point_of_requirement(tiling, req_index, point_index,
     # the 12, 21 in the cell.
     newobs = forced_obstructions + list(chain.from_iterable(
                     ob.place_point(cell, DIR_NONE, partial=True, row=row)
-                        for ob in tiling.obstructions)) + [
+                    for ob in tiling.obstructions)) + [
             Obstruction.single_cell(Perm((0, 1)), point_cell),
             Obstruction.single_cell(Perm((1, 0)), point_cell)]
     # If a point cell, make sure neighbouring cells are empty by adding the

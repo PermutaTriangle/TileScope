@@ -3,5 +3,5 @@ from .fusion import fusion
 from .deflation import deflation
 from .fusion_with_interleaving import fusion_with_interleaving
 
-from .partial_point_placements import (partial_point_placement, 
+from .partial_point_placements import (partial_point_placement,
                                        partial_requirement_placement)
