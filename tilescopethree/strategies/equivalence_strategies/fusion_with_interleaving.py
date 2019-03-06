@@ -61,8 +61,7 @@ def fusable(tiling, row_index, bases, row=True, **kwargs):
             (not row and first_cell[1] != second_cell[1])):
         return False
     # ensure other cells basis is the same, and not the same as the root basis
-    if (bases[first_cell][0] != bases[second_cell][0] or 
-            set(bases[first_cell][0]) == set(kwargs['basis'])):
+    if (bases[first_cell][0] != bases[second_cell][0]):
         return False
     obstructions_to_add = []
     for ob in tiling.obstructions:
