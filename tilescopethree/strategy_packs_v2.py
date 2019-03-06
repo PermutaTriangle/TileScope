@@ -19,7 +19,7 @@ from tilescopethree.strategies import (all_cell_insertions,
                                        row_placements as row_placements_strat,
                                        subobstruction_inferral,
                                        subclass_verified, subset_verified)
-                                    
+
 import importlib
 
 class TileScopePack(StrategyPack):
@@ -209,7 +209,29 @@ class TileScopePack(StrategyPack):
                 name="{}{}{}_placements".format("row" if not col_only else "",
                                                 "_and_" if both else "",
                                                 "col" if not row_only else ""))
-
+    @classmethod
+    def insertion_row_and_col_placements(cls, row_only=False, col_only=False):
+        if row_only and col_only:
+            raise ValueError("Can't be row and col only.")
+        both = not (row_only or col_only)
+        expansion_strats = []
+        if not col_only:
+            expansion_strats.append(partial(row_placements_strat,
+                                            positive=True))
+        if not row_only:
+            expansion_strats.append(partial(col_placements_strat,
+                                            positive=True))
+        return TileScopePack(
+                initial_strats=[factor, requirement_corroboration,
+                                partial(all_cell_insertions,
+                                        ignore_parent=True)],
+                ver_strats=[subset_verified, globally_verified],
+                inferral_strats=[row_and_column_separation,
+                                 obstruction_transitivity],
+                expansion_strats=[expansion_strats],
+                name="insertion_{}{}{}_placements".format("row" if not col_only else "",
+                                                "_and_" if both else "",
+                                                "col" if not row_only else ""))
 
 basepacks = [
     TileScopePack.row_and_col_placements(col_only=True),
@@ -220,6 +242,9 @@ basepacks = [
     TileScopePack.pattern_placements(4),
     TileScopePack.point_placements(4),
     TileScopePack.all_the_strategies(),
+    TileScopePack.insertion_row_and_col_placements(row_only=True),
+    TileScopePack.insertion_row_and_col_placements(col_only=True),
+    TileScopePack.insertion_row_and_col_placements()
 ]
 
 length_3_root_placements_pp = TileScopePack.point_placements().add_initial(
