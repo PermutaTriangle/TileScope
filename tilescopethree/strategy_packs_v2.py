@@ -256,6 +256,15 @@ length_4_root_placements_pp.name = "length_4_root_placements_pp"
 basepacks.append(length_3_root_placements_pp)
 basepacks.append(length_4_root_placements_pp)
 
+length_3_root_placements_pp = TileScopePack.pattern_placements().add_initial(
+                            partial(root_requirement_insertion, maxreqlen=3))
+length_4_root_placements_pp = TileScopePack.pattern_placements().add_initial(
+                            partial(root_requirement_insertion, maxreqlen=4))
+length_3_root_placements_pp.name = "length_3_root_pattern_pp"
+length_4_root_placements_pp.name = "length_4_root_pattern_pp"
+basepacks.append(length_3_root_placements_pp)
+basepacks.append(length_4_root_placements_pp)
+
 length_3_root_placements_rc = TileScopePack.row_and_col_placements().add_initial(
                             partial(root_requirement_insertion, maxreqlen=3))
 length_4_root_placements_rc = TileScopePack.row_and_col_placements().add_initial(
