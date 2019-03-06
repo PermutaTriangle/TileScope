@@ -18,7 +18,9 @@ from tilescopethree.strategies import (all_cell_insertions,
                                        row_and_column_separation,
                                        row_placements as row_placements_strat,
                                        subobstruction_inferral,
-                                       subset_verified, verify_points)
+                                       subclass_verified, subset_verified,
+                                       verify_points)
+                                    
 import importlib
 
 class TileScopePack(StrategyPack):
@@ -220,20 +222,42 @@ basepacks = [
     TileScopePack.point_placements(4),
     TileScopePack.all_the_strategies(),
 ]
-length_4_root_placements = TileScopePack.point_placements().add_initial(
+
+length_3_root_placements_pp = TileScopePack.point_placements().add_initial(
+                            partial(root_requirement_insertion, maxreqlen=3))
+length_4_root_placements_pp = TileScopePack.point_placements().add_initial(
                             partial(root_requirement_insertion, maxreqlen=4))
-length_4_root_placements.name = "length_4_root_placements"
-basepacks.append(length_4_root_placements)
+length_3_root_placements_pp.name = "length_3_root_placements_pp"
+length_4_root_placements_pp.name = "length_4_root_placements_pp"
+basepacks.append(length_3_root_placements_pp)
+basepacks.append(length_4_root_placements_pp)
+
+length_3_root_placements_rc = TileScopePack.row_and_col_placements().add_initial(
+                            partial(root_requirement_insertion, maxreqlen=3))
+length_4_root_placements_rc = TileScopePack.row_and_col_placements().add_initial(
+                            partial(root_requirement_insertion, maxreqlen=4))
+length_3_root_placements_rc.name = "length_3_root_placements_rc"
+length_4_root_placements_rc.name = "length_4_root_placements_rc"
+basepacks.append(length_3_root_placements_rc)
+basepacks.append(length_4_root_placements_rc)
 
 module = importlib.import_module(TileScopePack.__module__)
 
 for pack in basepacks:
     fusion_pack = pack.make_fusion()
+    fusion_datab = fusion_pack.add_verification(database_verified)
+    fusion_scv = fusion_pack.add_verification(subclass_verified)
     other_fusion = pack.make_fusion(interleaving=True)
+    other_fusion_datab = other_fusion.add_verification(database_verified)
     setattr(module, fusion_pack.name, fusion_pack)
+    setattr(module, fusion_datab.name, fusion_datab)
+    setattr(module, fusion_scv.name, fusion_scv)
     setattr(module, other_fusion.name, other_fusion)
+    setattr(module, other_fusion_datab.name, other_fusion_datab)
 delattr(module, 'fusion_pack')
+delattr(module, 'fusion_datab')
 delattr(module, 'other_fusion')
+delattr(module, 'other_fusion_datab')
 
 for pack in basepacks:
     new_packs = [pack]
