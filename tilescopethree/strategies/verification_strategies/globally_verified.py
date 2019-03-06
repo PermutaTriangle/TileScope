@@ -11,11 +11,12 @@ def globally_verified(tiling, **kwargs):
     if not tiling.dimensions == (1, 1):
         if all(not ob.is_interleaving() for ob in tiling.obstructions):
             if (all(all(not r.is_interleaving() for r in req)
-                    for req in tiling.requirements)
-                 and not possible_tautology(tiling)):
+                    for req in tiling.requirements) and
+                    not possible_tautology(tiling)):
                 return VerificationStrategy(formal_step="Globally verified.")
     else:
         return subset_verified(tiling, **kwargs)
+
 
 def possible_tautology(tiling):
     """Return True if possibly equivalent to a 1x1 tiling through empty cell
