@@ -282,15 +282,18 @@ for pack in basepacks:
     fusion_scv = fusion_pack.add_verification(subclass_verified)
     other_fusion = pack.make_fusion(interleaving=True)
     other_fusion_datab = other_fusion.add_verification(database_verified)
+    unreasonable_fusion = other_fusion.make_fusion()
     setattr(module, fusion_pack.name, fusion_pack)
     setattr(module, fusion_datab.name, fusion_datab)
     setattr(module, fusion_scv.name, fusion_scv)
     setattr(module, other_fusion.name, other_fusion)
     setattr(module, other_fusion_datab.name, other_fusion_datab)
+    setattr(module, unreasonable_fusion.name, unreasonable_fusion)
 delattr(module, 'fusion_pack')
 delattr(module, 'fusion_datab')
 delattr(module, 'other_fusion')
 delattr(module, 'other_fusion_datab')
+delattr(module, 'unreasonable_fusion')
 
 for pack in basepacks:
     new_packs = [pack]
