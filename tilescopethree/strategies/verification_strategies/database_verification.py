@@ -6,7 +6,7 @@ from permuta import Perm
 
 
 database = set()
-filenames = ["basis_depth_4_database.txt"]
+filenames = ["012_depth_4_database.txt"]
 for filename in filenames:
     f = open(filename, 'r')
     for line in f:
