@@ -13,10 +13,11 @@ filenames = ["012_depth_4_database.txt"]
 for filename in filenames:
     f = open(dir_path + "/" + filename, 'r')
     for line in f:
-       compression = b64decode(line.encode())
-       tiling = Tiling.decompress(compression)
-       database.add(tiling)
+        compression = b64decode(line.encode())
+        tiling = Tiling.decompress(compression)
+        database.add(tiling)
+
 
 def database_verified(tiling, **kwargs):
     if tiling in database:
-       return VerificationStrategy("Already in database!")
+        return VerificationStrategy("Already in database!")
