@@ -176,6 +176,31 @@ class TileScopePack(StrategyPack):
                                 if length > 1 else "")))
 
     @classmethod
+    def insertion_row_and_col_placements(cls, row_only=False, col_only=False):
+        """This pack finds insertion encodings."""
+        if row_only and col_only:
+            raise ValueError("Can't be row and col only.")
+        both = not (row_only or col_only)
+        expansion_strats = []
+        if not col_only:
+            expansion_strats.append(partial(row_placements_strat,
+                                            positive=True))
+        if not row_only:
+            expansion_strats.append(partial(col_placements_strat,
+                                            positive=True))
+        return TileScopePack(
+                initial_strats=[factor, requirement_corroboration,
+                                partial(all_cell_insertions,
+                                        ignore_parent=True)],
+                ver_strats=[subset_verified, globally_verified],
+                inferral_strats=[],
+                expansion_strats=[expansion_strats],
+                name="insertion_{}{}{}_placements".format(
+                                                "row" if not col_only else "",
+                                                "_and_" if both else "",
+                                                "col" if not row_only else ""))
+
+    @classmethod
     def row_and_col_placements(cls, row_only=False, col_only=False):
         if row_only and col_only:
             raise ValueError("Can't be row and col only.")
@@ -199,6 +224,9 @@ class TileScopePack(StrategyPack):
 
 
 basepacks = [
+    TileScopePack.insertion_row_and_col_placements(col_only=True),
+    TileScopePack.insertion_row_and_col_placements(row_only=True),
+    TileScopePack.insertion_row_and_col_placements(),
     TileScopePack.row_and_col_placements(col_only=True),
     TileScopePack.row_and_col_placements(row_only=True),
     TileScopePack.row_and_col_placements(),
