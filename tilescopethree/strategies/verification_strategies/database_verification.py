@@ -1,23 +1,28 @@
 """A strategy for checking if a tiling is a subset of the class."""
 from base64 import b64decode, b64encode
 from comb_spec_searcher import VerificationStrategy
+from logzero import logger
 from grids_three import Tiling
 
 import os
+import tqdm
 
 dir_path = os.path.dirname(os.path.realpath(__file__))
-
-database = set()
 filenames = ["012_depth_5_database_twisted.txt",
              "1302_depth_5_database_twisted.txt"]
-for filename in filenames:
-    f = open(dir_path + "/" + filename, 'r')
-    for line in f:
-        compression = b64decode(line.encode())
-        tiling = Tiling.decompress(compression)
-        database.add(tiling)
+database = set()
 
 
 def database_verified(tiling, **kwargs):
+    if not database and filenames:
+        for filename in filenames:
+            logger.info("Importing database from '{}'.".format(filename),
+                        extra=kwargs['logger'])
+            f = open(dir_path + "/" + filename, 'r')
+            for line in tqdm.tqdm(f.readlines()):
+                compression = b64decode(line.encode())
+                dbtiling = Tiling.decompress(compression)
+                database.add(dbtiling)
+            f.close()
     if tiling in database:
         return VerificationStrategy("Already in database!")
