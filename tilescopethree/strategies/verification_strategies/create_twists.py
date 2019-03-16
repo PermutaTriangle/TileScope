@@ -53,8 +53,9 @@ def twist_one_by_ones(tiling):
 
     return set(twists)
 
-
 seen = set()
+
+
 def get_twists(db, update=True):
     twists = set()
     for tiling in tqdm.tqdm(list(db)):
@@ -85,6 +86,7 @@ til_syms = [Tiling.reverse, Tiling.complement, Tiling.inverse,
             Tiling.antidiagonal, Tiling.rotate270, Tiling.rotate180,
             Tiling.rotate90]
 
+
 def get_symmetry(db):
     sym_database = set()
     for tiling in tqdm.tqdm(db):
@@ -94,7 +96,7 @@ def get_symmetry(db):
     return sym_database
 
 if __name__ == "__main__":
-    import sys, tqdm
+    import tqdm
     old_db = sys.argv[1]
 
     print("Reading database")
@@ -122,7 +124,7 @@ if __name__ == "__main__":
 
     print("Computing twists")
 
-    sym_database = frozenset(database)
+    # sym_database = frozenset(database)
 
     curr_db = None
     i = 0
@@ -130,7 +132,7 @@ if __name__ == "__main__":
         i += 1
         print("iteration {}".format(i))
         curr_db = set(database)
-        database |= get_twists(database, update=False)
+        database |= get_twists(database, update=True)
         # database = get_symmetry(database)
     print(len(database))
 
@@ -153,6 +155,3 @@ if __name__ == "__main__":
     f.close()
 
     print("Done")
-
-
-

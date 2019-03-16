@@ -1,15 +1,15 @@
 """A strategy for checking if a tiling is a subset of the class."""
 from base64 import b64decode, b64encode
 from comb_spec_searcher import VerificationStrategy
-from grids_three import Tiling, Obstruction, Requirement
-from permuta import Perm
+from grids_three import Tiling
 
 import os
 
 dir_path = os.path.dirname(os.path.realpath(__file__))
 
 database = set()
-filenames = ["012_depth_4_database.txt"]
+filenames = ["012_depth_5_database_twisted.txt",
+             "1302_depth_5_database_twisted.txt"]
 for filename in filenames:
     f = open(dir_path + "/" + filename, 'r')
     for line in f:
