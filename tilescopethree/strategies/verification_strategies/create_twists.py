@@ -8,7 +8,6 @@ from permuta.permutils import (antidiagonal_set, complement_set, inverse_set,
                                rotate_90_clockwise_set,
                                rotate_180_clockwise_set,
                                rotate_270_clockwise_set)
-
 import tqdm
 
 
@@ -16,6 +15,8 @@ def twist_one_by_ones(tiling):
     """
     Returns all tilings which can reached by twisting a single cell.
     """
+    if tiling.requirements:
+        raise NotImplementedError("Can't handle requirements")
     one_by_ones = set(tiling.active_cells)
     for ob in tiling.obstructions:
         if not one_by_ones:
@@ -24,34 +25,21 @@ def twist_one_by_ones(tiling):
             for c in ob.pos:
                 one_by_ones.discard(c)
 
-    for req in tiling.requirements:
-        for r in req:
-            if not one_by_ones:
-                break
-            if not r.is_single_cell():
-                for c in r.pos:
-                    one_by_ones.discard(c)
-
     sym_sets = [antidiagonal_set, complement_set, inverse_set,
                 rotate_90_clockwise_set, rotate_180_clockwise_set,
                 rotate_270_clockwise_set]
     cell_basis = tiling.cell_basis()
     twists = set()
     for cell in one_by_ones:
-        av, co = cell_basis[cell]
+        av, _ = cell_basis[cell]
         for sym_set in sym_sets:
             sym_av = sym_set(av)
-            sym_co = sym_set(co)
             twisted_obs = ([ob for ob in tiling.obstructions
                             if cell not in ob.pos] +
                            [Obstruction.single_cell(p, cell) for p in sym_av])
-            twisted_reqs = ([req for req in tiling.requirements
-                             if not any(cell in r.pos for r in req)] +
-                            [[Requirement.single_cell(p, cell)]
-                             for p in sym_co])
-            twists.add(Tiling(twisted_obs, twisted_reqs))
-
+            twists.add(Tiling(twisted_obs))
     return set(twists)
+
 
 seen = set()
 
@@ -77,7 +65,6 @@ def get_twists(db, update=True):
                     print("twisted:")
                     print(twist)
                     raise e
-
         twists |= new_twists
         seen.add(tiling)
     return twists
@@ -96,7 +83,7 @@ def get_symmetry(db):
     return sym_database
 
 if __name__ == "__main__":
-    import tqdm
+    import sys
     old_db = sys.argv[1]
 
     print("Reading database")

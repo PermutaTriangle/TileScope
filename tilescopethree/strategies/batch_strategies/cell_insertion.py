@@ -61,7 +61,7 @@ def all_cell_insertions(tiling, **kwargs):
 
 def root_requirement_insertion(tiling, **kwargs):
     """The cell insertion strategy performed only on 1 by 1 tilings."""
-    if tiling.dimensions != (1, 1):
+    if tiling.dimensions != (1, 1) or tiling.requirements:
         return
     yield from all_cell_insertions(tiling, **kwargs)
 
