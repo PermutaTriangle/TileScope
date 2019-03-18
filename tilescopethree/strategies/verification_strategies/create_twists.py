@@ -8,7 +8,6 @@ from permuta.permutils import (antidiagonal_set, complement_set, inverse_set,
                                rotate_90_clockwise_set,
                                rotate_180_clockwise_set,
                                rotate_270_clockwise_set)
-import tqdm
 
 
 def twist_one_by_ones(tiling):
@@ -46,7 +45,7 @@ seen = set()
 
 def get_twists(db, update=True):
     twists = set()
-    for tiling in tqdm.tqdm(list(db)):
+    for tiling in db:
         if tiling.requirements:
             raise NotImplementedError("Can't handle requirements")
         if tiling in seen:
@@ -76,7 +75,7 @@ til_syms = [Tiling.reverse, Tiling.complement, Tiling.inverse,
 
 def get_symmetry(db):
     sym_database = set()
-    for tiling in tqdm.tqdm(db):
+    for tiling in db:
         sym_database.add(tiling)
         for sym in til_syms:
             sym_database.add(sym(tiling))
@@ -104,7 +103,7 @@ if __name__ == "__main__":
 
     with_sym = old_db.split('.')[0] + "_symmetry.txt"
     f = open(with_sym, 'w')
-    for tiling in tqdm.tqdm(database):
+    for tiling in database:
         compression = b64encode(tiling.compress()).decode()
         f.write(compression + "\n")
     f.close()
@@ -127,7 +126,7 @@ if __name__ == "__main__":
     # from pymongo import MongoClient
     # mongo = MongoClient('mongodb://localhost:27017/permsdb_three')
     # print("Removing twists")
-    # for twist in tqdm.tqdm(database):
+    # for twist in database:
     #     if twist in sym_database:
     #         continue
     #     mongo.permsdb_three.min_poly.delete_one({'key': twist.compress()})
@@ -136,7 +135,7 @@ if __name__ == "__main__":
 
     with_twists = old_db.split('.')[0] + "_twisted.txt"
     f = open(with_twists, 'w')
-    for tiling in tqdm.tqdm(database):
+    for tiling in database:
         compression = b64encode(tiling.compress()).decode()
         f.write(compression + "\n")
     f.close()

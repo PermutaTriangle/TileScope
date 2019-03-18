@@ -5,11 +5,10 @@ from logzero import logger
 from grids_three import Tiling
 
 import os
-import tqdm
+
 
 dir_path = os.path.dirname(os.path.realpath(__file__))
-filenames = ["012_depth_5_database_twisted.txt",
-             "1302_depth_5_database_twisted.txt"]
+filenames = ["012_depth_5_database_twisted.txt"]
 database = set()
 
 
@@ -19,7 +18,7 @@ def database_verified(tiling, **kwargs):
             logger.info("Importing database from '{}'.".format(filename),
                         extra=kwargs['logger'])
             f = open(dir_path + "/" + filename, 'r')
-            for line in tqdm.tqdm(f.readlines()):
+            for line in f.readlines():
                 compression = b64decode(line.encode())
                 dbtiling = Tiling.decompress(compression)
                 database.add(dbtiling)
