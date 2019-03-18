@@ -14,6 +14,9 @@ def subset_verified(tiling, basis, **kwargs):
     if kwargs.get("no_factors", False):
         if len(tiling.find_factors()) > 1:
             return
+    if kwargs.get("no_reqs", False):
+        if tiling.requirements:
+            return
     if tiling.dimensions == (1, 1):
         if one_by_one_verified(tiling, basis, **kwargs):
             return VerificationStrategy(

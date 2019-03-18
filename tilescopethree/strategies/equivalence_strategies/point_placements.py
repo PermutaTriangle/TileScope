@@ -1,6 +1,6 @@
 from itertools import chain
 
-from comb_spec_searcher import EquivalenceStrategy
+from comb_spec_searcher import Strategy
 from grids_three import Obstruction, Requirement, Tiling
 from permuta import Perm
 from permuta.misc import (DIR_EAST, DIR_NONE, DIR_NORTH, DIR_SOUTH, DIR_WEST,
@@ -70,6 +70,7 @@ def requirement_placement(tiling, **kwargs):
     """
     point_cells = tiling.point_cells
     point_only = kwargs.get('point_only')
+    ignore_parent = kwargs.get('ignore_parent', False)
     for ri, reqs in enumerate(tiling.requirements):
         if len(reqs) > 1:
             continue
@@ -80,11 +81,16 @@ def requirement_placement(tiling, **kwargs):
         for i in range(len(reqs[0])):
             for DIR in DIRS:
                 placedtiling = place_point_of_requirement(tiling, ri, i, DIR)
-                yield EquivalenceStrategy(
-                    formal_step=("Placing point {} of requirement {} with "
-                                 "force {}").format(
-                                     (i, reqs[0].patt[i]), repr(reqs[0]), DIR),
-                    comb_class=placedtiling)
+                yield Strategy(
+                    formal_step=("Placing point {} of requirement {} "
+                                 "with force {}").format(
+                                    (i, reqs[0].patt[i]), repr(reqs[0]), DIR),
+                    comb_classes=[placedtiling],
+                    ignore_parent=ignore_parent,
+                    inferable=[True],
+                    possibly_empty=[True],
+                    workable=[True],
+                    constructor='equiv')
 
 
 def point_placement(tiling, **kwargs):
