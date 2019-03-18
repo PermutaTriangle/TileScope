@@ -5,10 +5,11 @@ from functools import partial
 from tilescopethree.strategies import (all_cell_insertions,
                                        all_col_insertions, all_row_insertions,
                                        col_placements as col_placements_strat,
-                                       database_verified, elementary_verified,
+                                       database_verified, deflation,
+                                       elementary_verified,
                                        factor, fusion,
                                        fusion_with_interleaving,
-                                       globally_verified,
+                                       globally_verified, globally_verified_no_req,
                                        obstruction_transitivity,
                                        partial_requirement_placement,
                                        requirement_corroboration,
@@ -18,7 +19,7 @@ from tilescopethree.strategies import (all_cell_insertions,
                                        row_and_column_separation,
                                        row_placements as row_placements_strat,
                                        subobstruction_inferral,
-                                       subclass_verified, subset_verified)
+                                       subclass_verified, subset_verified, subset_verified_no_req)
 
 import importlib
 
@@ -109,6 +110,14 @@ class TileScopePack(StrategyPack):
         with_fuse.forward_equivalence = True
         return with_fuse
 
+    def make_deflation(self):
+        try:
+            with_deflation = self.add_initial(deflation)
+        except ValueError as e:
+            raise ValueError(e)
+        with_deflation.forward_equivalence = True
+        return with_deflation
+
     # The base packs are given as class methods below.
 
     @classmethod
@@ -150,6 +159,22 @@ class TileScopePack(StrategyPack):
                                            maxreqlen=length)],
                                   [requirement_corroboration]],
                 name="{}{}{}_placements".format(
+                            "length_{}_".format(length) if length > 1 else "",
+                            "partial_" if partial_placements else "",
+                            "pattern" if length > 1 else "point"))
+
+    @classmethod
+    def pattern_placements_sh(cls, length=1, partial_placements=False):
+        if not isinstance(length, int) or length < 1:
+            raise ValueError("The length {} makes no sense".format(length))
+        placement = (partial_requirement_placement
+                     if partial_placements else requirement_placement)
+        return TileScopePack(
+                initial_strats=[placement],
+                ver_strats=[subset_verified_no_req],
+                inferral_strats=[],
+                expansion_strats=[[]],
+                name="{}{}{}_placements_sh".format(
                             "length_{}_".format(length) if length > 1 else "",
                             "partial_" if partial_placements else "",
                             "pattern" if length > 1 else "point"))
@@ -265,6 +290,15 @@ length_4_root_placements_pp.name = "length_4_root_pattern_pp"
 basepacks.append(length_3_root_placements_pp)
 basepacks.append(length_4_root_placements_pp)
 
+length_3_root_placements_pp_sh = TileScopePack.pattern_placements_sh().add_initial(
+                            partial(root_requirement_insertion, maxreqlen=3))
+length_4_root_placements_pp_sh = TileScopePack.pattern_placements_sh().add_initial(
+                            partial(root_requirement_insertion, maxreqlen=4))
+length_3_root_placements_pp_sh.name = "length_3_root_pattern_pp_sh"
+length_4_root_placements_pp_sh.name = "length_4_root_pattern_pp_sh"
+basepacks.append(length_3_root_placements_pp_sh)
+basepacks.append(length_4_root_placements_pp_sh)
+
 length_3_root_placements_rc = TileScopePack.row_and_col_placements().add_initial(
                             partial(root_requirement_insertion, maxreqlen=3))
 length_4_root_placements_rc = TileScopePack.row_and_col_placements().add_initial(
@@ -277,18 +311,24 @@ basepacks.append(length_4_root_placements_rc)
 module = importlib.import_module(TileScopePack.__module__)
 
 for pack in basepacks:
+    # deflation_pack = pack.make_deflation()
+    # defusion_pack = deflation_pack.make_fusion()
     fusion_pack = pack.make_fusion()
     fusion_datab = fusion_pack.add_verification(database_verified)
     fusion_scv = fusion_pack.add_verification(subclass_verified)
     other_fusion = pack.make_fusion(interleaving=True)
     other_fusion_datab = other_fusion.add_verification(database_verified)
     unreasonable_fusion = other_fusion.make_fusion()
+    # setattr(module, deflation_pack.name, deflation_pack)
+    # setattr(module, defusion_pack.name, defusion_pack)
     setattr(module, fusion_pack.name, fusion_pack)
     setattr(module, fusion_datab.name, fusion_datab)
     setattr(module, fusion_scv.name, fusion_scv)
     setattr(module, other_fusion.name, other_fusion)
     setattr(module, other_fusion_datab.name, other_fusion_datab)
     setattr(module, unreasonable_fusion.name, unreasonable_fusion)
+# delattr(module, 'defusion_pack')
+# delattr(module, 'deflation_pack')
 delattr(module, 'fusion_pack')
 delattr(module, 'fusion_datab')
 delattr(module, 'other_fusion')

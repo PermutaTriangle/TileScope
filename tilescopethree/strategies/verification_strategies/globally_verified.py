@@ -1,5 +1,6 @@
+from permuta import Perm
 from comb_spec_searcher import VerificationStrategy
-from .subset_verified import subset_verified
+from .subset_verified import subset_verified, subset_verified_no_req
 
 
 def globally_verified(tiling, **kwargs):
@@ -16,6 +17,32 @@ def globally_verified(tiling, **kwargs):
                 return VerificationStrategy(formal_step="Globally verified.")
     else:
         return subset_verified(tiling, **kwargs)
+
+def globally_verified_no_req(tiling, **kwargs):
+    """The globally verified strategy.
+
+    A tiling is globally verified if every requirement and obstruction is
+    non-interleaving.
+    """
+    if not tiling.dimensions == (1, 1):
+        if all(not ob.is_interleaving() for ob in tiling.obstructions):
+            if (all(all(not r.is_interleaving() for r in req)
+                    for req in tiling.requirements) and
+                    not possible_tautology(tiling)):
+
+                for req in tiling.requirements:
+                    # No requirement lists allowed
+                    if len(req) > 1:
+                        return
+                    r = req[0]
+                    # Only point requirements allowed
+                    if len(r) > 1:
+                        return
+                    if not(Perm((0,1)) in tiling.cell_basis()[r._pos[0]][0] and Perm((1,0)) in tiling.cell_basis()[r._pos[0]][0]):
+                        return
+                return VerificationStrategy(formal_step="Globally verified no req.")
+    else:
+        return subset_verified_no_req(tiling, **kwargs)
 
 
 def possible_tautology(tiling):
