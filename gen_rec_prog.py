@@ -26,13 +26,16 @@ except FileNotFoundError:
 
 queue = Queue()
 
-funcs = dict()
+funcs = dict() # Dictionary from function names to function bodies
 
 
 def prog_header():
+    '''
+        Creates a header for the recurrence relation program
+        with necessary imports and dictionaries required
+        by the program. 
+    '''
     return ("from collections import defaultdict\n"
-            # "from pymongo import MongoClient\n\n"
-            # "mongo = MongoClient('mongodb://localhost:27017/permsdb_three')\n"
             "mem = defaultdict(dict)\n\n"
             "import sys\n"
             "sys.setrecursionlimit(10**6)\n"
@@ -44,37 +47,46 @@ def prog_header():
 
 
 def get_func(pnode):
+    '''
+        Returns the name of pnode
+    '''
     return str(pnode.get_function())[:-3]
 
 
 def func_header(func):
+    '''
+        Returns the function signature given the name of the function.
+    '''
     return "def {}(n):".format(func)
 
 
 def mem_lookup(func):
+    '''
+        Given a func returns code that will check if the value
+        for the given parameters has been computed already and if so,
+        returns that value.
+    '''
     return ("if n in mem['{}']:\n"
             "\treturn mem['{}'][n]\n").format(func, func)
 
 
+def mem_save(func):
+    '''
+        Remember the value computed for given parameters.
+    '''
+    return "mem['{}'][n] = ans\n".format(func)
+
+
 def db_lookup(pnode):
-    '''    return ("info = mongo.permsdb_three.factordb.find_one({{'key': "
-            "{}}})\n"
-            "error = None\n"
-            "if info is None:\n"
-            "\terror = 'Tiling not in database. '\n"
-            "elif 'coeffs' not in info:\n"
-            "\terror = 'Coefficients not in database. '\n"
-            "elif len(info['coeffs']) <= n:\n"
-            "\terror = 'Coefficients only go up to {{}}.'"
-            ".format(len(info['coeffs'])-1)\n"
-            "else:\n"
-            "\tans = info['coeffs'][n+1]\n"
-            "if error:\n"
-            "\traise ValueError(error)\n").format(
-                                pnode.eqv_path_objects[0].compress())
+    '''
+        Computes or looks up the generating function for a verified
+        node and then stores it for future use.
     '''
     return ("if '{}' in genfs:\n"
-            "\tans = taylor_expand(genfs['{}'],n=n)[-1]\n"
+            "\tcoeffs = taylor_expand(genfs['{0}'],n=n+expand_each_time-1)\n"
+            "\tfor i, coeff in enumerate(coeffs[n:]):\n"
+            "\t\tmem['{0}'][(n+i)] = coeff\n"
+            "\tans = coeffs[n]\n"
             "else:\n"
             "\tgenf = None\n"
             "\tgenf = {}.get_genf()\n"
@@ -86,19 +98,21 @@ def db_lookup(pnode):
 
 
 def base_case(pnode):
+    '''
+        Finds all the required base cases for a given node.
+        Base cases are:
+            - There are no objects of negative length
+    '''
     return ("if n < 0:\n"
             "\treturn 0\n")
 
-
-def mem_save(func):
-    return "mem['{}'][n] = ans\n".format(func)
 
 
 def get_rec(pnode):
     func = get_func(pnode)
 
-    body = mem_lookup(func)
-    body += base_case(pnode)
+    body = base_case(pnode)
+    body += mem_lookup(func)
 
     if pnode.disjoint_union:
         body += ("ans = " +
@@ -107,70 +121,69 @@ def get_rec(pnode):
         for child in pnode.children:
             queue.put(child)
     elif pnode.decomposition:
-        '''if get_func(pnode) == 'F_54030':
-            print(pnode.eqv_path_objects[-1])
-            for child in pnode.children:
-                print(child.eqv_path_objects[0])'''
-        points = 0
-        pos_children = 0
-        children = []
+        atoms = 0 # Number of children that are just the atom
+        pos_children = 0 # Number of children that are positive (do not contain epsilon)
+        children = [] # A list of children that are not atoms
         for child in pnode.children:
-            if child.eqv_path_objects[-1].is_point_tiling():
-                points += 1
+            '''
+                Disjoint union will just return the sum of all
+                the children with the correct function signatures.
+            ''' 
+            if child.eqv_path_objects[-1].is_atom():
+                atoms += 1
             else:
-                if child.eqv_path_objects[-1].requirements:
+                if child.eqv_path_objects[-1].is_positive():
                     pos_children += 1
                 children.append(child)
-        ind = "i"  # index variable
-        rem = "n+1"
+        ind = 0 # index variable
+        rem = "n+1" # the remainder (how many points we have left to distribute)
         body += "ans = 0\n"
         for i, child in enumerate(children[:-1]):
-            if child.eqv_path_objects[-1].requirements:
-                start = 1
+            if child.eqv_path_objects[-1].is_positive():
+                start = 1 # If the child is positive then it contains no length 0 objects
+                          # so we start with length 1 objects
                 pos_children -= 1
             else:
                 start = 0
             tabs = '\t'*i
-            body += "{}for {} in range({},{}-{}):\n".format(tabs, ind, start, rem,
-                                                                points+pos_children)
-            rem += "-{}".format(ind)
-            ind = chr(ord(ind)+1)
+            body += "{}for {} in range({},{}-{}):\n".format(tabs, "i"+str(ind), start, rem,
+                                                                atoms+pos_children)
+            rem += "-{}".format("i"+str(ind)) # We chose i{ind} points for this child so we subtract
+                                              # that many points
+            ind += 1
 
-        ind = "i"
-        if points == 0:
+        ind = 0
+        if atoms == 0:
             rem = "n"
         else:
-            rem = "n-{}".format(points)
-        tabs = '\t'*(len(children)-1)
-        if tabs:
-            body += "{}ans += ".format(tabs)
-        for child in children[:-1]:
-            body += "{}({}) * ".format(get_func(child), ind)
-            rem += "-{}".format(ind)
-            ind = chr(ord(ind)+1)
+            rem = "n-{}".format(atoms)
 
-        if len(children) == 1:
-            body += "ans = {}({})\n".format(get_func(children[-1]), rem)
-        elif len(children) > 1:
-            body += "{}({})\n".format(get_func(children[-1]), rem)
+        tabs = '\t'*(len(children)-1)
+        body += "{}ans += ".format(tabs)
+
+        for child in children[:-1]:
+            body += "{}({}) * ".format(get_func(child), "i"+str(ind))
+            rem += "-{}".format("i"+str(ind))
+            ind += 1
+
+        body += "{}({})\n".format(get_func(children[-1]), rem)
 
         for child in pnode.children:
             queue.put(child)
+
     elif pnode.recursion:
         return
     elif pnode.strategy_verified:  # call database
-        tiling = pnode.eqv_path_objects[-1]
-        if  (len(tiling.obstructions) == 1 and
-                 len(tiling.obstructions[0]) == 1):
+        if  pnode.eqv_path_objects[-1].is_epsilon():
             body += ("if n == 0:\n"
-                     "\tans=1\n"
+                     "\tans = 1\n"
                      "else:\n"
-                     "\tans=0\n")
-        elif pnode.eqv_path_objects[0].is_point_tiling():
+                     "\tans = 0\n")
+        elif pnode.eqv_path_objects[-1].is_atom():
             body += ("if n == 1:\n"
-                     "\tans=1\n"
+                     "\tans = 1\n"
                      "else:\n"
-                     "\tans=0\n")
+                     "\tans = 0\n")
         else:
             body += db_lookup(pnode)
 
@@ -189,8 +202,7 @@ if tree:
             print(func_header(func), file=f)
             for line in body.split('\n'):
                 print("\t"+line, file=f)
-    from temp import F_0
-    for i in range(1000):
-        print(i, F_0(i))
 
-#print(json.dumps(tree.to_jsonable()))
+    from temp import F_0
+    for i in range(100):
+        print(i, F_0(i))
