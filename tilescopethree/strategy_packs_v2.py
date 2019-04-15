@@ -18,7 +18,7 @@ from tilescopethree.strategies import (all_cell_insertions,
                                        row_and_column_separation,
                                        row_placements as row_placements_strat,
                                        subobstruction_inferral,
-                                       subclass_verified, subset_verified)
+                                       subset_verified, verify_points)
 
 import importlib
 
@@ -189,6 +189,31 @@ class TileScopePack(StrategyPack):
                                 if length > 1 else "")))
 
     @classmethod
+    def insertion_row_and_col_placements(cls, row_only=False, col_only=False):
+        """This pack finds insertion encodings."""
+        if row_only and col_only:
+            raise ValueError("Can't be row and col only.")
+        both = not (row_only or col_only)
+        expansion_strats = []
+        if not col_only:
+            expansion_strats.append(partial(row_placements_strat,
+                                            positive=True))
+        if not row_only:
+            expansion_strats.append(partial(col_placements_strat,
+                                            positive=True))
+        return TileScopePack(
+                initial_strats=[factor, requirement_corroboration,
+                                partial(all_cell_insertions,
+                                        ignore_parent=True)],
+                ver_strats=[subset_verified, globally_verified],
+                inferral_strats=[],
+                expansion_strats=[expansion_strats],
+                name="insertion_{}{}{}_placements".format(
+                                                "row" if not col_only else "",
+                                                "_and_" if both else "",
+                                                "col" if not row_only else ""))
+
+    @classmethod
     def row_and_col_placements(cls, row_only=False, col_only=False):
         if row_only and col_only:
             raise ValueError("Can't be row and col only.")
@@ -233,7 +258,27 @@ class TileScopePack(StrategyPack):
                                                 "_and_" if both else "",
                                                 "col" if not row_only else ""))
 
+    @classmethod
+    def only_root_placements(cls, length=1):
+        return TileScopePack(
+            initial_strats=[partial(requirement_placement,
+                                    ignore_parent=True),
+                            factor],
+            ver_strats=[verify_points,
+                        partial(subset_verified,
+                                no_factors=True, no_reqs=True)],
+            inferral_strats=[row_and_column_separation,
+                             obstruction_transitivity],
+            expansion_strats=[[partial(root_requirement_insertion,
+                                       maxreqlen=length)]],
+            name="only_length_{}_root_placements".format(length)
+        )
+
+
 basepacks = [
+    TileScopePack.insertion_row_and_col_placements(col_only=True),
+    TileScopePack.insertion_row_and_col_placements(row_only=True),
+    TileScopePack.insertion_row_and_col_placements(),
     TileScopePack.row_and_col_placements(col_only=True),
     TileScopePack.row_and_col_placements(row_only=True),
     TileScopePack.row_and_col_placements(),
@@ -241,6 +286,9 @@ basepacks = [
     TileScopePack.point_placements(),
     TileScopePack.pattern_placements(4),
     TileScopePack.point_placements(4),
+    TileScopePack.only_root_placements(2),
+    TileScopePack.only_root_placements(3),
+    TileScopePack.only_root_placements(4),
     TileScopePack.all_the_strategies(),
     TileScopePack.insertion_row_and_col_placements(row_only=True),
     TileScopePack.insertion_row_and_col_placements(col_only=True),
