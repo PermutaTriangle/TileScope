@@ -18,6 +18,7 @@ from tilescopethree.strategies import (all_cell_insertions,
                                        row_and_column_separation,
                                        row_placements as row_placements_strat,
                                        subobstruction_inferral,
+                                       subclass_verified,
                                        subset_verified, verify_points)
 
 import importlib
