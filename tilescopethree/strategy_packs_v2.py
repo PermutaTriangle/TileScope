@@ -162,13 +162,12 @@ class TileScopePack(StrategyPack):
         placement = (partial_requirement_placement
                      if partial_placements else requirement_placement)
         return TileScopePack(
-                initial_strats=[factor, requirement_corroboration],
+                initial_strats=[factor, requirement_corroboration, placement],
                 ver_strats=[subset_verified, globally_verified],
                 inferral_strats=[row_and_column_separation,
                                  obstruction_transitivity],
                 expansion_strats=[[partial(all_cell_insertions,
-                                           maxreqlen=length)],
-                                  [placement]],
+                                           maxreqlen=length)]],
                 name="{}{}point_placements".format(
                             "length_{}_".format(length) if length > 1 else "",
                             "partial_" if partial_placements else ""))
@@ -190,29 +189,30 @@ class TileScopePack(StrategyPack):
                                 if length > 1 else "")))
 
     @classmethod
-    def insertion_row_and_col_placements(cls, row_only=False, col_only=False):
+    def regular_insertion_encoding(cls, direction=None):
         """This pack finds insertion encodings."""
-        if row_only and col_only:
-            raise ValueError("Can't be row and col only.")
-        both = not (row_only or col_only)
-        expansion_strats = []
-        if not col_only:
-            expansion_strats.append(partial(row_placements_strat,
-                                            positive=True))
-        if not row_only:
-            expansion_strats.append(partial(col_placements_strat,
-                                            positive=True))
+        if direction in [1, 3]:
+            expansion_strats = [partial(row_placements_strat,
+                                        positive=True,
+                                        direction=direction)]
+        elif direction in [0, 2]:
+            expansion_strats = [partial(col_placements_strat,
+                                        positive=True,
+                                        direction=direction)]
+        else:
+            raise ValueError("Must be direction in {0, 1, 2, 3}.")
         return TileScopePack(
                 initial_strats=[factor, requirement_corroboration,
                                 partial(all_cell_insertions,
                                         ignore_parent=True)],
-                ver_strats=[subset_verified, globally_verified],
+                ver_strats=[verify_points],
                 inferral_strats=[],
                 expansion_strats=[expansion_strats],
-                name="insertion_{}{}{}_placements".format(
-                                                "row" if not col_only else "",
-                                                "_and_" if both else "",
-                                                "col" if not row_only else ""))
+                name="regular_insertion_encoding_{}".format(
+                                                "left" if direction == 0 else
+                                                "bottom" if direction == 1 else
+                                                "right" if direction == 2 else
+                                                "top"))
 
     @classmethod
     def row_and_col_placements(cls, row_only=False, col_only=False):
@@ -291,9 +291,10 @@ basepacks = [
     TileScopePack.only_root_placements(3),
     TileScopePack.only_root_placements(4),
     TileScopePack.all_the_strategies(),
-    TileScopePack.insertion_row_and_col_placements(row_only=True),
-    TileScopePack.insertion_row_and_col_placements(col_only=True),
-    TileScopePack.insertion_row_and_col_placements()
+    TileScopePack.regular_insertion_encoding(0),
+    TileScopePack.regular_insertion_encoding(1),
+    TileScopePack.regular_insertion_encoding(2),
+    TileScopePack.regular_insertion_encoding(3),
 ]
 
 length_3_root_placements_pp = TileScopePack.point_placements().add_initial(
