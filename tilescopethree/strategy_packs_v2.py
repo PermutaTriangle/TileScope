@@ -10,6 +10,7 @@ from tilescopethree.strategies import (all_cell_insertions,
                                        fusion_with_interleaving,
                                        globally_verified,
                                        obstruction_transitivity,
+                                       one_by_one_verification,
                                        partial_requirement_placement,
                                        requirement_corroboration,
                                        requirement_list_placement,
@@ -361,3 +362,12 @@ for pack in basepacks:
 delattr(module, 'pack')
 delattr(module, 'new_pack')
 
+restricted_fusion = TileScopePack(
+                initial_strats=[factor, fusion, requirement_placement],
+                inferral_strats=[row_and_column_separation],
+                expansion_strats=[[all_cell_insertions,
+                                   partial(row_placements_strat, positive=False),
+                                   partial(col_placements_strat, positive=False)]],
+                ver_strats=[one_by_one_verification],
+                forward_equivalence=True,
+                name="restricted_fusion")
