@@ -84,7 +84,7 @@ def requirement_placement(tiling, **kwargs):
                 yield Strategy(
                     formal_step=("Placing point {} of requirement {} "
                                  "with force {}").format(
-                                    (i, reqs[0].patt[i]), repr(reqs[0]), DIR),
+                                    (i, reqs[0].patt[i]), str(reqs[0]), DIR),
                     comb_classes=[placedtiling],
                     ignore_parent=ignore_parent,
                     inferable=[True],

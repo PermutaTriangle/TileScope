@@ -3,6 +3,7 @@ from comb_spec_searcher.utils import get_func_name
 from grids_three import Tiling
 from functools import partial
 from tilescopethree.strategies import (all_cell_insertions,
+                                       all_requirement_insertions,
                                        all_col_insertions, all_row_insertions,
                                        col_placements as col_placements_strat,
                                        database_verified, elementary_verified,
@@ -238,6 +239,25 @@ class TileScopePack(StrategyPack):
             name="only_length_{}_root_placements".format(length)
         )
 
+    @classmethod
+    def requirement_placements(cls, length=2, partial_placements=False):
+        if not isinstance(length, int) or length < 1:
+            raise ValueError("The length {} makes no sense".format(length))
+        placement = (partial_requirement_placement
+                     if partial_placements else requirement_placement)
+        return TileScopePack(
+                initial_strats=[factor, requirement_corroboration],
+                ver_strats=[subset_verified, globally_verified],
+                inferral_strats=[row_and_column_separation,
+                                 obstruction_transitivity],
+                expansion_strats=[[partial(all_requirement_insertions,
+                                           maxlen=length)],
+                                  [placement]],
+                name="{}{}requirement_placements".format(
+                            "length_{}_".format(length) if length != 2 else "",
+                            "partial_" if partial_placements else ""))
+
+
 
 basepacks = [
     TileScopePack.insertion_row_and_col_placements(col_only=True),
@@ -246,10 +266,18 @@ basepacks = [
     TileScopePack.row_and_col_placements(col_only=True),
     TileScopePack.row_and_col_placements(row_only=True),
     TileScopePack.row_and_col_placements(),
-    TileScopePack.point_placements(partial_placements=True),
     TileScopePack.pattern_placements(),
+    TileScopePack.pattern_placements(2),
+    TileScopePack.pattern_placements(3),
     TileScopePack.pattern_placements(4),
+    TileScopePack.point_placements(2),
+    TileScopePack.point_placements(3),
     TileScopePack.point_placements(4),
+    TileScopePack.point_placements(partial_placements=True),
+    TileScopePack.requirement_placements(),
+    TileScopePack.requirement_placements(3),
+    TileScopePack.requirement_placements(4),
+    TileScopePack.requirement_placements(partial_placements=True),
     TileScopePack.only_root_placements(2),
     TileScopePack.only_root_placements(3),
     TileScopePack.only_root_placements(4),
