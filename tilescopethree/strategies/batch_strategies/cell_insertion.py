@@ -183,4 +183,3 @@ def all_requirement_insertions(tiling, **kwargs):
                            possibly_empty=[True for _ in range(2)],
                            workable=[True for _ in range(2)],
                            constructor='disjoint')
-

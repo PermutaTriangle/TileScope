@@ -258,7 +258,6 @@ class TileScopePack(StrategyPack):
                             "partial_" if partial_placements else ""))
 
 
-
 basepacks = [
     TileScopePack.insertion_row_and_col_placements(col_only=True),
     TileScopePack.insertion_row_and_col_placements(row_only=True),
