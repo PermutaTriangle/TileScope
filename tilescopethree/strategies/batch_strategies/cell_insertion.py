@@ -170,16 +170,17 @@ def all_requirement_insertions(tiling, **kwargs):
                         minimize=False, sorted_input=True)
     for length in range(1, maxlen + 1):
         for gp in obs_tiling.gridded_perms_of_length(length):
-            av = Tiling((tiling.obstructions +
-                        (Obstruction(gp.patt, gp.pos),)),
-                        tiling.requirements)
-            co = Tiling(tiling.obstructions,
-                        (tiling.requirements) +
-                        ((Requirement(gp.patt, gp.pos),),))
-            yield Strategy(formal_step="Insert {}.".format(str(gp)),
-                           comb_classes=[av, co],
-                           ignore_parent=ignore_parent,
-                           inferable=[True for _ in range(2)],
-                           possibly_empty=[True for _ in range(2)],
-                           workable=[True for _ in range(2)],
-                           constructor='disjoint')
+            if len(gp.factors()) == 1:
+                av = Tiling((tiling.obstructions +
+                            (Obstruction(gp.patt, gp.pos),)),
+                            tiling.requirements)
+                co = Tiling(tiling.obstructions,
+                            (tiling.requirements) +
+                            ((Requirement(gp.patt, gp.pos),),))
+                yield Strategy(formal_step="Insert {}.".format(str(gp)),
+                            comb_classes=[av, co],
+                            ignore_parent=ignore_parent,
+                            inferable=[True for _ in range(2)],
+                            possibly_empty=[True for _ in range(2)],
+                            workable=[True for _ in range(2)],
+                            constructor='disjoint')
