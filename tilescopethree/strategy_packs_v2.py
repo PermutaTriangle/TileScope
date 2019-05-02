@@ -117,24 +117,22 @@ class TileScopePack(StrategyPack):
     @classmethod
     def all_the_strategies(cls, length=1):
         return TileScopePack(
-                initial_strats=[partial(factor, unions=True)],
+                initial_strats=[partial(factor, unions=True),
+                                requirement_corroboration],
                 ver_strats=[subset_verified, globally_verified],
                 inferral_strats=[row_and_column_separation,
                                  obstruction_transitivity],
                 expansion_strats=[[partial(all_cell_insertions,
                                            maxreqlen=length),
                                    all_row_insertions,
-                                   all_col_insertions],
-                                  [row_placements_strat,
-                                   col_placements_strat,
-                                   partial(row_placements_strat,
+                                   all_col_insertions,
+                                   all_requirement_insertions],
+                                  [partial(row_placements_strat,
                                            positive=False),
                                    partial(col_placements_strat,
                                            positive=False),
                                    partial_requirement_placement,
-                                   requirement_placement,
-                                   requirement_list_placement],
-                                  [requirement_corroboration]],
+                                   requirement_placement]],
                 name="all_the_strategies")
 
     @classmethod
@@ -238,6 +236,7 @@ class TileScopePack(StrategyPack):
                 name="{}{}{}_placements".format("row" if not col_only else "",
                                                 "_and_" if both else "",
                                                 "col" if not row_only else ""))
+
     @classmethod
     def insertion_row_and_col_placements(cls, row_only=False, col_only=False):
         if row_only and col_only:

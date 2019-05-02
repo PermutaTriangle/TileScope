@@ -38,15 +38,32 @@ def row_placements(tiling, row=True, positive=True, regions=False, **kwargs):
         y = tiling.dimensions[1]
         only_cell_in_col = tiling.only_cell_in_row
         directions = [DIR_EAST, DIR_WEST]
+
     rows = range(x)
     if kwargs.get("index") is not None:
         rows = [kwargs.get("index")]
-
-
     if kwargs.get("direction") is not None:
         directions = [kwargs["direction"]]
     if regions:
         forward_maps = []
+
+    direction = kwargs.get('direction')
+    if direction is not None:
+        if row:
+            if direction == DIR_NORTH:
+                directions = [DIR_NORTH]
+            elif direction == DIR_SOUTH:
+                directions = [DIR_SOUTH]
+            else:
+                raise ValueError("Can't place rows in direction.")
+        else:
+            if direction == DIR_EAST:
+                directions = [DIR_EAST]
+            elif direction == DIR_WEST:
+                directions = [DIR_WEST]
+            else:
+                raise ValueError("Can't place cols in direction.")
+
     for i in rows:
         place = True
         cells_in_row = []
