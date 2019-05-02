@@ -102,24 +102,22 @@ class TileScopePack(StrategyPack):
     @classmethod
     def all_the_strategies(cls, length=1):
         return TileScopePack(
-                initial_strats=[partial(factor, unions=True)],
+                initial_strats=[partial(factor, unions=True),
+                                requirement_corroboration],
                 ver_strats=[subset_verified, globally_verified],
                 inferral_strats=[row_and_column_separation,
                                  obstruction_transitivity],
                 expansion_strats=[[partial(all_cell_insertions,
                                            maxreqlen=length),
                                    all_row_insertions,
-                                   all_col_insertions],
-                                  [row_placements_strat,
-                                   col_placements_strat,
-                                   partial(row_placements_strat,
+                                   all_col_insertions,
+                                   all_requirement_insertions],
+                                  [partial(row_placements_strat,
                                            positive=False),
                                    partial(col_placements_strat,
                                            positive=False),
                                    partial_requirement_placement,
-                                   requirement_placement,
-                                   requirement_list_placement],
-                                  [requirement_corroboration]],
+                                   requirement_placement]],
                 name="all_the_strategies")
 
     @classmethod
@@ -175,6 +173,32 @@ class TileScopePack(StrategyPack):
                 name=("insertion_{}point_placements"
                       "".format("length_{}_".format(length)
                                 if length > 1 else "")))
+
+    @classmethod
+    def regular_insertion_encoding(cls, direction=None):
+        """This pack finds insertion encodings."""
+        if direction in [1, 3]:
+            expansion_strats = [partial(row_placements_strat,
+                                        positive=True,
+                                        direction=direction)]
+        elif direction in [0, 2]:
+            expansion_strats = [partial(col_placements_strat,
+                                        positive=True,
+                                        direction=direction)]
+        else:
+            raise ValueError("Must be direction in {0, 1, 2, 3}.")
+        return TileScopePack(
+                initial_strats=[factor, requirement_corroboration,
+                                partial(all_cell_insertions,
+                                        ignore_parent=True)],
+                ver_strats=[verify_points],
+                inferral_strats=[],
+                expansion_strats=[expansion_strats],
+                name="regular_insertion_encoding_{}".format(
+                                                "left" if direction == 0 else
+                                                "bottom" if direction == 1 else
+                                                "right" if direction == 2 else
+                                                "top"))
 
     @classmethod
     def insertion_row_and_col_placements(cls, row_only=False, col_only=False):
@@ -281,6 +305,10 @@ basepacks = [
     TileScopePack.only_root_placements(3),
     TileScopePack.only_root_placements(4),
     TileScopePack.all_the_strategies(),
+    TileScopePack.regular_insertion_encoding(0),
+    TileScopePack.regular_insertion_encoding(1),
+    TileScopePack.regular_insertion_encoding(2),
+    TileScopePack.regular_insertion_encoding(3),
 ]
 length_4_root_placements = TileScopePack.point_placements().add_initial(
                             partial(root_requirement_insertion, maxreqlen=4))
