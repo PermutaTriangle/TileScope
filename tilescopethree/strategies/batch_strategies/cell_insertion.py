@@ -189,3 +189,30 @@ def col_insertion_helper(tiling, col, col_cells, regions=False):
     else:
         return [Tiling(tiling.obstructions + col_obs, tiling.requirements),
                  Tiling(tiling.obstructions, tiling.requirements + (col_req,))]
+
+
+def all_requirement_insertions(tiling, **kwargs):
+    """Insert all possible requirements the obstruction allow."""
+    if kwargs.get("no_reqs", True) and tiling.requirements:
+        return
+    maxlen = kwargs.get("maxlen", 2)
+    ignore_parent = kwargs.get("ignore_parent", False)
+    obs_tiling = Tiling(tiling.obstructions,
+                        remove_empty=False, derive_empty=False,
+                        minimize=False, sorted_input=True)
+    for length in range(1, maxlen + 1):
+        for gp in obs_tiling.gridded_perms_of_length(length):
+            if len(gp.factors()) == 1:
+                av = Tiling((tiling.obstructions +
+                            (Obstruction(gp.patt, gp.pos),)),
+                            tiling.requirements)
+                co = Tiling(tiling.obstructions,
+                            (tiling.requirements) +
+                            ((Requirement(gp.patt, gp.pos),),))
+                yield Strategy(formal_step="Insert {}.".format(str(gp)),
+                            comb_classes=[av, co],
+                            ignore_parent=ignore_parent,
+                            inferable=[True for _ in range(2)],
+                            possibly_empty=[True for _ in range(2)],
+                            workable=[True for _ in range(2)],
+                            constructor='disjoint')

@@ -113,7 +113,7 @@ def partial_requirement_placement(tiling, **kwargs):
                 yield EquivalenceStrategy(
                     formal_step=("Partially placing point {} of requirement {}"
                                  " with force {}").format(
-                                     (i, reqs[0].patt[i]), repr(reqs[0]), DIR),
+                                     (i, reqs[0].patt[i]), str(reqs[0]), DIR),
                     comb_class=placedtiling)
 
 
