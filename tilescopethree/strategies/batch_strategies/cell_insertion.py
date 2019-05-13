@@ -1,6 +1,8 @@
 """The cell insertion strategy checks whether a cell is empty or contains a
 point"""
 
+from itertools import chain
+
 from comb_spec_searcher import Strategy
 from permuta import Av, Perm
 from grids_three import Obstruction, Requirement, Tiling
@@ -45,18 +47,30 @@ def all_cell_insertions(tiling, **kwargs):
                     if (tiling.dimensions != (1, 1) or
                             all(patt > perm for perm in bdict[cell][1])):
                         yield Strategy(
-                            formal_step="Insert {} into cell {}.".format(patt,
-                                                                         cell),
-                            comb_classes=[
-                                tiling.add_single_cell_obstruction(patt,
-                                                                   cell),
-                                tiling.add_single_cell_requirement(patt,
-                                                                   cell)],
+                            formal_step=("Insert {} into cell {}.|{}|{}|{}|"
+                                         "".format(patt, cell, cell[0],
+                                                   cell[1],
+                                                   "".join(str(i)
+                                                           for i in patt))),
+                            comb_classes=cell_insertion(tiling, patt, cell),
                             ignore_parent=ignore_parent,
                             inferable=[True for _ in range(2)],
                             possibly_empty=[True for _ in range(2)],
                             workable=[True for _ in range(2)],
                             constructor='disjoint')
+
+def cell_insertion(tiling, patt, cell, regions=False):
+    """Return a tuple, the first avoids pattern in the cell, and the second
+    contains it."""
+    if regions:
+        return ([tiling.add_single_cell_obstruction(patt, cell),
+                 tiling.add_single_cell_requirement(patt, cell)],
+                [{c: frozenset([c]) for c in tiling.active_cells},
+                 {c: frozenset([c]) for c in tiling.active_cells}])
+    else:
+        return [tiling.add_single_cell_obstruction(patt, cell),
+                tiling.add_single_cell_requirement(patt, cell)]
+
 
 
 def root_requirement_insertion(tiling, **kwargs):
@@ -116,22 +130,32 @@ def all_row_insertions(tiling, **kwargs):
         row_cells = tiling.cells_in_row(row)
         if any(c in positive_cells for c in row_cells):
             continue
-        row_req = tuple(Requirement.single_cell(Perm((0, )), c)
-                        for c in row_cells)
-        row_obs = tuple(Obstruction.single_cell(Perm((0, )), c)
-                        for c in row_cells)
         yield Strategy(
                     formal_step="Either row {} is empty or not.".format(row),
-                    comb_classes=[Tiling(tiling.obstructions + row_obs,
-                                         tiling.requirements),
-                                  Tiling(tiling.obstructions,
-                                         tiling.requirements + (row_req,))],
+                    comb_classes=row_insertion_helper(tiling, row, row_cells),
                     ignore_parent=False,
                     inferable=[True for _ in range(2)],
                     possibly_empty=[True,
                                     True],
                     workable=[True for _ in range(2)],
                     constructor='disjoint')
+
+
+def row_insertion_helper(tiling, row, row_cells, regions=False):
+    if row_cells == None:
+        row_cells = tiling.cells_in_row(row)
+    row_req = tuple(Requirement.single_cell(Perm((0, )), c)
+                    for c in row_cells)
+    row_obs = tuple(Obstruction.single_cell(Perm((0, )), c)
+                    for c in row_cells)
+    if regions:
+        return ([Tiling(tiling.obstructions + row_obs, tiling.requirements),
+                Tiling(tiling.obstructions, tiling.requirements + (row_req,))],
+                [{c: frozenset([c]) for c in tiling.active_cells},
+                 {c: frozenset([c]) for c in tiling.active_cells}])
+    else:
+        return [Tiling(tiling.obstructions + row_obs, tiling.requirements),
+                Tiling(tiling.obstructions, tiling.requirements + (row_req,))]
 
 
 def all_col_insertions(tiling, **kwargs):
@@ -141,22 +165,32 @@ def all_col_insertions(tiling, **kwargs):
         col_cells = tiling.cells_in_col(col)
         if any(c in positive_cells for c in col_cells):
             continue
-        col_req = tuple(Requirement.single_cell(Perm((0, )), c)
-                        for c in col_cells)
-        col_obs = tuple(Obstruction.single_cell(Perm((0, )), c)
-                        for c in col_cells)
         yield Strategy(
                     formal_step="Either col {} is empty or not.".format(col),
-                    comb_classes=[Tiling(tiling.obstructions + col_obs,
-                                         tiling.requirements),
-                                  Tiling(tiling.obstructions,
-                                         tiling.requirements + (col_req,))],
+                    comb_classes=col_insertion_helper(tiling, col, col_cells),
                     ignore_parent=False,
                     inferable=[True for _ in range(2)],
                     possibly_empty=[True,
                                     True],
                     workable=[True for _ in range(2)],
                     constructor='disjoint')
+
+
+def col_insertion_helper(tiling, col, col_cells, regions=False):
+    if col_cells == None:
+        col_cells = tiling.cells_in_col(col)
+    col_req = tuple(Requirement.single_cell(Perm((0, )), c)
+                        for c in col_cells)
+    col_obs = tuple(Obstruction.single_cell(Perm((0, )), c)
+                    for c in col_cells)
+    if regions:
+        return ([Tiling(tiling.obstructions + col_obs, tiling.requirements),
+                 Tiling(tiling.obstructions, tiling.requirements + (col_req,))],
+                [{c: frozenset([c]) for c in tiling.active_cells},
+                 {c: frozenset([c]) for c in tiling.active_cells}])
+    else:
+        return [Tiling(tiling.obstructions + col_obs, tiling.requirements),
+                 Tiling(tiling.obstructions, tiling.requirements + (col_req,))]
 
 
 def all_requirement_insertions(tiling, **kwargs):
@@ -184,3 +218,24 @@ def all_requirement_insertions(tiling, **kwargs):
                             possibly_empty=[True for _ in range(2)],
                             workable=[True for _ in range(2)],
                             constructor='disjoint')
+
+def all_factor_insertions(tiling, **kwargs):
+    ignore_parent = kwargs.get("ignore_parent", False)
+    for gp in sorted(set(chain(tiling.obstructions, *tiling.requirements))):
+        factors = gp.factors()
+        if len(factors) != 1:
+            for gp in factors:
+                av = Tiling((tiling.obstructions +
+                            (Obstruction(gp.patt, gp.pos),)),
+                            tiling.requirements)
+                co = Tiling(tiling.obstructions,
+                            (tiling.requirements) +
+                            ((Requirement(gp.patt, gp.pos),),))
+                yield Strategy(formal_step="Insert {}.".format(str(gp)),
+                            comb_classes=[av, co],
+                            ignore_parent=ignore_parent,
+                            inferable=[True for _ in range(2)],
+                            possibly_empty=[True for _ in range(2)],
+                            workable=[True for _ in range(2)],
+                            constructor='disjoint')
+                # return
