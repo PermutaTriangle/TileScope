@@ -212,12 +212,12 @@ def all_requirement_insertions(tiling, **kwargs):
                             (tiling.requirements) +
                             ((Requirement(gp.patt, gp.pos),),))
                 yield Strategy(formal_step="Insert {}.".format(str(gp)),
-                            comb_classes=[av, co],
-                            ignore_parent=ignore_parent,
-                            inferable=[True for _ in range(2)],
-                            possibly_empty=[True for _ in range(2)],
-                            workable=[True for _ in range(2)],
-                            constructor='disjoint')
+                               comb_classes=[av, co],
+                               ignore_parent=ignore_parent,
+                               inferable=[True for _ in range(2)],
+                               possibly_empty=[True for _ in range(2)],
+                               workable=[True for _ in range(2)],
+                               constructor='disjoint')
 
 def all_factor_insertions(tiling, **kwargs):
     ignore_parent = kwargs.get("ignore_parent", False)
@@ -232,10 +232,10 @@ def all_factor_insertions(tiling, **kwargs):
                             (tiling.requirements) +
                             ((Requirement(gp.patt, gp.pos),),))
                 yield Strategy(formal_step="Insert {}.".format(str(gp)),
-                            comb_classes=[av, co],
-                            ignore_parent=ignore_parent,
-                            inferable=[True for _ in range(2)],
-                            possibly_empty=[True for _ in range(2)],
-                            workable=[True for _ in range(2)],
-                            constructor='disjoint')
-                # return
+                               comb_classes=[av, co],
+                               ignore_parent=ignore_parent,
+                               inferable=[True for _ in range(2)],
+                               possibly_empty=[True for _ in range(2)],
+                               workable=[True for _ in range(2)],
+                               constructor='disjoint')
+
