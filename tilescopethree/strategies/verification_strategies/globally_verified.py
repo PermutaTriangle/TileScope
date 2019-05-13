@@ -24,7 +24,7 @@ def possible_tautology(tiling):
     if len(tiling.positive_cells) > 1:
         return False
     cells = set()
-    maxlen = max(tiling.maximum_length_of_minimum_gridded_perm(), 1)+1
+    maxlen = max(tiling.maximum_length_of_minimum_gridded_perm(), 1) + 1
     for gp in tiling.gridded_perms(maxlen=maxlen):
         cells.update(gp.pos)
         if len(cells) > 1:
