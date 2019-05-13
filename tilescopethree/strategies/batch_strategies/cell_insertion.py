@@ -59,6 +59,7 @@ def all_cell_insertions(tiling, **kwargs):
                             workable=[True for _ in range(2)],
                             constructor='disjoint')
 
+
 def cell_insertion(tiling, patt, cell, regions=False):
     """Return a tuple, the first avoids pattern in the cell, and the second
     contains it."""
@@ -70,7 +71,6 @@ def cell_insertion(tiling, patt, cell, regions=False):
     else:
         return [tiling.add_single_cell_obstruction(patt, cell),
                 tiling.add_single_cell_requirement(patt, cell)]
-
 
 
 def root_requirement_insertion(tiling, **kwargs):
@@ -142,7 +142,7 @@ def all_row_insertions(tiling, **kwargs):
 
 
 def row_insertion_helper(tiling, row, row_cells, regions=False):
-    if row_cells == None:
+    if row_cells is None:
         row_cells = tiling.cells_in_row(row)
     row_req = tuple(Requirement.single_cell(Perm((0, )), c)
                     for c in row_cells)
@@ -177,20 +177,24 @@ def all_col_insertions(tiling, **kwargs):
 
 
 def col_insertion_helper(tiling, col, col_cells, regions=False):
-    if col_cells == None:
+    if col_cells is None:
         col_cells = tiling.cells_in_col(col)
     col_req = tuple(Requirement.single_cell(Perm((0, )), c)
-                        for c in col_cells)
+                    for c in col_cells)
     col_obs = tuple(Obstruction.single_cell(Perm((0, )), c)
                     for c in col_cells)
     if regions:
-        return ([Tiling(tiling.obstructions + col_obs, tiling.requirements),
-                 Tiling(tiling.obstructions, tiling.requirements + (col_req,))],
+        return ([Tiling(tiling.obstructions + col_obs,
+                        tiling.requirements),
+                 Tiling(tiling.obstructions,
+                        tiling.requirements + (col_req,))],
                 [{c: frozenset([c]) for c in tiling.active_cells},
                  {c: frozenset([c]) for c in tiling.active_cells}])
     else:
-        return [Tiling(tiling.obstructions + col_obs, tiling.requirements),
-                 Tiling(tiling.obstructions, tiling.requirements + (col_req,))]
+        return [Tiling(tiling.obstructions + col_obs,
+                       tiling.requirements),
+                Tiling(tiling.obstructions,
+                       tiling.requirements + (col_req,))]
 
 
 def all_requirement_insertions(tiling, **kwargs):
@@ -219,6 +223,7 @@ def all_requirement_insertions(tiling, **kwargs):
                                workable=[True for _ in range(2)],
                                constructor='disjoint')
 
+
 def all_factor_insertions(tiling, **kwargs):
     ignore_parent = kwargs.get("ignore_parent", False)
     for gp in sorted(set(chain(tiling.obstructions, *tiling.requirements))):
@@ -238,4 +243,3 @@ def all_factor_insertions(tiling, **kwargs):
                                possibly_empty=[True for _ in range(2)],
                                workable=[True for _ in range(2)],
                                constructor='disjoint')
-
