@@ -301,6 +301,7 @@ basepacks = [
     TileScopePack.insertion_row_and_col_placements(col_only=True),
     TileScopePack.insertion_row_and_col_placements(row_only=True),
     TileScopePack.insertion_row_and_col_placements(),
+    TileScopePack.insertion_point_placements(),
     TileScopePack.row_and_col_placements(col_only=True),
     TileScopePack.row_and_col_placements(row_only=True),
     TileScopePack.row_and_col_placements(),
