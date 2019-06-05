@@ -108,7 +108,6 @@ def all_requirement_extensions(tiling, **kwargs):
         for length in range(len(curr_req) + 1, maxreqlen + 1):
             for patt in Av(bdict[cell][0] + extra_basis).of_length(length):
                 if curr_req in patt:
-                    print(patt, cell)
                     yield Rule(
                         formal_step=("Insert {} into cell {}."
                                      "".format(patt, cell)),
