@@ -1,8 +1,9 @@
-from comb_spec_searcher import Strategy
 from itertools import chain
-from grids_three import Tiling
-from grids_three.misc import union_reduce
+
+from comb_spec_searcher import Rule
 from permuta.misc import UnionFind
+from tilings import Tiling
+from tilings.misc import union_reduce
 
 
 def factor(tiling, **kwargs):
@@ -90,11 +91,11 @@ def factor(tiling, **kwargs):
     else:
         work = [False for _ in strategy]
 
-    yield Strategy("The factors of the tiling.", strategy,
-                   inferable=[False for _ in strategy], workable=work,
-                   possibly_empty=[False for _ in strategy],
-                   ignore_parent=kwargs.get("workable", True),
-                   constructor='cartesian')
+    yield Rule("The factors of the tiling.", strategy,
+               inferable=[False for _ in strategy], workable=work,
+               possibly_empty=[False for _ in strategy],
+               ignore_parent=kwargs.get("workable", True),
+               constructor='cartesian')
 
     if kwargs.get("unions", False):
         for partition in partition_list(factors):
@@ -104,12 +105,12 @@ def factor(tiling, **kwargs):
                 strategy.append(Tiling(obstructions=chain(*obstructions),
                                        requirements=chain(*requirements),
                                        minimize=False))
-            yield Strategy("The union of factors of the tiling",
-                           strategy,
-                           possibly_empty=[False for _ in strategy],
-                           inferable=[False for _ in strategy],
-                           workable=[False for _ in strategy],
-                           constructor='cartesian')
+            yield Rule("The union of factors of the tiling",
+                       strategy,
+                       possibly_empty=[False for _ in strategy],
+                       inferable=[False for _ in strategy],
+                       workable=[False for _ in strategy],
+                       constructor='cartesian')
 
 
 # The code below is magical and comes from

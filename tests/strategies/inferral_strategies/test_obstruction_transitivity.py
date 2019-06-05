@@ -1,6 +1,6 @@
-from grids_three import Tiling, Obstruction, Requirement
 from permuta import Perm
 from tilescopethree.strategies import obstruction_transitivity
+from tilings import Obstruction, Requirement, Tiling
 
 pytest_plugins = [
     'tests.fixtures.simple_trans'

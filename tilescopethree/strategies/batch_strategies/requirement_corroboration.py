@@ -1,8 +1,8 @@
 """
     Module containing the requirement corroboration strategy.
 """
-from comb_spec_searcher import Strategy
-from grids_three import Obstruction, Tiling
+from comb_spec_searcher import Rule
+from tilings import Obstruction, Tiling
 
 
 def requirement_corroboration(tiling, basis, **kwargs):
@@ -25,7 +25,7 @@ def requirement_corroboration(tiling, basis, **kwargs):
         if len(reqs) == 1:
             continue
         for req in reqs:
-            yield Strategy(
+            yield Rule(
                 formal_step="Inserting requirement {}.".format(str(req)),
                 comb_classes=[
                     Tiling(obstructions=tiling.obstructions,

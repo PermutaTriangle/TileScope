@@ -1,24 +1,24 @@
-from comb_spec_searcher import StrategyPack as Pack
 from functools import partial
-from tilescopethree.strategies import (all_cell_insertions,
+
+from comb_spec_searcher import StrategyPack as Pack
+from tilescopethree.strategies import (all_cell_insertions, all_col_insertions,
                                        all_point_insertions,
                                        all_requirement_extensions,
-                                       database_verified,
-                                       factor,
-                                       globally_verified,
-                                       elementary_verified,
+                                       all_row_insertions, col_placements,
+                                       database_verified, elementary_verified,
+                                       factor, globally_verified,
+                                       insertion_encoding,
                                        obstruction_transitivity,
-                                       point_placement, requirement_placement,
-                                       verify_points,
-                                       requirement_corroboration,
-                                       row_and_column_separation,
-                                       subset_verified, insertion_encoding,
-                                       subclass_verified, all_row_insertions,
-                                       all_col_insertions, col_placements,
-                                       row_placements,
-                                       requirement_list_placement,
                                        partial_requirement_placement,
-                                       subobstruction_inferral)
+                                       point_placement,
+                                       requirement_corroboration,
+                                       requirement_list_placement,
+                                       requirement_placement,
+                                       row_and_column_separation,
+                                       row_placements, subclass_verified,
+                                       subobstruction_inferral,
+                                       subset_verified, verify_points)
+
 single_cell_subob_2 = Pack(
          initial_strats=[],
          ver_strats=[subset_verified],

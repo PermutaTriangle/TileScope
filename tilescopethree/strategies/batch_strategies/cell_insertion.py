@@ -3,9 +3,9 @@ point"""
 
 from itertools import chain
 
-from comb_spec_searcher import Strategy
+from comb_spec_searcher import Rule
 from permuta import Av, Perm
-from grids_three import Obstruction, Requirement, Tiling
+from tilings import Obstruction, Requirement, Tiling
 
 
 def all_cell_insertions(tiling, **kwargs):
@@ -46,7 +46,7 @@ def all_cell_insertions(tiling, **kwargs):
                 if not any(patt in perm for perm in bdict[cell][1]):
                     if (tiling.dimensions != (1, 1) or
                             all(patt > perm for perm in bdict[cell][1])):
-                        yield Strategy(
+                        yield Rule(
                             formal_step=("Insert {} into cell {}.|{}|{}|{}|"
                                          "".format(patt, cell, cell[0],
                                                    cell[1],
@@ -108,7 +108,7 @@ def all_requirement_extensions(tiling, **kwargs):
         for length in range(len(curr_req) + 1, maxreqlen + 1):
             for patt in Av(bdict[cell][0] + extra_basis).of_length(length):
                 if curr_req in patt:
-                    yield Strategy(
+                    yield Rule(
                         formal_step=("Insert {} into cell {}."
                                      "".format(patt, cell)),
                         comb_classes=[
@@ -130,7 +130,7 @@ def all_row_insertions(tiling, **kwargs):
         row_cells = tiling.cells_in_row(row)
         if any(c in positive_cells for c in row_cells):
             continue
-        yield Strategy(
+        yield Rule(
                     formal_step="Either row {} is empty or not.".format(row),
                     comb_classes=row_insertion_helper(tiling, row, row_cells),
                     ignore_parent=False,
@@ -165,7 +165,7 @@ def all_col_insertions(tiling, **kwargs):
         col_cells = tiling.cells_in_col(col)
         if any(c in positive_cells for c in col_cells):
             continue
-        yield Strategy(
+        yield Rule(
                     formal_step="Either col {} is empty or not.".format(col),
                     comb_classes=col_insertion_helper(tiling, col, col_cells),
                     ignore_parent=False,
@@ -215,13 +215,13 @@ def all_requirement_insertions(tiling, **kwargs):
                 co = Tiling(tiling.obstructions,
                             (tiling.requirements) +
                             ((Requirement(gp.patt, gp.pos),),))
-                yield Strategy(formal_step="Insert {}.".format(str(gp)),
-                               comb_classes=[av, co],
-                               ignore_parent=ignore_parent,
-                               inferable=[True for _ in range(2)],
-                               possibly_empty=[True for _ in range(2)],
-                               workable=[True for _ in range(2)],
-                               constructor='disjoint')
+                yield Rule(formal_step="Insert {}.".format(str(gp)),
+                           comb_classes=[av, co],
+                           ignore_parent=ignore_parent,
+                           inferable=[True for _ in range(2)],
+                           possibly_empty=[True for _ in range(2)],
+                           workable=[True for _ in range(2)],
+                           constructor='disjoint')
 
 
 def all_factor_insertions(tiling, **kwargs):
@@ -236,10 +236,10 @@ def all_factor_insertions(tiling, **kwargs):
                 co = Tiling(tiling.obstructions,
                             (tiling.requirements) +
                             ((Requirement(gp.patt, gp.pos),),))
-                yield Strategy(formal_step="Insert {}.".format(str(gp)),
-                               comb_classes=[av, co],
-                               ignore_parent=ignore_parent,
-                               inferable=[True for _ in range(2)],
-                               possibly_empty=[True for _ in range(2)],
-                               workable=[True for _ in range(2)],
-                               constructor='disjoint')
+                yield Rule(formal_step="Insert {}.".format(str(gp)),
+                           comb_classes=[av, co],
+                           ignore_parent=ignore_parent,
+                           inferable=[True for _ in range(2)],
+                           possibly_empty=[True for _ in range(2)],
+                           workable=[True for _ in range(2)],
+                           constructor='disjoint')

@@ -1,11 +1,11 @@
 """A strategy for checking if a tiling is a subset of the class."""
-from base64 import b64decode, b64encode
-from comb_spec_searcher import VerificationStrategy
-from logzero import logger
-from grids_three import Tiling
-
 import os
+from base64 import b64decode, b64encode
 
+from logzero import logger
+
+from comb_spec_searcher import VerificationRule
+from tilings import Tiling
 
 dir_path = os.path.dirname(os.path.realpath(__file__))
 filenames = ["012_depth_5_database_twisted.txt"]
@@ -24,4 +24,4 @@ def database_verified(tiling, **kwargs):
                 database.add(dbtiling)
             f.close()
     if tiling in database:
-        return VerificationStrategy("Already in database!")
+        return VerificationRule("Already in database!")
