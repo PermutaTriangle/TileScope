@@ -1,13 +1,12 @@
 from base64 import b64decode, b64encode
 
-from grids_three import Tiling, Obstruction, Requirement
-from grids_three.db_conf import update_database, check_database
-
 from permuta import Perm
 from permuta.permutils import (antidiagonal_set, complement_set, inverse_set,
                                rotate_90_clockwise_set,
                                rotate_180_clockwise_set,
                                rotate_270_clockwise_set)
+from tilings import Obstruction, Requirement, Tiling
+from tilings.db_conf import check_database, update_database
 
 
 def twist_one_by_ones(tiling):

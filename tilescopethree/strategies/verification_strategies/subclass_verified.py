@@ -1,9 +1,10 @@
 """A strategy for checking if a tiling is contained in a subclass."""
 
-from comb_spec_searcher import VerificationStrategy
 from itertools import chain
-from permuta.descriptors import Basis
+
+from comb_spec_searcher import VerificationRule
 from permuta import Av
+from permuta.descriptors import Basis
 
 
 def subclass_verified(tiling, basis, **kwargs):
@@ -26,7 +27,7 @@ def subclass_verified(tiling, basis, **kwargs):
                                if perm.avoids(pattern))
                 if not patterns:
                     return None
-        return VerificationStrategy(formal_step=("The tiling belongs to the "
-                                                 "subclass obtained by adding"
-                                                 " the patterns {}."
-                                                 "".format(Basis(patterns))))
+        return VerificationRule(formal_step=("The tiling belongs to the "
+                                             "subclass obtained by adding"
+                                             " the patterns {}."
+                                             "".format(Basis(patterns))))

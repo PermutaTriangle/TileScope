@@ -1,7 +1,8 @@
 """An inferral function that tries to separate cells in rows and columns."""
 from collections import defaultdict
-from comb_spec_searcher import InferralStrategy
-from grids_three import Tiling
+
+from comb_spec_searcher import InferralRule
+from tilings import Tiling
 
 
 def row_and_column_inequalities_of_tiling(tiling):
@@ -259,4 +260,4 @@ def row_and_column_separation(tiling, **kwargs):
         formal_step = "Separated rows [{}] and columns [{}]".format(
             ", ".join(map(str, separated_rows)),
             ", ".join(map(str, separated_cols)))
-        return InferralStrategy(formal_step, separated_tiling)
+        return InferralRule(formal_step, separated_tiling)

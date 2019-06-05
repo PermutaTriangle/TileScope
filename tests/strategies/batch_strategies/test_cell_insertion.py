@@ -1,6 +1,6 @@
-from tilescopethree.strategies import all_cell_insertions
-from grids_three import Tiling, Requirement, Obstruction
 from permuta import Perm
+from tilescopethree.strategies import all_cell_insertions
+from tilings import Obstruction, Requirement, Tiling
 
 pytest_plugins = [
     'tests.fixtures.obstructions_requirements',

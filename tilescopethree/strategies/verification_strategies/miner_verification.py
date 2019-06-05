@@ -1,4 +1,4 @@
-from comb_spec_searcher import VerificationStrategy
+from comb_spec_searcher import VerificationRule
 from permuta import Perm
 from permuta.descriptors import Basis
 
@@ -64,11 +64,11 @@ def miner_verified(tiling, basis, **kwargs):
             topbasis = Basis(top)
             if ((topbool == 0 and topbasis == Basis([Perm((0, 1, 2))])) or
                     (topbool == 1 and topbasis == Basis([Perm((2, 1, 0))]))):
-                return VerificationStrategy("Miner verified!")
+                return VerificationRule("Miner verified!")
         elif bottombool is not None:
             bottombasis = Basis(bottom)
             if ((bottombool == 0 and
                  Basis(bottom) == Basis([Perm((0, 1, 2))])) or
                     (bottombool == 1 and
                      bottombasis == Basis([Perm((2, 1, 0))]))):
-                return VerificationStrategy("Miner verified!")
+                return VerificationRule("Miner verified!")
