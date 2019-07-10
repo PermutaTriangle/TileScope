@@ -6,8 +6,8 @@ from itertools import combinations
 from comb_spec_searcher import ProofTree
 from functools import partial, reduce
 from permuta import Perm
-from grids_three import Tiling, Obstruction, Requirement
-from grids_three.misc import union_reduce
+from tilings import Tiling, Obstruction, Requirement
+from tilings.misc import union_reduce
 from operator import add, mul
 from sympy import Function, Eq, var
 from sympy.abc import x
@@ -429,7 +429,7 @@ def get_genf_with_region(tiling, regions_to_track, variables, root_func, root_cl
         return (get_genf_with_region(avoids, get_new_regions(avoids), variables, root_func, root_class) +
                 get_genf_with_region(contains, get_new_regions(contains), variables, root_func, root_class))
 
-    from grids_three.db_conf import enumerate_tree_factor
+    from tilings.db_conf import enumerate_tree_factor
     try:
         f, cell_vars = enumerate_tree_factor(tiling, root_func=root_func, root_class=root_class, substitute=False)
         for region, variable in zip(regions_to_track, variables):

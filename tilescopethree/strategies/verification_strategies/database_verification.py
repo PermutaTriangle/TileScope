@@ -1,14 +1,14 @@
 """A strategy for checking if a tiling is a subset of the class."""
 
 from comb_spec_searcher import VerificationStrategy
-from grids_three import Tiling, Obstruction, Requirement
+from tilings import Tiling, Obstruction, Requirement
 from tilescopethree.strategies.decomposition_strategies.factor import factor
 from permuta import Perm
 from permuta.permutils import (antidiagonal_set, complement_set, inverse_set, 
                                rotate_90_clockwise_set, 
                                rotate_180_clockwise_set, 
                                rotate_270_clockwise_set)
-from grids_three.misc import union_reduce
+from tilings.misc import union_reduce
 from permuta.misc import UnionFind
 
 

@@ -1,7 +1,7 @@
 """The fusion strategy."""
 from collections import defaultdict
 from comb_spec_searcher import Strategy
-from grids_three import Tiling
+from tilings import Tiling
 
 
 def fusion(tiling, **kwargs):

@@ -103,3 +103,6 @@ atrapv2/devtest.py
 
 # Pytest cache
 .pytest_cache
+
+# Apple
+*.DS_Store

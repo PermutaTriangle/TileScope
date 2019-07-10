@@ -1,7 +1,7 @@
 from collections import defaultdict
 from comb_spec_searcher import InferralStrategy
 from permuta import Perm
-from grids_three import Tiling, Obstruction
+from tilings import Tiling, Obstruction
 
 
 def compute_new_ineqs(pos, ineqs):

@@ -1,7 +1,7 @@
 from comb_spec_searcher import Strategy
 from itertools import chain
-from grids_three import Tiling
-from grids_three.misc import union_reduce
+from tilings import Tiling
+from tilings.misc import union_reduce
 from permuta.misc import UnionFind
 
 

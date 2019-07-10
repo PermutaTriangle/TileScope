@@ -1,6 +1,6 @@
 """The deflation strategy."""
 from permuta import Perm
-from grids_three import Obstruction, Tiling
+from tilings import Obstruction, Tiling
 from comb_spec_searcher import Strategy
 
 def deflation(tiling, **kwargs):

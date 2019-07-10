@@ -2,7 +2,7 @@
 you can draw a line somewhere."""
 from collections import defaultdict
 from comb_spec_searcher import Strategy
-from grids_three import Tiling, Obstruction
+from tilings import Tiling, Obstruction
 from tilescopethree.strategies.equivalence_strategies.fusion import fuse_gridded_perm
 # from tilescopethree.strategies.equivalence_strategies.fusion import fusable as original_fusable # for print statements
 

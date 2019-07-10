@@ -1,12 +1,12 @@
 from comb_spec_searcher import StrategyPack
 from comb_spec_searcher.utils import get_func_name
-from grids_three import Tiling
+from tilings import Tiling
 from functools import partial
 from tilescopethree.strategies import (all_cell_insertions,
                                        all_col_insertions, all_row_insertions,
                                        col_placements as col_placements_strat,
                                        database_verified, deflation,
-                                       elementary_verified,
+                                       elementary_verified, empty_cell_inferral,
                                        factor, fusion,
                                        fusion_with_interleaving,
                                        globally_verified, globally_verified_no_req,

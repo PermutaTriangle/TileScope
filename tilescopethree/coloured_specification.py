@@ -17,12 +17,12 @@ from itertools import chain, product
 from functools import reduce
 from operator import add, mul
 
-from grids_three import Tiling
+from tilings import Tiling
 from regions import get_fuse_region, parse_formal_step
 
 import sympy
 
-from grids_three import Obstruction, Requirement
+from tilings import Obstruction, Requirement
 from permuta import Perm
 
 class Rule:
