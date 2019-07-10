@@ -74,7 +74,8 @@ def requirement_placement(tiling, **kwargs):
     for ri, reqs in enumerate(tiling.requirements):
         if len(reqs) > 1:
             continue
-        if reqs[0].is_point_perm() in point_cells:
+        if reqs[0].is_point_perm() in point_cells and
+        tiling.only_cell_in_row_and_col(reqs[0].is_point_perm()):
             continue
         if point_only and reqs[0].is_point_perm() is None:
             continue
