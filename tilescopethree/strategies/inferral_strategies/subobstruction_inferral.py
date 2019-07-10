@@ -18,10 +18,11 @@ def empty_cell_inferral(tiling, **kwargs):
             empty_cells.append(cell)
     newobs = [Obstruction.single_cell(Perm((0,)), cell)
               for cell in empty_cells]
-    return InferralStrategy(
-        "The cells {} are empty".format(", ".join(map(str, empty_cells))),
-        Tiling(obstructions=tiling.obstructions + tuple(newobs),
-               requirements=tiling.requirements))
+    if newobs: # if True: # will give you an error
+        return InferralStrategy(
+            "The cells {} are empty".format(", ".join(map(str, empty_cells))),
+            Tiling(tiling.obstructions + tuple(newobs),
+                tiling.requirements))
 
 
 def subobstruction_inferral(tiling, **kwargs):
