@@ -1,4 +1,5 @@
 import pytest
+
 from tilings import Obstruction, Requirement
 from permuta import Perm
 
