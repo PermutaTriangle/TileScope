@@ -12,7 +12,6 @@ def test_requirement_extensions(typical_obstructions_with_local,
                                 typical_requirements_with_local):
     tiling = Tiling(obstructions=typical_obstructions_with_local,
                     requirements=typical_requirements_with_local)
-    print(tiling)
     strats = set([frozenset(s.comb_classes)
                   for s in all_requirement_extensions(tiling, maxreqlen=3)])
 
