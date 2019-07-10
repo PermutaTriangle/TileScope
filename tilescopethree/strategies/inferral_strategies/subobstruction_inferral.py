@@ -1,5 +1,5 @@
 from comb_spec_searcher import InferralStrategy
-from grids_three import Obstruction, Tiling
+from tilings import Obstruction, Tiling
 from permuta import Perm
 
 
@@ -18,10 +18,11 @@ def empty_cell_inferral(tiling, **kwargs):
             empty_cells.append(cell)
     newobs = [Obstruction.single_cell(Perm((0,)), cell)
               for cell in empty_cells]
-    return InferralStrategy(
-        "The cells {} are empty".format(", ".join(map(str, empty_cells))),
-        Tiling(obstructions=tiling.obstructions + tuple(newobs),
-               requirements=tiling.requirements))
+    if newobs:
+        return InferralStrategy(
+            "The cells {} are empty".format(", ".join(map(str, empty_cells))),
+            Tiling(obstructions=tiling.obstructions + tuple(newobs),
+                requirements=tiling.requirements))
 
 
 def subobstruction_inferral(tiling, **kwargs):

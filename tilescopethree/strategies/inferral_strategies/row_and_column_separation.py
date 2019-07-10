@@ -1,7 +1,7 @@
 """An inferral function that tries to separate cells in rows and columns."""
 from collections import defaultdict
 from comb_spec_searcher import InferralStrategy
-from grids_three import Tiling
+from tilings import Tiling
 
 
 def row_and_column_inequalities_of_tiling(tiling):

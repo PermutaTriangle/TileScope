@@ -2,7 +2,7 @@
 from base64 import b64decode, b64encode
 from comb_spec_searcher import VerificationStrategy
 from logzero import logger
-from grids_three import Tiling
+from tilings import Tiling
 
 import os
 

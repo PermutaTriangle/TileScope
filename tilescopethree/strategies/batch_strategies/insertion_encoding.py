@@ -1,6 +1,6 @@
 from permuta.misc import DIR_SOUTH
 from comb_spec_searcher import BatchStrategy, EquivalenceStrategy
-from grids_three import Tiling, Obstruction, Requirement
+from tilings import Tiling, Obstruction, Requirement
 from permuta import Perm
 from tilescopethree.strategies.batch_strategies import cell_insertion
 from collections import defaultdict

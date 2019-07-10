@@ -7,7 +7,7 @@
                           '
 """
 from comb_spec_searcher import CombinatorialSpecificationSearcher
-from grids_three import Obstruction, Tiling
+from tilings import Obstruction, Tiling
 from permuta import Perm
 from permuta.descriptors import Basis
 from logzero import logger

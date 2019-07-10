@@ -5,7 +5,7 @@ from itertools import chain
 
 from comb_spec_searcher import Strategy
 from permuta import Av, Perm
-from grids_three import Obstruction, Requirement, Tiling
+from tilings import Obstruction, Requirement, Tiling
 
 
 def all_cell_insertions(tiling, **kwargs):

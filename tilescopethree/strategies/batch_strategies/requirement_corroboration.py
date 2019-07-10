@@ -2,7 +2,7 @@
     Module containing the requirement corroboration strategy.
 """
 from comb_spec_searcher import Strategy
-from grids_three import Obstruction, Requirement, Tiling
+from tilings import Obstruction, Requirement, Tiling
 
 
 def requirement_corroboration(tiling, basis, **kwargs):

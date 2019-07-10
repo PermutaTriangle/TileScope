@@ -1,6 +1,6 @@
 from comb_spec_searcher import StrategyPack
 from comb_spec_searcher.utils import get_func_name
-from grids_three import Tiling
+from tilings import Tiling
 from functools import partial
 from tilescopethree.strategies import (all_cell_insertions,
                                        all_requirement_insertions,

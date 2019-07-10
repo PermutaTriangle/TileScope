@@ -3,7 +3,7 @@ specific strategies."""
 from functools import partial
 
 from permuta import Perm
-from grids_three import GriddedPerm, Tiling
+from tilings import GriddedPerm, Tiling
 from tilescopethree.strategies.equivalence_strategies.point_placements import place_point_of_requirement
 from tilescopethree.strategies.inferral_strategies.row_and_column_separation import row_and_column_separation
 from tilescopethree.strategies.equivalence_strategies.fusion import fuse_tiling

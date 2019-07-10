@@ -1,7 +1,7 @@
 from comb_spec_searcher import Strategy
 from permuta.misc import DIR_EAST, DIR_NORTH, DIR_SOUTH, DIR_WEST, DIR_NONE
 
-from grids_three import Obstruction, Requirement, Tiling
+from tilings import Obstruction, Requirement, Tiling
 
 from itertools import chain
 from permuta import Perm

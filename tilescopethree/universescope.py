@@ -1,5 +1,5 @@
 from comb_spec_searcher import CombinatorialSpecificationSearcher, ProofTree
-from grids_three import Tiling, Obstruction
+from tilings import Tiling, Obstruction
 from permuta import PermSet
 from itertools import combinations
 from tilescopethree.strategies import verify_points

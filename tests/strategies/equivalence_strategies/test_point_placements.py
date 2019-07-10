@@ -1,4 +1,4 @@
-from grids_three import Obstruction, Requirement, Tiling
+from tilings import Obstruction, Requirement, Tiling
 from permuta import Perm
 from permuta.misc import (DIR_EAST, DIR_NORTH, DIR_SOUTH, DIR_WEST,
                           DIRS)
@@ -16,7 +16,7 @@ pytest_plugins = [
 
 def test_point_placement(diverse_tiling, no_point_tiling):
     strats = list(point_placement(diverse_tiling))
-    assert len(strats) == 1 * len(DIRS)
+    assert len(strats) == 3 * len(DIRS)
 
     strats = list(requirement_placement(no_point_tiling))
     assert len(strats) == 3 * len(DIRS)
