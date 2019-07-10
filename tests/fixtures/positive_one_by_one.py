@@ -1,7 +1,7 @@
 import pytest
-from tilings import Tiling, Obstruction, Requirement
-from permuta import Perm
 
+from permuta import Perm
+from tilings import Tiling, Obstruction, Requirement
 
 @pytest.fixture
 def positive_one_by_one():
