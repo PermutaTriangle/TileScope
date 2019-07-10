@@ -64,10 +64,14 @@ def place_point_of_requirement(tiling, req_index, point_index, force_dir,
             mindex, minval = c
             maxdex = mindex + 1
             maxval = minval + 1
-            if mindex >= cell[0]: maxdex += 2
-            if minval >= cell[1]: maxval += 2
-            if mindex > cell[0]: mindex += 2
-            if minval > cell[1]: minval += 2
+            if mindex >= cell[0]:
+                maxdex += 2
+            if minval >= cell[1]:
+                maxval += 2
+            if mindex > cell[0]:
+                mindex += 2
+            if minval > cell[1]:
+                minval += 2
             return set([placed_tiling.forward_map[(x, y)]
                         for x in range(mindex, maxdex)
                         for y in range(minval, maxval)

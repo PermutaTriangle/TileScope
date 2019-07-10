@@ -1,4 +1,4 @@
-from grids_three import Tiling, Requirement
+from tiling import Tiling, Requirement
 from permuta import Perm
 from permuta.descriptors import Basis
 from tilescopethree import TileScopeTHREE

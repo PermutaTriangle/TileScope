@@ -1,5 +1,5 @@
 from tilescopethree.strategies import all_requirement_extensions
-from grids_three import Tiling, Requirement, Obstruction
+from tilings import Tiling, Requirement, Obstruction
 from permuta import Perm
 
 pytest_plugins = [

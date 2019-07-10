@@ -1,4 +1,4 @@
-from grids_three import Tiling, Obstruction, Requirement
+from tilings import Tiling, Obstruction, Requirement
 from permuta import Perm
 from tilescopethree.strategies import factor
 
