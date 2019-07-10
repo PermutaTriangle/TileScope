@@ -13,7 +13,6 @@ def test_requirement_corroboration(typical_redundant_requirements,
         obstructions=[Obstruction(Perm((1, 0)), [(0, 1), (1, 0)])],
         requirements=[[Requirement(Perm((0, 1)), [(0, 0), (1, 0)]),
                        Requirement(Perm((0, 1)), [(0, 0), (1, 1)])]])
-    print(tiling)
     reqins = list(strat.comb_classes
                   for strat in requirement_corroboration(tiling, None))
     assert len(reqins) == 2
@@ -38,9 +37,11 @@ def test_requirement_corroboration(typical_redundant_requirements,
     assert len(reqins) == sum(len(reqs) for reqs in tiling.requirements
                               if len(reqs) > 1)
     til1, til2 = reqins[0]
-    print(til1)
+    print(tiling)
     print('')
-    print(til2)
+    print(til1)
+    # print('')
+    # print(til2)
     print('')
     print(Tiling(
         requirements=[
