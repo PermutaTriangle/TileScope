@@ -15,7 +15,7 @@ pytest_plugins = [
 
 def test_point_placement(diverse_tiling, no_point_tiling):
     strats = list(point_placement(diverse_tiling))
-    assert len(strats) == 1 * len(DIRS)
+    assert len(strats) == 3 * len(DIRS)
 
     strats = list(requirement_placement(no_point_tiling))
     assert len(strats) == 3 * len(DIRS)
