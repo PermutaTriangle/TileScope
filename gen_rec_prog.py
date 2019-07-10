@@ -1,5 +1,5 @@
 from comb_spec_searcher import *
-from grids_three import *
+from tilings import *
 from permuta import *
 from tilescopethree import *
 from tilescopethree.strategy_packs import point_placements_db
@@ -40,8 +40,8 @@ def prog_header():
             "import sys\n"
             "sys.setrecursionlimit(10**6)\n"
             "from sympy import Poly, abc, sympify, var\n"
-            "from grids_three.db_conf import taylor_expand\n"
-            "from grids_three import Tiling, Obstruction, Requirement\n"
+            "from tilings.db_conf import taylor_expand\n"
+            "from tilings import Tiling, Obstruction, Requirement\n"
             "from permuta import Perm\n"
             "genfs = dict()\n\n")
 

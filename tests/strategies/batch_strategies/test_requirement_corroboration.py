@@ -1,4 +1,4 @@
-from grids_three import Obstruction, Requirement, Tiling
+from tilings import Obstruction, Requirement, Tiling
 from permuta import Perm
 from tilescopethree.strategies import requirement_corroboration
 
@@ -21,14 +21,13 @@ def test_requirement_corroboration(typical_redundant_requirements,
     assert len(strat1) == 2
     til1, til2 = strat1
     assert til1 == Tiling(
-        obstructions=[Obstruction(Perm((1, 0)), [(0, 1), (1, 0)])],
-        requirements=[[Requirement(Perm((0, 1)), [(0, 0), (1, 0)])]])
-    assert til1 == Tiling(
-        requirements=[[Requirement(Perm((0, 1)), [(0, 0), (1, 0)])]])
-    assert til2 == Tiling(
         obstructions=[Obstruction(Perm((0, 1)), [(0, 0), (1, 0)]),
                       Obstruction(Perm((1, 0)), [(0, 1), (1, 0)])],
-        requirements=[[Requirement(Perm((0, 1)), [(0, 0), (1, 1)])]])
+        requirements=[[Requirement(Perm((0,)), [(0, 0)])],
+                      [Requirement(Perm((0,)), [(1, 1)])]])
+    assert til2 == Tiling(
+        obstructions=[],
+        requirements=[[Requirement(Perm((0, 1)), [(0, 0), (1, 0)])]])
 
     tiling = Tiling(
         obstructions=typical_redundant_obstructions,

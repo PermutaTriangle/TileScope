@@ -1,5 +1,5 @@
 from tilescopethree.strategies import all_cell_insertions
-from grids_three import Tiling, Requirement, Obstruction
+from tilings import Tiling, Requirement, Obstruction
 from permuta import Perm
 
 pytest_plugins = [
@@ -37,7 +37,8 @@ def test_all_cell_insertions_points(simple_tiling):
     assert s[0] == Tiling(obstructions=[Obstruction(Perm(tuple()), tuple())])
     assert s[1] == Tiling(
         obstructions=[Obstruction(Perm((1, 0)), ((0, 1), (1, 0)))],
-        requirements=[[Requirement(Perm((0, 1)), ((0, 0), (1, 0))),
+        requirements=[[Requirement(Perm((0,)), ((0, 0),))],
+                      [Requirement(Perm((0, 1)), ((0, 0), (1, 0))),
                        Requirement(Perm((0, 1)), ((0, 0), (1, 1)))]])
 
     s = strats[3]
