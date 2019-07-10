@@ -63,8 +63,4 @@ def test_requirement_extensions(typical_obstructions_with_local,
          tiling.add_single_cell_requirement(Perm((2, 0, 1)), (3, 0))]),
         frozenset([tiling.add_single_cell_obstruction(Perm((2, 1, 0)), (3, 0)),
          tiling.add_single_cell_requirement(Perm((2, 1, 0)), (3, 0))])])
-    for s in strats:
-        if s not in actual:
-            for t in s:
-                print(t)
     assert strats == actual
