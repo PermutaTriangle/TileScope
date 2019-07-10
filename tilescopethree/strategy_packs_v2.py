@@ -172,7 +172,7 @@ class TileScopePack(StrategyPack):
         return TileScopePack(
                 initial_strats=[placement],
                 ver_strats=[subset_verified_no_req],
-                inferral_strats=[empty_cell_inferral],
+                inferral_strats=[],
                 expansion_strats=[[]],
                 name="{}{}{}_placements_sh".format(
                             "length_{}_".format(length) if length > 1 else "",

@@ -50,7 +50,6 @@ def subset_verified_no_req(tiling, basis, **kwargs):
                 # Only point requirements allowed
                 if len(r) > 1:
                     return
-                print(r)
                 if not(Perm((0,1)) in tiling.cell_basis()[r._pos[0]][0] and Perm((1,0)) in tiling.cell_basis()[r._pos[0]][0]):
                     return
             return VerificationStrategy(formal_step="The tiling is a subset of the class no req.")
