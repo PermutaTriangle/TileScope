@@ -52,19 +52,19 @@ def big_tiling():
 
 @pytest.fixture
 def row_fusion(small_tiling):
-    return SlicingFusion(small_tiling, 0, 0, True)
+    return SlicingFusion(small_tiling, True, 0, 0)
 
 @pytest.fixture
 def col_fusion(small_tiling):
-    return SlicingFusion(small_tiling, 1, 0, False)
+    return SlicingFusion(small_tiling, False, 1, 0)
 
 @pytest.fixture
 def row_fusion_big(big_tiling):
-    return SlicingFusion(big_tiling, 0, 0, True)
+    return SlicingFusion(big_tiling, True, 0, 0)
 
 @pytest.fixture
 def col_fusion_big(big_tiling):
-    return SlicingFusion(big_tiling, 1, 0, False)
+    return SlicingFusion(big_tiling, False, 1, 0)
 
 @pytest.fixture
 def gp1():

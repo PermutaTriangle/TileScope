@@ -12,9 +12,9 @@ def slicing_fusion(tiling, **kwargs):
     ncol = tiling.dimensions[1]
     nrow = tiling.dimensions[0]
     possible_fusion = chain(
-        (SlicingFusion(tiling, r, c, True) for r, c in
+        (SlicingFusion(tiling, True, r, c) for r, c in
          product(range(nrow - 1), range(ncol))),
-        (SlicingFusion(tiling, r, c, False) for r, c in
+        (SlicingFusion(tiling, False, r, c) for r, c in
          product(range(nrow), range(ncol - 1))),
     )
     return (fusion.rule() for fusion in possible_fusion if fusion.fusable())
@@ -32,7 +32,139 @@ def is_empty_cell(tiling, cell):
     return cell in tiling.empty_cells
 
 
-class SlicingFusion(object):
+class Fusion(object):
+    """
+    Fusion algorithm container class.
+
+    Check if a fusion is valid and compute the fusion.
+
+    If `row_idx` is provided it attempts to fuse row `row_idx` with row
+    `row_idx+1`.
+
+    If incited `col_ids` is provided it attempts to fuse column `col_idx` with column
+    `col_idx+1`.
+    """
+
+    def __init__(self, tiling, row_idx=None, col_idx=None):
+        self._tiling = tiling
+        if row_idx is None and col_idx is not None:
+            self._col_idx = col_idx
+            self._fuse_row = False
+        elif col_idx is None and row_idx is not None:
+            self._row_idx = row_idx
+            self._fuse_row = True
+        else:
+            raise RuntimeError('Cannot specify a row and a columns')
+
+    def _fuse_gridded_perm(self, gp):
+        """
+        Fuse the gridded permutation `gp`.
+        """
+        fused_pos = []
+        for x, y in gp.pos:
+            if self._fuse_row and y > self._row_idx:
+                y -= 1
+            elif not self._fuse_row and x > self._col_idx:
+                x -= 1
+            fused_pos.append((x, y))
+        return  gp.__class__(gp.patt, fused_pos)
+
+    def _fuse_counter(self, gridded_perms):
+        """
+        Count the multiplicities of a set of gridded permutations after the fusion.
+
+        Return a dictionary of gridded permutations with their multiplicities.
+        """
+        fuse_counter = dict()
+        for gp in gridded_perms:
+            fused_perm = self._fuse_gridded_perm(gp)
+            fuse_counter[fused_perm] = fuse_counter.get(fused_perm, 0) + 1
+        return fuse_counter
+
+    @property
+    def obstruction_fuse_counter(self):
+        """
+        Dictionary of multiplicities of fused obstructions.
+        """
+        if hasattr(self, '_obstruction_fuse_counter'):
+            return self._obstruction_fuse_counter
+        fuse_counter = self._fuse_counter(self._tiling.obstructions)
+        self._obstruction_fuse_counter = fuse_counter
+        return self._obstruction_fuse_counter
+
+    @property
+    def requirements_fuse_counters(self):
+        """
+        List of fuse counters for each of the requirements list of the tiling.
+        """
+        if hasattr(self, '_requirements_fuse_counters'):
+            return self._requirements_fuse_counters
+        counters = [self._fuse_counter(req_list) for req_list in
+                    self._tiling.requirements]
+        self._requirements_fuse_counters = counters
+        return self._requirements_fuse_counters
+
+    def _can_fuse_set_of_gridded_perms(self, fuse_counter):
+        """
+        Check if a set of gridded permutations can be fused.
+        """
+        return all(self._is_valid_count(count, gp) for gp, count in
+            fuse_counter.items())
+
+    def _is_valid_count(self, count, gp):
+        """
+        Check if the fuse count `count` for a given gridded permutation `gp` is
+        valid.
+        """
+        return (self._point_in_fuse_region(gp) + 1 == count)
+
+    def _point_in_fuse_region(self, fused_gp):
+        """
+        Return the number of point of the gridded permutation `fused_gp` in the
+        fused row or column.
+        """
+        if self._fuse_row:
+            return sum(1 for cell in fused_gp.pos if cell[1] == self._row_idx)
+        else:
+            return sum(1 for cell in fused_gp.pos if cell[0] == self._col_idx)
+
+    def fusable(self):
+        """
+        Check if the fusion is possible.
+        """
+        return (self._can_fuse_set_of_gridded_perms(self.obstruction_fuse_counter) and
+                all(self._can_fuse_set_of_gridded_perms(self.requirements_fuse_counters)))
+
+    def fusion(self):
+        """
+        Return the fused tiling.
+        """
+        return Tiling(
+            obstructions = self.obstruction_fuse_counter.keys(),
+            requirements = map(dict.keys, self.requirements_fuse_counters),
+        )
+
+    def description(self):
+        """
+        Return a description of the fusion.
+        """
+        if self._fuse_row:
+            return f"Fuse rows {self._row_idx} and {self._row_idx+1}|{self._row_idx}|."
+        else:
+            return f"Fuse columns {self._col_idx} and {self._col_idx+1}|{self._col_idx}|."
+
+    def rule(self):
+        """
+        Return a rule for the slicing fusion.
+        """
+        return Rule(formal_step=self.description(),
+                    comb_classes=[self.fusion()],
+                    inferable=[True],
+                    workable=[True],
+                    possibly_empty=[False],
+                    constructor='other')
+
+class SlicingFusion(Fusion):
     """
     Slicing fusion algorithm container class.
 
@@ -49,7 +181,7 @@ class SlicingFusion(object):
     - `self._special_cell is set in `self._pre_check()`
     """
 
-    def __init__(self, tiling, row_idx, col_idx, fuse_row):
+    def __init__(self, tiling, fuse_row, row_idx, col_idx):
         self._tiling = tiling
         self._row_idx = row_idx
         self._col_idx = col_idx
@@ -108,31 +240,6 @@ class SlicingFusion(object):
                         'special cell')
         return self._special_cell
 
-    def _fuse_gridded_perm(self, gp):
-        """
-        Fuse the gridded permutation `gp` with the fusion of `self`.
-        """
-        fused_pos = []
-        for x, y in gp.pos:
-            if self._fuse_row and y > self._row_idx:
-                y -= 1
-            elif not self._fuse_row and x > self._col_idx:
-                x -= 1
-            fused_pos.append((x, y))
-        return  gp.__class__(gp.patt, fused_pos)
-
-    def _fuse_counter(self, gridded_perms):
-        """
-        Count the multiplicities of a set of gridded perm after the fusion.
-
-        Return a dictionary of gridded permutations with their multiplicities.
-        """
-        fuse_counter = dict()
-        for gp in gridded_perms:
-            fused_perm = self._fuse_gridded_perm(gp)
-            fuse_counter[fused_perm] = fuse_counter.get(fused_perm, 0) + 1
-        return fuse_counter
-
     def _is_localized_in_special_cell(self, gp):
         """
         Check if a permutation is localized in the special cell.
@@ -142,7 +249,7 @@ class SlicingFusion(object):
     @property
     def obstruction_fuse_counter(self):
         """
-        Dictionary of multiplicity of fused obstruction.
+        Dictionary of multiplicities of fused obstructions.
 
         Only the good obstructions (i.e. the ones that are not localized in the
         special cell) are fused.
@@ -155,14 +262,6 @@ class SlicingFusion(object):
         self._obstruction_fuse_counter = fuse_counter
         return self._obstruction_fuse_counter
 
-    def _can_fuse_set_of_gridded_perms(self, fuse_counter):
-        """
-        Check if a set of gridded permutations can be fused with the fusion of
-        the class.
-        """
-        return all(self._is_valid_count(count, gp) for gp, count in
-            fuse_counter.items())
-
     def _is_valid_count(self, count, gp):
         """
         Check if the fuse count `count` for a given gridded permutation `gp` is
@@ -170,16 +269,6 @@ class SlicingFusion(object):
         """
         return (self._point_in_fuse_region(gp) + 1 ==
                 count + self._num_addable_gp(gp))
-
-    def _point_in_fuse_region(self, fused_gp):
-        """
-        Return the number of point of the gridded permutation `fused_gp` in the
-        fused row or column.
-        """
-        if self._fuse_row:
-            return sum(1 for cell in fused_gp.pos if cell[1] == self._row_idx)
-        else:
-            return sum(1 for cell in fused_gp.pos if cell[0] == self._col_idx)
 
     def _num_addable_gp(self, gp):
         """
@@ -216,8 +305,7 @@ class SlicingFusion(object):
 
     def fusable(self):
         """
-        Check if the tiling is slicing fusable. If so the method fusion is made
-        available.
+        Check if the fusion is possible.
         """
         if self._tiling.requirements:
             raise NotImplementedError('Does not handle requirements at the '
@@ -226,12 +314,6 @@ class SlicingFusion(object):
             return False
         if self._can_fuse_set_of_gridded_perms(self.obstruction_fuse_counter):
             return True
-
-    def fusion(self):
-        """
-        Return the fused tiling.
-        """
-        return Tiling(obstructions = self.obstruction_fuse_counter.keys())
 
     def description(self):
         """
@@ -244,14 +326,3 @@ class SlicingFusion(object):
             description += f"Slice fuse columns {self._col_idx} and {self._col_idx+1}."
         description += f" The special cell is {self.special_cell}."
         return description
-
-    def rule(self):
-        """
-        Return a rule for the slicing fusion.
-        """
-        return Rule(formal_step=self.description(),
-                    comb_classes=[self.fusion()],
-                    inferable=[True],
-                    workable=[True],
-                    possibly_empty=[False],
-                    constructor='other')
