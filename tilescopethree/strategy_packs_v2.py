@@ -26,6 +26,8 @@ from tilescopethree.strategies import (all_cell_insertions,
                                        subclass_verified,
                                        subset_verified, verify_points)
 
+from tilescopethree.strategies.equivalence_strategies.slicing_fusion import slicing_fusion
+
 import importlib
 
 class TileScopePack(StrategyPack):
@@ -402,3 +404,46 @@ restricted_fusion = TileScopePack(
                 ver_strats=[one_by_one_verification],
                 forward_equivalence=True,
                 name="restricted_fusion")
+
+slicing1_pack = TileScopePack(
+                initial_strats=[
+                    factor,
+                    slicing_fusion,
+                    requirement_placement
+                ],
+                inferral_strats=[row_and_column_separation],
+                expansion_strats=[[all_cell_insertions,
+                                   partial(row_placements_strat, positive=False),
+                                   partial(col_placements_strat, positive=False)]],
+                ver_strats=[one_by_one_verification],
+                forward_equivalence=True,
+                name="Slicing fusion")
+slicing2_pack = TileScopePack(
+                initial_strats=[
+                    factor,
+                    slicing_fusion,
+                    fusion,
+                    requirement_placement
+                ],
+                inferral_strats=[row_and_column_separation],
+                expansion_strats=[[all_cell_insertions,
+                                   partial(row_placements_strat, positive=False),
+                                   partial(col_placements_strat, positive=False)]],
+                ver_strats=[one_by_one_verification],
+                forward_equivalence=True,
+                name="Slicing fusion and fusion")
+slicing3_pack = TileScopePack(
+                initial_strats=[
+                    factor,
+                    slicing_fusion,
+                    fusion,
+                    fusion_with_interleaving
+                    requirement_placement
+                ],
+                inferral_strats=[row_and_column_separation],
+                expansion_strats=[[all_cell_insertions,
+                                   partial(row_placements_strat, positive=False),
+                                   partial(col_placements_strat, positive=False)]],
+                ver_strats=[one_by_one_verification],
+                forward_equivalence=True,
+                name="Slicing fusion with fusion and component fusion")
