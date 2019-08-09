@@ -3,18 +3,21 @@ from itertools import chain, product
 
 from comb_spec_searcher import Rule
 from tilings import Tiling
-from permuta import Perm
+from permuta import Av, Perm
 
-def slicing_fusion(tiling, **kwargs):
+def slicing_fusion(tiling, power_level=1, **kwargs):
     """Yield rules found by slicing fusing rows and columns of a tiling."""
+    sf_class = {1: SlicingFusion,
+                2: SlicingFusionLevel2,
+                3: SlicingFusionLevel3}[power_level]
     if tiling.requirements:
         return
     ncol = tiling.dimensions[1]
     nrow = tiling.dimensions[0]
     possible_fusion = chain(
-        (SlicingFusion(tiling, True, r, c) for r, c in
+        (sf_class(tiling, True, r, c) for r, c in
          product(range(nrow - 1), range(ncol))),
-        (SlicingFusion(tiling, False, r, c) for r, c in
+        (sf_class(tiling, False, r, c) for r, c in
          product(range(nrow), range(ncol - 1))),
     )
     return (fusion.rule() for fusion in possible_fusion if fusion.fusable())
@@ -163,6 +166,7 @@ class Fusion(object):
                     workable=[True],
                     possibly_empty=[False],
                     constructor='other')
+
 
 class SlicingFusion(Fusion):
     """
@@ -326,3 +330,27 @@ class SlicingFusion(Fusion):
             description += f"Slice fuse columns {self._col_idx} and {self._col_idx+1}."
         description += f" The special cell is {self.special_cell}."
         return description
+
+
+class SlicingFusionLevel2(SlicingFusion):
+
+    def _satisfy_special_cell_partener_condition(self, cell):
+        """
+        Check that the cell satisfy the condition to me the cell fused with
+        the special cell.
+        """
+        return True
+
+    def description(self):
+        return super().description() + 'Power level 2'
+
+
+class SlicingFusionLevel3(SlicingFusion):
+
+    def description(self):
+        return super().description() + 'Power level 2'
+
+    def _is_special_pair(self, special_cell, fused_cell):
+        special_basis = self._tiling.cell_basis()[special_cell][0]
+        other_basis = self._tiling.cell_basis()[fused_cell][0]
+        return all(p not in Av(special_basis) for p in other_basis)
