@@ -11,7 +11,7 @@ def slicing_fusion(tiling, power_level=1, **kwargs):
                 2: SlicingFusionLevel2,
                 3: SlicingFusionLevel3}[power_level]
     if tiling.requirements:
-        return
+        return []
     ncol = tiling.dimensions[1]
     nrow = tiling.dimensions[0]
     possible_fusion = chain(
