@@ -405,9 +405,10 @@ restricted_fusion = TileScopePack(
                 forward_equivalence=True,
                 name="restricted_fusion")
 
+# Original from Friday                
 def slicing_pack(fusion_power, slicing_power):
-    assert fusion_power in range(1,4)
-    assert slicing_power in range(1,4)
+    assert fusion_power in range(1, 4)
+    assert slicing_power in range(1, 4)
     fusions = [
         partial(slicing_fusion, power_level=slicing_power),
         fusion,
@@ -424,4 +425,44 @@ def slicing_pack(fusion_power, slicing_power):
         ver_strats=[one_by_one_verification],
         forward_equivalence=True,
         name="Slicing fusion"
+    )
+
+def slicing_pack_rc(fusion_power, slicing_power):
+    assert fusion_power in range(1, 4)
+    assert slicing_power in range(1, 4)
+    fusions = [
+        partial(slicing_fusion, power_level=slicing_power),
+        fusion,
+        fusion_with_interleaving
+    ]
+    return TileScopePack(
+        initial_strats=[factor, requirement_corroboration]+fusions[:fusion_power],
+        inferral_strats=[row_and_column_separation, obstruction_transitivity],
+        expansion_strats=[[
+            partial(row_placements_strat, positive=False),
+            partial(col_placements_strat, positive=False)
+        ]],
+        ver_strats=[subset_verified, globally_verified],
+        forward_equivalence=True,
+        name="Slicing fusion RC"
+    )
+
+def slicing_pack_pp(fusion_power, slicing_power):
+    assert fusion_power in range(1, 4)
+    assert slicing_power in range(1, 4)
+    fusions = [
+        partial(slicing_fusion, power_level=slicing_power),
+        fusion,
+        fusion_with_interleaving
+    ]
+    return TileScopePack(
+        initial_strats=[factor, requirement_corroboration]+fusions[:fusion_power],
+        inferral_strats=[row_and_column_separation, obstruction_transitivity],
+        expansion_strats=[
+            [all_cell_insertions],
+            [requirement_placement]
+        ],
+        ver_strats=[subset_verified, globally_verified],
+        forward_equivalence=True,
+        name="Slicing fusion PP"
     )
