@@ -1,6 +1,6 @@
 from itertools import chain
 
-from comb_spec_searcher import EquivalenceStrategy
+from comb_spec_searcher import EquivalenceRule
 from tilings import Obstruction, Requirement, Tiling
 from permuta import Perm
 from permuta.misc import (DIR_EAST, DIR_NONE, DIR_NORTH, DIR_SOUTH, DIR_WEST,
@@ -105,7 +105,7 @@ def requirement_placement(tiling, **kwargs):
         for i in range(len(reqs[0])):
             for DIR in DIRS:
                 placedtiling = place_point_of_requirement(tiling, ri, i, DIR)
-                yield EquivalenceStrategy(
+                yield EquivalenceRule(
                     formal_step=("Placing point {} of requirement {} with "
                                  "force {}|{}|{}|{}|").format(
                          (i, reqs[0].patt[i]), repr(reqs[0]), DIR, ri, i, DIR),

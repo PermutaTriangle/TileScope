@@ -1,7 +1,7 @@
 """The cell insertion strategy checks whether a cell is empty or contains a
 point"""
 
-from comb_spec_searcher import Strategy
+from comb_spec_searcher import Rule
 from permuta import Av, Perm
 from tilings import Obstruction, Requirement, Tiling
 
@@ -44,7 +44,7 @@ def all_cell_insertions(tiling, **kwargs):
                 if not any(patt in perm for perm in bdict[cell][1]):
                     if (tiling.dimensions != (1, 1) or
                             all(patt > perm for perm in bdict[cell][1])):
-                        yield Strategy(
+                        yield Rule(
                             formal_step=("Insert {} into cell {}.|{}|{}|{}|"
                                          "".format(patt, cell, cell[0],
                                                    cell[1],
@@ -106,7 +106,7 @@ def all_requirement_extensions(tiling, **kwargs):
         for length in range(len(curr_req) + 1, maxreqlen + 1):
             for patt in Av(bdict[cell][0] + extra_basis).of_length(length):
                 if curr_req in patt:
-                    yield Strategy(
+                    yield Rule(
                         formal_step=("Insert {} into cell {}."
                                      "".format(patt, cell)),
                         comb_classes=[
@@ -128,7 +128,7 @@ def all_row_insertions(tiling, **kwargs):
         row_cells = tiling.cells_in_row(row)
         if any(c in positive_cells for c in row_cells):
             continue
-        yield Strategy(
+        yield Rule(
                     formal_step="Either row {} is empty or not.".format(row),
                     comb_classes=row_insertion_helper(tiling, row, row_cells),
                     ignore_parent=False,
@@ -163,7 +163,7 @@ def all_col_insertions(tiling, **kwargs):
         col_cells = tiling.cells_in_col(col)
         if any(c in positive_cells for c in col_cells):
             continue
-        yield Strategy(
+        yield Rule(
                     formal_step="Either col {} is empty or not.".format(col),
                     comb_classes=col_insertion_helper(tiling, col, col_cells),
                     ignore_parent=False,

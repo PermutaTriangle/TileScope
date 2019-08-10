@@ -1,6 +1,6 @@
 """A strategy for checking if a tiling is a subset of the class."""
 
-from comb_spec_searcher import VerificationStrategy
+from comb_spec_searcher import VerificationRule
 from permuta import Perm
 from permuta.descriptors import Basis
 from permuta.permutils import all_symmetry_sets
@@ -17,12 +17,12 @@ def subset_verified(tiling, basis, **kwargs):
             return
     if tiling.dimensions == (1, 1):
         if one_by_one_verified(tiling, basis, **kwargs):
-            return VerificationStrategy(
+            return VerificationRule(
                 formal_step="The tiling is a subset of the class.")
     elif (all(ob.is_single_cell() for ob in tiling.obstructions) and
           all(all(r.is_single_cell() for r in req)
               for req in tiling.requirements)):
-            return VerificationStrategy(
+            return VerificationRule(
                 formal_step="The tiling is a subset of the class.")
 
 def subset_verified_no_req(tiling, basis, **kwargs):
@@ -36,7 +36,7 @@ def subset_verified_no_req(tiling, basis, **kwargs):
             return
     if tiling.dimensions == (1, 1):
         if one_by_one_verified(tiling, basis, **kwargs):
-            return VerificationStrategy(
+            return VerificationRule(
                 formal_step="The tiling is a subset of the class.")
     elif (all(ob.is_single_cell() for ob in tiling.obstructions) and
           all(all(r.is_single_cell() for r in req)
@@ -52,7 +52,7 @@ def subset_verified_no_req(tiling, basis, **kwargs):
                     return
                 if not(Perm((0,1)) in tiling.cell_basis()[r._pos[0]][0] and Perm((1,0)) in tiling.cell_basis()[r._pos[0]][0]):
                     return
-            return VerificationStrategy(formal_step="The tiling is a subset of the class no req.")
+            return VerificationRule(formal_step="The tiling is a subset of the class no req.")
             
 
 
@@ -73,5 +73,5 @@ def one_by_one_verified(tiling, basis, **kwargs):
 def one_by_one_verification(tiling, basis, **kwargs):
     """Return a verification if one-by-one verified."""
     if one_by_one_verified(tiling, basis, **kwargs):
-        return VerificationStrategy(
+        return VerificationRule(
                         formal_step="The tiling is a subclass of the class.")
