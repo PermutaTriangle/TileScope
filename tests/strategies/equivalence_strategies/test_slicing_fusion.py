@@ -5,6 +5,7 @@ from tilings import Tiling
 from tilings.obstruction import Obstruction
 
 from tilescopethree.strategies.equivalence_strategies.slicing_fusion import SlicingFusion
+from tilescopethree.strategies.equivalence_strategies.slicing_fusion import SlicingFusionLevel3
 from tilescopethree.strategies.equivalence_strategies.slicing_fusion import slicing_fusion
 
 @pytest.fixture
@@ -196,7 +197,6 @@ def test_fusion(row_fusion, col_fusion, row_fusion_big, col_fusion_big):
         Obstruction(Perm((2, 1, 0)), ((1, 3), (1, 3), (1, 3))),
     ]))
 
-
 def test_description(row_fusion_big, col_fusion_big):
     assert (row_fusion_big.description() ==
             "Slice fuse rows 0 and 1. The special cell is (0, 1).")
@@ -210,3 +210,15 @@ def test_description(row_fusion_big, col_fusion_big):
 def test_slicing_fusion(small_tiling, big_tiling):
     assert len(list(slicing_fusion(small_tiling))) == 2
     assert len(list(slicing_fusion(big_tiling))) == 3
+
+def slicing_fusion_level3():
+    t = Tiling(
+        obstructions=[Obstruction(Perm((0,1,2)), ((0,0),)*3),
+                      Obstruction(Perm((0,1,2,3)), ((0,1),)*4)]
+    )
+    sf = SlicingFusionLevel3(t, True, 0, 0)
+    assert sf.fusable
+    assert sf.special_cell == (0,0)
+    assert (sf.fusion ==
+            Tiling(obstructions=[Obstruction(Perm((0,1,2,3)), ((0,0),)*4)]))
+

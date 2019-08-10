@@ -348,7 +348,7 @@ class SlicingFusionLevel2(SlicingFusion):
 class SlicingFusionLevel3(SlicingFusion):
 
     def description(self):
-        return super().description() + 'Power level 2'
+        return super().description() + 'Power level 3'
 
     def _is_special_pair(self, special_cell, fused_cell):
         special_basis = self._tiling.cell_basis()[special_cell][0]
