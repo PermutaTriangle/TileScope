@@ -72,6 +72,28 @@ class Fusion(object):
             fused_pos.append((x, y))
         return  gp.__class__(gp.patt, fused_pos)
 
+    def _unfuse_gridded_perm(self, gp):
+        """ Generator of all the possible ways to unfuse a gridded permutations. """
+        stretch_above = (lambda p: p if p[1] < self._row_idx else (p[0], p[1]+1))
+        stretch_left = (lambda p: p if p[0] < self._col_idx else (p[0]+1, p[1]))
+        if self._fuse_row:
+            stretch = stretch_above
+            editable_pos_idx = [i for i, p in enumerate(gp.pos) if p[1] == self._row_idx]
+            editable_pos_idx.sort(key=lambda i: gp.patt[i])
+        else:
+            stretch = stretch_left
+            editable_pos_idx = [i for i, p in enumerate(gp.pos) if p[0] == self._col_idx]
+            editable_pos_idx.sort()
+        pos = list(map(stretch, gp.pos))
+        yield gp.__class__(gp.patt, pos)
+        row_shift = int(self._fuse_row)
+        col_shift = 1 - int(self._fuse_row)
+        for i in editable_pos_idx:
+            pos[i] = (pos[i][0] - col_shift, pos[i][1] - row_shift)
+            yield gp.__class__(gp.patt, pos)
+
+
+
     def _fuse_counter(self, gridded_perms):
         """
         Count the multiplicities of a set of gridded permutations after the fusion.

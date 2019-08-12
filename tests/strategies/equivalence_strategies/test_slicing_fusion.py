@@ -4,6 +4,7 @@ from permuta import Perm
 from tilings import Tiling
 from tilings.obstruction import Obstruction
 
+from tilescopethree.strategies.equivalence_strategies.slicing_fusion import Fusion
 from tilescopethree.strategies.equivalence_strategies.slicing_fusion import SlicingFusion
 from tilescopethree.strategies.equivalence_strategies.slicing_fusion import SlicingFusionLevel3
 from tilescopethree.strategies.equivalence_strategies.slicing_fusion import slicing_fusion
@@ -99,6 +100,60 @@ def test_fuse_gridded_perm(row_fusion, col_fusion, gp1):
             Obstruction(Perm((0, 1, 2)), ((0, 0), (1, 0), (1, 0))))
     assert (col_fusion._fuse_gridded_perm(gp1) ==
             Obstruction(Perm((0, 1, 2)), ((0, 0), (0, 0), (0, 1))))
+
+def test_unfuse_gridded_perm():
+    rf0 = Fusion(Tiling(), row_idx=0)
+    rf1 = Fusion(Tiling(), row_idx=1)
+    cf0 = Fusion(Tiling(), col_idx=0)
+    ob1 = Obstruction(Perm((0,1,2,3)), ((0,0), (0,1), (0,1), (0,2)))
+    assert list(rf1._unfuse_gridded_perm(ob1)) == [
+        Obstruction(Perm((0,1,2,3)), ((0,0), (0,2), (0,2), (0,3))),
+        Obstruction(Perm((0,1,2,3)), ((0,0), (0,1), (0,2), (0,3))),
+        Obstruction(Perm((0,1,2,3)), ((0,0), (0,1), (0,1), (0,3))),
+    ]
+    ob2 = Obstruction(Perm((0,2,1,3)), ((0,0), (0,1), (0,1), (0,2)))
+    assert list(rf1._unfuse_gridded_perm(ob2)) == [
+        Obstruction(Perm((0,2,1,3)), ((0,0), (0,2), (0,2), (0,3))),
+        Obstruction(Perm((0,2,1,3)), ((0,0), (0,2), (0,1), (0,3))),
+        Obstruction(Perm((0,2,1,3)), ((0,0), (0,1), (0,1), (0,3))),
+    ]
+    ob3 = Obstruction(Perm((0,2,1,4,3)), ((0,0), (0,1), (0,1), (0,2), (0,1)))
+    assert list(rf1._unfuse_gridded_perm(ob3)) == [
+        Obstruction(Perm((0,2,1,4,3)), ((0,0), (0,2), (0,2), (0,3), (0,2))),
+        Obstruction(Perm((0,2,1,4,3)), ((0,0), (0,2), (0,1), (0,3), (0,2))),
+        Obstruction(Perm((0,2,1,4,3)), ((0,0), (0,1), (0,1), (0,3), (0,2))),
+        Obstruction(Perm((0,2,1,4,3)), ((0,0), (0,1), (0,1), (0,3), (0,1))),
+    ]
+    ob4 = Obstruction(Perm((0,2,3,1)), ((0,0), (0,1), (1,1), (1,0)))
+    assert list(rf0._unfuse_gridded_perm(ob4)) == [
+        Obstruction(Perm((0,2,3,1)), ((0,1), (0,2), (1,2), (1,1))),
+        Obstruction(Perm((0,2,3,1)), ((0,0), (0,2), (1,2), (1,1))),
+        Obstruction(Perm((0,2,3,1)), ((0,0), (0,2), (1,2), (1,0))),
+    ]
+    assert list(cf0._unfuse_gridded_perm(ob4)) == [
+        Obstruction(Perm((0,2,3,1)), ((1,0), (1,1), (2,1), (2,0))),
+        Obstruction(Perm((0,2,3,1)), ((0,0), (1,1), (2,1), (2,0))),
+        Obstruction(Perm((0,2,3,1)), ((0,0), (0,1), (2,1), (2,0))),
+    ]
+    #Unfuse column
+    ob5 = Obstruction(Perm((2,0,1)), ((0,0), (0,0), (0,0)))
+    assert list(cf0._unfuse_gridded_perm(ob5)) == [
+        Obstruction(Perm((2,0,1)), ((1,0), (1,0), (1,0))),
+        Obstruction(Perm((2,0,1)), ((0,0), (1,0), (1,0))),
+        Obstruction(Perm((2,0,1)), ((0,0), (0,0), (1,0))),
+        Obstruction(Perm((2,0,1)), ((0,0), (0,0), (0,0))),
+    ]
+    #Unfuse pattern with no point in the fuse region
+    ob6 = Obstruction(Perm((0,1,2)), ((1,0), (1,0), (1,0)))
+    assert list(cf0._unfuse_gridded_perm(ob6)) == [
+        Obstruction(Perm((0,1,2)), ((2,0), (2,0), (2,0))),
+    ]
+    ob6 = Obstruction(Perm((1,0,2)), ((0,0), (0,0), (1,0)))
+    assert list(cf0._unfuse_gridded_perm(ob6)) == [
+        Obstruction(Perm((1,0,2)), ((1,0), (1,0), (2,0))),
+        Obstruction(Perm((1,0,2)), ((0,0), (1,0), (2,0))),
+        Obstruction(Perm((1,0,2)), ((0,0), (0,0), (2,0))),
+    ]
 
 def test_fuse_counter(row_fusion, col_fusion, gp1, gp2):
     assert (row_fusion._fuse_counter([gp1, gp2]) ==
