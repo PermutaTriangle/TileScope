@@ -219,6 +219,13 @@ def test_fusable(row_fusion, col_fusion, row_fusion_big, col_fusion_big):
     assert col_fusion.fusable()
     assert row_fusion_big.fusable()
     assert col_fusion_big.fusable()
+    t = Tiling(obstructions=[
+        Obstruction(Perm((0,)), ((0,1),)),
+        Obstruction(Perm((0,1)), ((0,0),(0,0))),
+        Obstruction(Perm((0,1)), ((1,0),(1,0))),
+        Obstruction(Perm((0,1)), ((1,1),(1,1))),
+    ])
+    assert not SlicingFusion(t, True, 0, 0).fusable()
 
 def test_fusion(row_fusion, col_fusion, row_fusion_big, col_fusion_big):
     assert (row_fusion.fusion() == Tiling(obstructions=[
@@ -266,14 +273,28 @@ def test_slicing_fusion(small_tiling, big_tiling):
     assert len(list(slicing_fusion(small_tiling))) == 2
     assert len(list(slicing_fusion(big_tiling))) == 3
 
-def slicing_fusion_level3():
-    t = Tiling(
-        obstructions=[Obstruction(Perm((0,1,2)), ((0,0),)*3),
-                      Obstruction(Perm((0,1,2,3)), ((0,1),)*4)]
-    )
-    sf = SlicingFusionLevel3(t, True, 0, 0)
-    assert sf.fusable
-    assert sf.special_cell == (0,0)
-    assert (sf.fusion ==
-            Tiling(obstructions=[Obstruction(Perm((0,1,2,3)), ((0,0),)*4)]))
 
+# ------------------------------------------------
+#       Test for class SlicingFusionLevel3
+# ------------------------------------------------
+
+def test_slicing_fusion_level3(small_tiling):
+    assert SlicingFusionLevel3(small_tiling, True, 0, 0).special_cell == (0,1)
+    assert SlicingFusionLevel3(small_tiling, True, 0, 0).special_cell_basis() == [Perm((0,))]
+    t = Tiling(obstructions=[
+        Obstruction(Perm((0,1,2)), ((0,0),)*3),
+        Obstruction(Perm((0,1,2,3)), ((0,1),)*4),
+        Obstruction(Perm((0,1,2,3)), ((0,0), (0,0), (0,1), (0,1))),
+        Obstruction(Perm((0,1,2,3)), ((0,0), (0,1), (0,1), (0,1))),
+    ])
+    print(t)
+    sf = SlicingFusionLevel3(t, True, 0, 0)
+    assert sf.special_cell == (0,0)
+    assert sf.special_cell_basis() == [Perm((0,1,2))]
+    assert sf._num_addable_gp(Obstruction(Perm((0,1,2,3)),((0,0),)*4)) == 2
+    assert sf._num_addable_gp(Obstruction(Perm((0,1,2,3,4)),((0,0),)*5)) == 3
+
+    print(sf.obstruction_fuse_counter)
+    assert sf.fusable()
+    assert (sf.fusion() ==
+            Tiling(obstructions=[Obstruction(Perm((0,1,2,3)), ((0,0),)*4)]))

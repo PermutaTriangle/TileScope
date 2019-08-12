@@ -35,6 +35,19 @@ def is_empty_cell(tiling, cell):
     return cell in tiling.empty_cells
 
 
+def is_subclass(subclass, superclass):
+    """ Check if the `subclass` is a subclass of `superclass`. """
+    return all(p1 not in subclass for p1 in superclass.basis)
+
+
+def cell_basis(tiling, cell):
+    """ Return the set of local obstruction in the cell """
+    if is_empty_cell(tiling, cell):
+        return [Perm((0,))]
+    else:
+        return tiling.cell_basis()[cell][0]
+
+
 class Fusion(object):
     """
     Fusion algorithm container class.
@@ -338,8 +351,7 @@ class SlicingFusion(Fusion):
                                       'moment')
         if not self._pre_check():
             return False
-        if self._can_fuse_set_of_gridded_perms(self.obstruction_fuse_counter):
-            return True
+        return self._can_fuse_set_of_gridded_perms(self.obstruction_fuse_counter)
 
     def description(self):
         """
@@ -373,6 +385,19 @@ class SlicingFusionLevel3(SlicingFusion):
         return super().description() + 'Power level 3'
 
     def _is_special_pair(self, special_cell, fused_cell):
-        special_basis = self._tiling.cell_basis()[special_cell][0]
-        other_basis = self._tiling.cell_basis()[fused_cell][0]
-        return all(p not in Av(special_basis) for p in other_basis)
+        special_basis = cell_basis(self._tiling, special_cell)
+        other_basis = cell_basis(self._tiling, fused_cell)
+        return is_subclass(Av(special_basis), Av(other_basis))
+
+    def special_cell_basis(self):
+        """
+        Return the set of pattern that must be avoided locally in the
+        special cell.
+        """
+        return cell_basis(self._tiling, self.special_cell)
+
+    def _num_addable_gp(self, gp):
+        spec_cell_basis = self.special_cell_basis()
+        return sum(1 for gp in self._unfuse_gridded_perm(gp) if
+                   gp.get_gridded_perm_in_cells((self.special_cell,)).patt
+                   not in Av(spec_cell_basis))
