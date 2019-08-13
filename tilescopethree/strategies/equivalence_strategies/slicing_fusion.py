@@ -376,13 +376,29 @@ class SlicingFusionLevel2(SlicingFusion):
         return True
 
     def description(self):
-        return super().description() + 'Power level 2'
+        if SlicingFusion(self._tiling, self._fuse_row, self._row_idx,
+                         self._col_idx).fusable():
+            power_level = 1
+        elif SlicingFusionLevel2(self._tiling, self._fuse_row, self._row_idx,
+                         self._col_idx).fusable():
+            power_level = 2
+        else:
+            power_level =3
+        return super().description() + f'Power level {power_level}'
 
 
 class SlicingFusionLevel3(SlicingFusion):
 
     def description(self):
-        return super().description() + 'Power level 3'
+        if SlicingFusion(self._tiling, self._fuse_row, self._row_idx,
+                         self._col_idx).fusable():
+            power_level = 1
+        elif SlicingFusionLevel2(self._tiling, self._fuse_row, self._row_idx,
+                         self._col_idx).fusable():
+            power_level = 2
+        else:
+            power_level =3
+        return super().description() + f'Power level {power_level}'
 
     def _is_special_pair(self, special_cell, fused_cell):
         special_basis = cell_basis(self._tiling, special_cell)
