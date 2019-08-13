@@ -23,6 +23,7 @@ def fusion(tiling, **kwargs):
 
 def fusable(tiling, row_index, row):
     """Return True if rows 'row_index' and 'row_index + 1' can be fused."""
+    return can_fuse_set_of_gridded_perms(tiling.obstructions, row_index, row)
     return (can_fuse_set_of_gridded_perms(tiling.obstructions, row_index, row)
             and all(can_fuse_set_of_gridded_perms(req_list, row_index, row)
                     for req_list in tiling.requirements))

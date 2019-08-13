@@ -399,3 +399,60 @@ restricted_fusion = TileScopePack(
                 ver_strats=[one_by_one_verification],
                 forward_equivalence=True,
                 name="restricted_fusion")
+
+from comb_spec_searcher import VerificationRule
+from tilings import *
+from permuta import *
+
+f7 = Tiling(obstructions=(Obstruction(Perm((0,)), ((0, 1),)), Obstruction(Perm((0,)), ((0, 2),)), Obstruction(Perm((1, 0)), ((1, 1), (1, 1))), Obstruction(Perm((1, 0)), ((1, 2), (1, 1))), Obstruction(Perm((1, 0)), ((1, 2), (1, 2))), Obstruction(Perm((0, 2, 1)), ((0, 0), (1, 0), (1, 0))), Obstruction(Perm((1, 0, 2)), ((0, 0), (0, 0), (1, 0))), Obstruction(Perm((0, 3, 2, 1)), ((0, 0), (0, 0), (0, 0), (0, 0))), Obstruction(Perm((0, 3, 2, 1)), ((0, 0), (0, 0), (0, 0), (1, 0))), Obstruction(Perm((0, 3, 2, 1)), ((1, 0), (1, 0), (1, 0), (1, 0))), Obstruction(Perm((0, 3, 2, 1)), ((1, 0), (1, 1), (1, 0), (1, 0))), Obstruction(Perm((0, 3, 2, 1)), ((1, 0), (1, 2), (1, 0), (1, 0))), Obstruction(Perm((1, 0, 3, 2)), ((0, 0), (0, 0), (0, 0), (0, 0))), Obstruction(Perm((1, 0, 3, 2)), ((0, 0), (1, 0), (1, 1), (1, 0))), Obstruction(Perm((1, 0, 3, 2)), ((0, 0), (1, 0), (1, 2), (1, 0))), Obstruction(Perm((1, 0, 3, 2)), ((1, 0), (1, 0), (1, 0), (1, 0))), Obstruction(Perm((1, 0, 3, 2)), ((1, 0), (1, 0), (1, 1), (1, 0))), Obstruction(Perm((1, 0, 3, 2)), ((1, 0), (1, 0), (1, 2), (1, 0)))), requirements=())
+
+# til2 = Tiling(obstructions=(Obstruction(Perm((0,)), ((0, 1),)), Obstruction(Perm((0,)), ((0, 2),)), Obstruction(Perm((0,)), ((0, 3),)), Obstruction(Perm((1, 0)), ((1, 1), (1, 1))), Obstruction(Perm((1, 0)), ((1, 2), (1, 1))), Obstruction(Perm((1, 0)), ((1, 2), (1, 2))), Obstruction(Perm((1, 0)), ((1, 3), (1, 1))), Obstruction(Perm((1, 0)), ((1, 3), (1, 2))), Obstruction(Perm((1, 0)), ((1, 3), (1, 3))), Obstruction(Perm((0, 2, 1)), ((0, 0), (1, 0), (1, 0))), Obstruction(Perm((1, 0, 2)), ((0, 0), (0, 0), (1, 0))), Obstruction(Perm((0, 3, 2, 1)), ((0, 0), (0, 0), (0, 0), (0, 0))), Obstruction(Perm((0, 3, 2, 1)), ((0, 0), (0, 0), (0, 0), (1, 0))), Obstruction(Perm((0, 3, 2, 1)), ((1, 0), (1, 0), (1, 0), (1, 0))), Obstruction(Perm((0, 3, 2, 1)), ((1, 0), (1, 1), (1, 0), (1, 0))), Obstruction(Perm((0, 3, 2, 1)), ((1, 0), (1, 2), (1, 0), (1, 0))), Obstruction(Perm((0, 3, 2, 1)), ((1, 0), (1, 3), (1, 0), (1, 0))), Obstruction(Perm((1, 0, 3, 2)), ((0, 0), (0, 0), (0, 0), (0, 0))), Obstruction(Perm((1, 0, 3, 2)), ((0, 0), (1, 0), (1, 1), (1, 0))), Obstruction(Perm((1, 0, 3, 2)), ((0, 0), (1, 0), (1, 2), (1, 0))), Obstruction(Perm((1, 0, 3, 2)), ((0, 0), (1, 0), (1, 3), (1, 0))), Obstruction(Perm((1, 0, 3, 2)), ((1, 0), (1, 0), (1, 0), (1, 0))), Obstruction(Perm((1, 0, 3, 2)), ((1, 0), (1, 0), (1, 1), (1, 0))), Obstruction(Perm((1, 0, 3, 2)), ((1, 0), (1, 0), (1, 2), (1, 0))), Obstruction(Perm((1, 0, 3, 2)), ((1, 0), (1, 0), (1, 3), (1, 0)))), requirements=((Requirement(Perm((0,)), ((1, 2),)),),))
+
+# til3 = Tiling(obstructions=(Obstruction(Perm((0,)), ((0, 0),)), Obstruction(Perm((0,)), ((0, 3),)), Obstruction(Perm((0,)), ((1, 1),)), Obstruction(Perm((0,)), ((1, 2),)), Obstruction(Perm((0,)), ((1, 3),)), Obstruction(Perm((0,)), ((2, 1),)), Obstruction(Perm((1, 0)), ((0, 1), (0, 1))), Obstruction(Perm((1, 0)), ((0, 2), (0, 2))), Obstruction(Perm((1, 0)), ((2, 2), (2, 2))), Obstruction(Perm((1, 0)), ((2, 3), (2, 2))), Obstruction(Perm((1, 0)), ((2, 3), (2, 3))), Obstruction(Perm((0, 2, 1)), ((1, 0), (2, 0), (2, 0))), Obstruction(Perm((1, 0, 2)), ((0, 2), (0, 1), (2, 2))), Obstruction(Perm((1, 0, 2)), ((1, 0), (1, 0), (2, 0))), Obstruction(Perm((0, 3, 2, 1)), ((1, 0), (1, 0), (1, 0), (1, 0))), Obstruction(Perm((0, 3, 2, 1)), ((1, 0), (1, 0), (1, 0), (2, 0))), Obstruction(Perm((0, 3, 2, 1)), ((2, 0), (2, 0), (2, 0), (2, 0))), Obstruction(Perm((0, 3, 2, 1)), ((2, 0), (2, 2), (2, 0), (2, 0))), Obstruction(Perm((0, 3, 2, 1)), ((2, 0), (2, 3), (2, 0), (2, 0))), Obstruction(Perm((1, 0, 3, 2)), ((1, 0), (1, 0), (1, 0), (1, 0))), Obstruction(Perm((1, 0, 3, 2)), ((1, 0), (2, 0), (2, 2), (2, 0))), Obstruction(Perm((1, 0, 3, 2)), ((1, 0), (2, 0), (2, 3), (2, 0))), Obstruction(Perm((1, 0, 3, 2)), ((2, 0), (2, 0), (2, 0), (2, 0))), Obstruction(Perm((1, 0, 3, 2)), ((2, 0), (2, 0), (2, 2), (2, 0))), Obstruction(Perm((1, 0, 3, 2)), ((2, 0), (2, 0), (2, 3), (2, 0)))), requirements=())
+
+# tils = [row_and_column_separation(t).comb_classes[0] for t in (til1, til2, til3) if row_and_column_separation(t) is not None]
+# print(len(tils))
+
+f3 = Tiling(obstructions=(Obstruction(Perm((1, 0)), ((0, 1), (0, 1))), Obstruction(Perm((0, 3, 2, 1)), ((0, 0), (0, 0), (0, 0), (0, 0))), Obstruction(Perm((0, 3, 2, 1)), ((0, 0), (0, 1), (0, 0), (0, 0))), Obstruction(Perm((1, 0, 3, 2)), ((0, 0), (0, 0), (0, 0), (0, 0))), Obstruction(Perm((1, 0, 3, 2)), ((0, 0), (0, 0), (0, 1), (0, 0)))), requirements=())
+
+f14 = Tiling(obstructions=(Obstruction(Perm((0,)), ((0, 1),)), Obstruction(Perm((1, 0)), ((1, 1), (1, 1))), Obstruction(Perm((0, 2, 1)), ((0, 0), (1, 0), (1, 0))), Obstruction(Perm((1, 0, 2)), ((0, 0), (0, 0), (1, 0))), Obstruction(Perm((0, 3, 2, 1)), ((0, 0), (0, 0), (0, 0), (0, 0))), Obstruction(Perm((0, 3, 2, 1)), ((0, 0), (0, 0), (0, 0), (1, 0))), Obstruction(Perm((0, 3, 2, 1)), ((1, 0), (1, 0), (1, 0), (1, 0))), Obstruction(Perm((0, 3, 2, 1)), ((1, 0), (1, 1), (1, 0), (1, 0))), Obstruction(Perm((1, 0, 3, 2)), ((0, 0), (0, 0), (0, 0), (0, 0))), Obstruction(Perm((1, 0, 3, 2)), ((0, 0), (1, 0), (1, 1), (1, 0))), Obstruction(Perm((1, 0, 3, 2)), ((1, 0), (1, 0), (1, 0), (1, 0))), Obstruction(Perm((1, 0, 3, 2)), ((1, 0), (1, 0), (1, 1), (1, 0)))), requirements=())
+
+f8 = Tiling(obstructions=(Obstruction(Perm((0,)), ((0, 1),)), Obstruction(Perm((0,)), ((0, 2),)), Obstruction(Perm((0,)), ((0, 3),)), Obstruction(Perm((1, 0)), ((1, 1), (1, 1))), Obstruction(Perm((1, 0)), ((1, 2), (1, 1))), Obstruction(Perm((1, 0)), ((1, 2), (1, 2))), Obstruction(Perm((1, 0)), ((1, 3), (1, 1))), Obstruction(Perm((1, 0)), ((1, 3), (1, 2))), Obstruction(Perm((1, 0)), ((1, 3), (1, 3))), Obstruction(Perm((0, 2, 1)), ((0, 0), (1, 0), (1, 0))), Obstruction(Perm((1, 0, 2)), ((0, 0), (0, 0), (1, 0))), Obstruction(Perm((0, 3, 2, 1)), ((0, 0), (0, 0), (0, 0), (0, 0))), Obstruction(Perm((0, 3, 2, 1)), ((0, 0), (0, 0), (0, 0), (1, 0))), Obstruction(Perm((0, 3, 2, 1)), ((1, 0), (1, 0), (1, 0), (1, 0))), Obstruction(Perm((0, 3, 2, 1)), ((1, 0), (1, 1), (1, 0), (1, 0))), Obstruction(Perm((0, 3, 2, 1)), ((1, 0), (1, 2), (1, 0), (1, 0))), Obstruction(Perm((0, 3, 2, 1)), ((1, 0), (1, 3), (1, 0), (1, 0))), Obstruction(Perm((1, 0, 3, 2)), ((0, 0), (0, 0), (0, 0), (0, 0))), Obstruction(Perm((1, 0, 3, 2)), ((0, 0), (1, 0), (1, 1), (1, 0))), Obstruction(Perm((1, 0, 3, 2)), ((0, 0), (1, 0), (1, 2), (1, 0))), Obstruction(Perm((1, 0, 3, 2)), ((0, 0), (1, 0), (1, 3), (1, 0))), Obstruction(Perm((1, 0, 3, 2)), ((1, 0), (1, 0), (1, 0), (1, 0))), Obstruction(Perm((1, 0, 3, 2)), ((1, 0), (1, 0), (1, 1), (1, 0))), Obstruction(Perm((1, 0, 3, 2)), ((1, 0), (1, 0), (1, 2), (1, 0))), Obstruction(Perm((1, 0, 3, 2)), ((1, 0), (1, 0), (1, 3), (1, 0)))), requirements=((Requirement(Perm((0,)), ((1, 2),)),),))
+
+
+def fake_verify(tiling, **kwargs):
+    if tiling == f7:
+        print("="*20 + "VERIFIED" + "="*20)
+        print(f7)
+        return VerificationRule('fake verified')
+    if tiling == f3:
+        print("="*20 + "VERIFIED" + "="*20)
+        print(f3)
+        return VerificationRule('fake_verified')
+    if tiling == f14:
+        print("="*20 + "VERIFIED" + "="*20)
+        print(f14)
+        return VerificationRule('fake_verified')
+    if tiling == f8:
+        print("="*20 + "VERIFIED" + "="*20)
+        print(f8)
+        return VerificationRule('fake_verified')
+    # if tiling == til2:
+    #     print(til2)
+    #     print("="*20 + "VERIFIED2" + "="*20)
+    #     return VerificationRule('fake verified')
+    # if tiling == til3:
+    #     print(til3)
+    #     print("="*20 + "VERIFIED3" + "="*20)
+    #     return VerificationRule('fake verified')
+    # if tiling in tils:
+    #     print("="*20 + "VERIFIEDs" + "="*20)
+    #     return VerificationRule('fake verified')
+
+try_everything = TileScopePack(
+    initial_strats=[partial(factor, interleaving=True, unions=True), requirement_corroboration, fusion],
+    inferral_strats=[row_and_column_separation, obstruction_transitivity],
+    expansion_strats=[[partial(all_requirement_insertions, no_reqs=True, maxlen=2), requirement_placement]],
+    ver_strats=[subset_verified, globally_verified, fake_verify],
+    forward_equivalence=True,
+    name="try_everything")
