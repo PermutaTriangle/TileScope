@@ -421,22 +421,22 @@ f8 = Tiling(obstructions=(Obstruction(Perm((0,)), ((0, 1),)), Obstruction(Perm((
 
 
 def fake_verify(tiling, **kwargs):
-    if tiling == f7:
-        print("="*20 + "VERIFIED" + "="*20)
-        print(f7)
-        return VerificationRule('fake verified')
-    if tiling == f3:
-        print("="*20 + "VERIFIED" + "="*20)
-        print(f3)
-        return VerificationRule('fake_verified')
+    #if tiling == f7:
+    #    print("="*20 + "VERIFIED" + "="*20)
+    #    print(f7)
+    #    return VerificationRule('fake verified')
+    #if tiling == f3:
+    #    print("="*20 + "VERIFIED" + "="*20)
+    #    print(f3)
+    #    return VerificationRule('fake_verified')
     if tiling == f14:
         print("="*20 + "VERIFIED" + "="*20)
         print(f14)
         return VerificationRule('fake_verified')
-    if tiling == f8:
-        print("="*20 + "VERIFIED" + "="*20)
-        print(f8)
-        return VerificationRule('fake_verified')
+    #if tiling == f8:
+    #    print("="*20 + "VERIFIED" + "="*20)
+    #    print(f8)
+    #    return VerificationRule('fake_verified')
     # if tiling == til2:
     #     print(til2)
     #     print("="*20 + "VERIFIED2" + "="*20)
@@ -449,10 +449,62 @@ def fake_verify(tiling, **kwargs):
     #     print("="*20 + "VERIFIEDs" + "="*20)
     #     return VerificationRule('fake verified')
 
-try_everything = TileScopePack(
+from comb_spec_searcher import Strategy
+special = set()
+def hack(tiling, **kwargs):
+    if tiling in special:
+        print("Shortcutting to place 1324")
+        print(tiling)
+        for s in requirement_placement(tiling):
+            special.update(s.comb_classes)
+            yield s
+    if tiling == f14:
+        gp = Obstruction(Perm((0, 2, 1, 3)), ((0, 0), (0, 0), (1, 0), (1, 0)))
+        print("inserting {} into".format(str(gp)))
+        print(tiling)
+        av = Tiling((tiling.obstructions +
+                    (Obstruction(gp.patt, gp.pos),)),
+                    tiling.requirements)
+        co = Tiling(tiling.obstructions,
+                    (tiling.requirements) +
+                    ((Requirement(gp.patt, gp.pos),),))
+        special.add(co)
+        yield Strategy(formal_step="Insert {}.".format(str(gp)),
+                        comb_classes=[av, co],
+                        ignore_parent=False,
+                        inferable=[True for _ in range(2)],
+                        possibly_empty=[True for _ in range(2)],
+                        workable=[True for _ in range(2)],
+                        constructor='disjoint')
+
+hack_pack = TileScopePack(
+    initial_strats=[hack, partial(factor, interleaving=True, unions=True), requirement_corroboration, fusion],
+    inferral_strats=[row_and_column_separation, obstruction_transitivity],
+    expansion_strats=[[partial(all_requirement_insertions, no_reqs=True, maxlen=2), requirement_placement]],
+    ver_strats=[subset_verified, globally_verified],
+    forward_equivalence=True,
+    name="hack_pack")
+
+try_everything2 = TileScopePack(
     initial_strats=[partial(factor, interleaving=True, unions=True), requirement_corroboration, fusion],
     inferral_strats=[row_and_column_separation, obstruction_transitivity],
     expansion_strats=[[partial(all_requirement_insertions, no_reqs=True, maxlen=2), requirement_placement]],
-    ver_strats=[subset_verified, globally_verified, fake_verify],
+    ver_strats=[subset_verified, globally_verified],
     forward_equivalence=True,
-    name="try_everything")
+    name="try_everything2")
+
+try_everything3 = TileScopePack(
+    initial_strats=[partial(factor, interleaving=True, unions=True), requirement_corroboration, fusion],
+    inferral_strats=[row_and_column_separation, obstruction_transitivity],
+    expansion_strats=[[partial(all_requirement_insertions, no_reqs=True, maxlen=3), requirement_placement]],
+    ver_strats=[subset_verified, globally_verified],
+    forward_equivalence=True,
+    name="try_everything3")
+
+try_everything4 = TileScopePack(
+    initial_strats=[partial(factor, interleaving=True, unions=True), requirement_corroboration, fusion],
+    inferral_strats=[row_and_column_separation, obstruction_transitivity],
+    expansion_strats=[[partial(all_requirement_insertions, no_reqs=True, maxlen=4), requirement_placement]],
+    ver_strats=[subset_verified, globally_verified],
+    forward_equivalence=True,
+    name="try_everything4")
