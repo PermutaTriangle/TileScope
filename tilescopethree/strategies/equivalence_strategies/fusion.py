@@ -1,19 +1,9 @@
 """The fusion strategy."""
 from collections import defaultdict
+from functools import partial, update_wrapper
 from itertools import chain
 from comb_spec_searcher import Rule
 from tilings import Tiling
-
-
-def fusion(tiling):
-    """Generator over rules found by fusing rows or columns of `tiling`."""
-    ncol = tiling.dimensions[1]
-    nrow = tiling.dimensions[0]
-    possible_fusion = chain(
-        (Fusion(tiling, row_idx=r) for r in range(nrow-1)),
-        (Fusion(tiling, col_idx=c) for c in range(ncol-1))
-    )
-    return (fusion.rule() for fusion in possible_fusion if fusion.fusable())
 
 
 class Fusion(object):
@@ -168,3 +158,22 @@ class Fusion(object):
                     workable=[True],
                     possibly_empty=[False],
                     constructor='other')
+
+
+def general_fusion_iterator(tiling, fusion_class):
+    """
+    Generator over rules found by fusing rows or columns of `tiling` using
+    the fusion defined by `fusion_class`.
+    """
+    assert issubclass(fusion_class, Fusion)
+    ncol = tiling.dimensions[1]
+    nrow = tiling.dimensions[0]
+    possible_fusion = chain(
+        (Fusion(tiling, row_idx=r) for r in range(nrow-1)),
+        (Fusion(tiling, col_idx=c) for c in range(ncol-1))
+    )
+    return (fusion.rule() for fusion in possible_fusion if fusion.fusable())
+
+fusion = partial(general_fusion_iterator, fusion_class=Fusion)
+update_wrapper(fusion, general_fusion_iterator)
+fusion.__doc__ = """Generator over rules found by fusing rows or columns of `tiling`."""

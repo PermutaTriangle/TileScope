@@ -2,27 +2,14 @@
 you can draw a line somewhere."""
 from collections import defaultdict
 from comb_spec_searcher import Strategy
+from functools import partial, update_wrapper
 from itertools import chain
 from tilings import Tiling, Obstruction
-from tilescopethree.strategies.equivalence_strategies.fusion import Fusion
-
-
 from permuta import Perm
 
+from tilescopethree.strategies.equivalence_strategies.fusion import Fusion
+from tilescopethree.strategies.equivalence_strategies.fusion import general_fusion_iterator
 
-def fusion_with_interleaving(tiling, **kwargs):
-    """
-    Yield rules found by fusing rows and columns of a tiling, where the
-    unfused tiling obtained by drawing a line through certain heights/indices
-    of the row/column.
-    """
-    ncol = tiling.dimensions[1]
-    nrow = tiling.dimensions[0]
-    possible_fusion = chain(
-        (FusionWithInterleaving(tiling, row_idx=r) for r in range(nrow-1)),
-        (FusionWithInterleaving(tiling, col_idx=c) for c in range(ncol-1))
-    )
-    return (fusion.rule() for fusion in possible_fusion if fusion.fusable())
 
 class FusionWithInterleaving(Fusion):
 
@@ -155,3 +142,10 @@ class FusionWithInterleaving(Fusion):
             return f"Fuse fancily rows {self._row_idx} and {self._row_idx+1}."
         else:
             return f"Fuse fancily columns {self._col_idx} and {self._col_idx+1}."
+
+fusion_with_interleaving = partial(general_fusion_iterator, fusion_class=FusionWithInterleaving)
+update_wrapper(fusion_with_interleaving, general_fusion_iterator)
+fusion_with_interleaving.__doc__ = """
+    Yield rules found by fusing rows and columns of a tiling, where the
+    unfused tiling obtained by drawing a line through certain heights/indices
+    """
