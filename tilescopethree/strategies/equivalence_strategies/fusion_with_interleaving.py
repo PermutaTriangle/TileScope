@@ -26,6 +26,7 @@ class FusionWithInterleaving(Fusion):
         horizontal line through the permutation."""
         if not self._pre_check():
             return False
+        bases = self._bases
         tiling = self._tiling
         row_index = self._row_idx if self._fuse_row else self._col_idx
         row = self._fuse_row
@@ -112,13 +113,13 @@ class FusionWithInterleaving(Fusion):
         tiling = self._tiling
         row_index = self._row_idx if self._fuse_row else self._col_idx
         row = self._fuse_row
-        fused_obstructions = [fuse_gridded_perm(ob, row_index, row)
+        fused_obstructions = [self._fuse_gridded_perm(ob)
                               for ob in tiling.obstructions
                               if ((row and
                                    all(c[1] != row_index + 1 for c in ob.pos)) or
                                   (not row and
                                    all(c[0] != row_index + 1 for c in ob.pos)))]
-        fused_requirements = [[fuse_gridded_perm(req, row_index, row)
+        fused_requirements = [[self._fuse_gridded_perm(req)
                                for req in req_list]
                               for req_list in tiling.requirements]
         fused_tiling = Tiling(fused_obstructions, fused_requirements)

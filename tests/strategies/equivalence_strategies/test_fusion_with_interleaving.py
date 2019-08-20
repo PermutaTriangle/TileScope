@@ -33,3 +33,7 @@ def test_init(small_tiling):
 
 def test_fusable(row_fusion):
     row_fusion.fusable()
+
+
+def test_fused_tiling(row_fusion):
+    row_fusion.fused_tiling()
