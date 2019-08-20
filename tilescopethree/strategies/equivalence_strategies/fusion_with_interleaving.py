@@ -3,8 +3,7 @@ you can draw a line somewhere."""
 from collections import defaultdict
 from comb_spec_searcher import Strategy
 from tilings import Tiling, Obstruction
-from tilescopethree.strategies.equivalence_strategies.fusion import fuse_gridded_perm
-# from tilescopethree.strategies.equivalence_strategies.fusion import fusable as original_fusable # for print statements
+# from tilescopethree.strategies.equivalence_strategies.fusion import fuse_gridded_perm
 
 
 from permuta import Perm
@@ -40,6 +39,7 @@ def fusion_with_interleaving(tiling, **kwargs):
         #     print("On the tiling:")
         #     print(tiling)
         #     print("Column {} is ordinary fusable but not fancy fusable. Explain.".format(col_index))
+
 
 def fusable(tiling, row_index, bases, row=True, **kwargs):
     """Return true if adjacent rows can be viewed as one row where you draw a
