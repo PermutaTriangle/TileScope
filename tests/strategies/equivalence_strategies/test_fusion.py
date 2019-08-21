@@ -105,6 +105,13 @@ def test_fusion(small_tiling, big_tiling):
     small_tiling_rules = list(fusion(small_tiling))
     assert len(small_tiling_rules) == 2
     assert small_tiling_rules[0].__class__ == Rule
+    t = Tiling(obstructions=[
+        Obstruction(Perm((0,1)), ((0, 0), (0, 0))),
+        Obstruction(Perm((0,1)), ((0, 0), (1, 0))),
+        Obstruction(Perm((0,1)), ((1, 0), (1, 0))),
+    ])
+    t_rules = list(fusion(t))
+    assert len(t_rules) == 1
 
 # ------------------------------------------------
 #       Test for the class Fusion
