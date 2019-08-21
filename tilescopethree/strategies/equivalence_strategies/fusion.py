@@ -1,83 +1,179 @@
 """The fusion strategy."""
 from collections import defaultdict
-from comb_spec_searcher import Strategy
+from functools import partial, update_wrapper
+from itertools import chain
+from comb_spec_searcher import Rule
 from tilings import Tiling
 
 
-def fusion(tiling, **kwargs):
-    """Yield rules found by fusing rows and columns of a tiling."""
-    for row_index in range(tiling.dimensions[1] - 1):
-        if fusable(tiling, row_index, True):
-            yield Strategy(("Fuse rows {} and {}|{}|."
-                            "").format(row_index, row_index + 1, row_index),
-                           [fuse_tiling(tiling, row_index, True)],
-                           inferable=[True], workable=[True],
-                           possibly_empty=[False], constructor='other')
-    for col_index in range(tiling.dimensions[0] - 1):
-        if fusable(tiling, col_index, False):
-            yield Strategy(("Fuse columns {} and {}|{}|."
-                            "").format(col_index, col_index + 1, col_index),
-                           [fuse_tiling(tiling, col_index, False)],
-                           inferable=[True], workable=[True],
-                           possibly_empty=[False], constructor='other')
+class Fusion(object):
+    """
+    Fusion algorithm container class.
 
-def fusable(tiling, row_index, row):
-    """Return True if rows 'row_index' and 'row_index + 1' can be fused."""
-    return can_fuse_set_of_gridded_perms(tiling.obstructions, row_index, row)
-    return (can_fuse_set_of_gridded_perms(tiling.obstructions, row_index, row)
-            and all(can_fuse_set_of_gridded_perms(req_list, row_index, row)
-                    for req_list in tiling.requirements))
+    Check if a fusion is valid and compute the fusion.
 
+    If `row_idx` is provided it attempts to fuse row `row_idx` with row
+    `row_idx+1`.
 
-def can_fuse_set_of_gridded_perms(gridded_perms, row_index, row):
-    """Return True if rows 'row_index' and 'row_index + 1' can be fused,
-    maintaining the containment of the set of gridded permutations."""
-    fuse_counter = defaultdict(int)
-    for gp in gridded_perms:
-        fuse_counter[fuse_gridded_perm(gp, row_index, row)] += 1
-    for gp, count in fuse_counter.items():
-        if row:
-            row_count = sum(1 for c in gp.pos if c[1] == row_index)
+    If incited `col_ids` is provided it attempts to fuse column `col_idx` with column
+    `col_idx+1`.
+    """
+
+    def __init__(self, tiling, row_idx=None, col_idx=None):
+        self._tiling = tiling
+        if row_idx is None and col_idx is not None:
+            self._col_idx = col_idx
+            self._fuse_row = False
+        elif col_idx is None and row_idx is not None:
+            self._row_idx = row_idx
+            self._fuse_row = True
         else:
-            row_count = sum(1 for c in gp.pos if c[0] == row_index)
-        if row_count + 1 != count:
-            return False
-    return True
+            raise RuntimeError('Cannot specify a row and a columns')
 
-
-def fuse_tiling(tiling, row_index, row=True, **kwargs):
-    """
-    Return the tiling where rows 'row_index' and 'row_index + 1' are fused.
-
-    If row=False, then it does the same for columns.
-    """
-    fused_obstructions = [fuse_gridded_perm(ob, row_index, row)
-                          for ob in tiling.obstructions]
-    fused_requirements = [[fuse_gridded_perm(req, row_index, row)
-                           for req in req_list]
-                          for req_list in tiling.requirements]
-    fused_tiling = Tiling(fused_obstructions, fused_requirements)
-    if kwargs.get('regions', False):
-        cell_to_region = {}
-        for cell in tiling.active_cells:
-            x, y = cell
-            if row and y > row_index:
+    def _fuse_gridded_perm(self, gp):
+        """
+        Fuse the gridded permutation `gp`.
+        """
+        fused_pos = []
+        for x, y in gp.pos:
+            if self._fuse_row and y > self._row_idx:
                 y -= 1
-            elif not row and x > row_index:
+            elif not self._fuse_row and x > self._col_idx:
                 x -= 1
-            cell_to_region[cell] = set([(x, y)])
-        return ([fused_tiling], [cell_to_region])
-    return fused_tiling
+            fused_pos.append((x, y))
+        return  gp.__class__(gp.patt, fused_pos)
+
+    def _unfuse_gridded_perm(self, gp):
+        """ Generator of all the possible ways to unfuse a gridded permutations. """
+        stretch_above = (lambda p: p if p[1] < self._row_idx else (p[0], p[1]+1))
+        stretch_left = (lambda p: p if p[0] < self._col_idx else (p[0]+1, p[1]))
+        if self._fuse_row:
+            stretch = stretch_above
+            editable_pos_idx = [i for i, p in enumerate(gp.pos) if p[1] == self._row_idx]
+            editable_pos_idx.sort(key=lambda i: gp.patt[i])
+        else:
+            stretch = stretch_left
+            editable_pos_idx = [i for i, p in enumerate(gp.pos) if p[0] == self._col_idx]
+            editable_pos_idx.sort()
+        pos = list(map(stretch, gp.pos))
+        yield gp.__class__(gp.patt, pos)
+        row_shift = int(self._fuse_row)
+        col_shift = 1 - int(self._fuse_row)
+        for i in editable_pos_idx:
+            pos[i] = (pos[i][0] - col_shift, pos[i][1] - row_shift)
+            yield gp.__class__(gp.patt, pos)
+
+    def _fuse_counter(self, gridded_perms):
+        """
+        Count the multiplicities of a set of gridded permutations after the fusion.
+
+        Return a dictionary of gridded permutations with their multiplicities.
+        """
+        fuse_counter = dict()
+        for gp in gridded_perms:
+            fused_perm = self._fuse_gridded_perm(gp)
+            fuse_counter[fused_perm] = fuse_counter.get(fused_perm, 0) + 1
+        return fuse_counter
+
+    @property
+    def obstruction_fuse_counter(self):
+        """
+        Dictionary of multiplicities of fused obstructions.
+        """
+        if hasattr(self, '_obstruction_fuse_counter'):
+            return self._obstruction_fuse_counter
+        fuse_counter = self._fuse_counter(self._tiling.obstructions)
+        self._obstruction_fuse_counter = fuse_counter
+        return self._obstruction_fuse_counter
+
+    @property
+    def requirements_fuse_counters(self):
+        """
+        List of fuse counters for each of the requirements list of the tiling.
+        """
+        if hasattr(self, '_requirements_fuse_counters'):
+            return self._requirements_fuse_counters
+        counters = [self._fuse_counter(req_list) for req_list in
+                    self._tiling.requirements]
+        self._requirements_fuse_counters = counters
+        return self._requirements_fuse_counters
+
+    def _can_fuse_set_of_gridded_perms(self, fuse_counter):
+        """
+        Check if a set of gridded permutations can be fused.
+        """
+        return all(self._is_valid_count(count, gp) for gp, count in
+            fuse_counter.items())
+
+    def _is_valid_count(self, count, gp):
+        """
+        Check if the fuse count `count` for a given gridded permutation `gp` is
+        valid.
+        """
+        return (self._point_in_fuse_region(gp) + 1 == count)
+
+    def _point_in_fuse_region(self, fused_gp):
+        """
+        Return the number of point of the gridded permutation `fused_gp` in the
+        fused row or column.
+        """
+        if self._fuse_row:
+            return sum(1 for cell in fused_gp.pos if cell[1] == self._row_idx)
+        else:
+            return sum(1 for cell in fused_gp.pos if cell[0] == self._col_idx)
+
+    def fusable(self):
+        """
+        Check if the fusion is possible.
+        """
+        return (self._can_fuse_set_of_gridded_perms(self.obstruction_fuse_counter) and
+                all(self._can_fuse_set_of_gridded_perms(counter) for counter in
+                   self.requirements_fuse_counters))
+
+    def fused_tiling(self):
+        """
+        Return the fused tiling.
+        """
+        return Tiling(
+            obstructions = self.obstruction_fuse_counter.keys(),
+            requirements = map(dict.keys, self.requirements_fuse_counters),
+        )
+
+    def formal_step(self):
+        """
+        Return the formal step of the fusion.
+        """
+        if self._fuse_row:
+            return f"Fuse rows {self._row_idx} and {self._row_idx+1}."
+        else:
+            return f"Fuse columns {self._col_idx} and {self._col_idx+1}."
+
+    def rule(self):
+        """
+        Return a tilescope rule for the fusion.
+        """
+        return Rule(formal_step=self.formal_step(),
+                    comb_classes=[self.fused_tiling()],
+                    inferable=[True],
+                    workable=[True],
+                    possibly_empty=[False],
+                    constructor='other')
 
 
-def fuse_gridded_perm(gp, row_index, row=True):
-    """Fuses rows 'row_index' and 'row_index + 1'."""
-    fused_pos = []
-    for cell in gp.pos:
-        x, y = cell
-        if row and y > row_index:
-            y -= 1
-        elif not row and x > row_index:
-            x -= 1
-        fused_pos.append((x, y))
-    return  gp.__class__(gp.patt, fused_pos)
+def general_fusion_iterator(tiling, fusion_class):
+    """
+    Generator over rules found by fusing rows or columns of `tiling` using
+    the fusion defined by `fusion_class`.
+    """
+    assert issubclass(fusion_class, Fusion)
+    ncol = tiling.dimensions[1]
+    nrow = tiling.dimensions[0]
+    possible_fusion = chain(
+        (Fusion(tiling, row_idx=r) for r in range(nrow-1)),
+        (Fusion(tiling, col_idx=c) for c in range(ncol-1))
+    )
+    return (fusion.rule() for fusion in possible_fusion if fusion.fusable())
+
+fusion = partial(general_fusion_iterator, fusion_class=Fusion)
+update_wrapper(fusion, general_fusion_iterator)
+fusion.__doc__ = """Generator over rules found by fusing rows or columns of `tiling`."""
