@@ -18,8 +18,7 @@ class FusionWithInterleaving(Fusion):
         self._bases = tiling.cell_basis()
 
     def _pre_check(self):
-        if self._tiling.requirements:
-            return False
+        return not self._tiling.requirements
 
     def fusable(self, **kwargs):
         """Return true if adjacent rows can be viewed as one row where you draw a
