@@ -160,7 +160,7 @@ class Fusion(object):
                     constructor='other')
 
 
-def general_fusion_iterator(tiling, fusion_class):
+def general_fusion_iterator(tiling, fusion_class, **kwargs):
     """
     Generator over rules found by fusing rows or columns of `tiling` using
     the fusion defined by `fusion_class`.
