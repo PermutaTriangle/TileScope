@@ -477,6 +477,8 @@ def hack(tiling, **kwargs):
                         workable=[True for _ in range(2)],
                         constructor='disjoint')
 
+from tilescopethree.strategies.equivalence_strategies.fusion_with_point_req import fusion_with_point_req 
+
 hack_pack = TileScopePack(
     initial_strats=[hack, partial(factor, interleaving=True, unions=True), requirement_corroboration, fusion],
     inferral_strats=[row_and_column_separation, obstruction_transitivity],
@@ -486,7 +488,7 @@ hack_pack = TileScopePack(
     name="hack_pack")
 
 try_everything2 = TileScopePack(
-    initial_strats=[partial(factor, interleaving=True, unions=True), requirement_corroboration, fusion],
+    initial_strats=[partial(factor, interleaving=True, unions=True), requirement_corroboration, fusion_with_point_req],
     inferral_strats=[row_and_column_separation, obstruction_transitivity],
     expansion_strats=[[partial(all_requirement_insertions, no_reqs=True, maxlen=2), requirement_placement]],
     ver_strats=[subset_verified, globally_verified],
@@ -494,7 +496,7 @@ try_everything2 = TileScopePack(
     name="try_everything2")
 
 try_everything3 = TileScopePack(
-    initial_strats=[partial(factor, interleaving=True, unions=True), requirement_corroboration, fusion],
+    initial_strats=[partial(factor, interleaving=True, unions=True), requirement_corroboration, fusion_with_point_req],
     inferral_strats=[row_and_column_separation, obstruction_transitivity],
     expansion_strats=[[partial(all_requirement_insertions, no_reqs=True, maxlen=3), requirement_placement]],
     ver_strats=[subset_verified, globally_verified],
@@ -502,7 +504,7 @@ try_everything3 = TileScopePack(
     name="try_everything3")
 
 try_everything4 = TileScopePack(
-    initial_strats=[partial(factor, interleaving=True, unions=True), requirement_corroboration, fusion],
+    initial_strats=[partial(factor, interleaving=True, unions=True), requirement_corroboration, fusion_with_point_req],
     inferral_strats=[row_and_column_separation, obstruction_transitivity],
     expansion_strats=[[partial(all_requirement_insertions, no_reqs=True, maxlen=4), requirement_placement]],
     ver_strats=[subset_verified, globally_verified],
