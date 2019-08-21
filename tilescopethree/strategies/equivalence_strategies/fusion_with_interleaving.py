@@ -143,9 +143,10 @@ class FusionWithInterleaving(Fusion):
         else:
             return f"Fuse fancily columns {self._col_idx} and {self._col_idx+1}."
 
-fusion_with_interleaving = partial(general_fusion_iterator, fusion_class=FusionWithInterleaving)
-update_wrapper(fusion_with_interleaving, general_fusion_iterator)
-fusion_with_interleaving.__doc__ = """
+def fusion_with_interleaving(tiling, **kwargs):
+    """
     Yield rules found by fusing rows and columns of a tiling, where the
     unfused tiling obtained by drawing a line through certain heights/indices
     """
+    yield from general_fusion_iterator(tiling,
+                                       fusion_class=FusionWithInterleaving)
