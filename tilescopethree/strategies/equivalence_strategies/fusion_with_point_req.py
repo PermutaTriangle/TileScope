@@ -53,7 +53,9 @@ class FusionWithPointReq(Fusion):
         return super().formal_step() + ' Ignoring point requirement.'
 
 
-fusion_with_point_req = partial(general_fusion_iterator, fusion_class=FusionWithPointReq)
-update_wrapper(fusion_with_point_req, general_fusion_iterator)
-fusion_with_point_req.__doc__ = """Generator over rules found by fusing rows or columns of
-`tiling`. Point requirements are ignored"""
+def fusion_with_point_req(tiling, **kwargs):
+    """
+    Generator over rules found by fusing rows or columns of `tiling`.
+    Point requirements are ignored
+    """
+    yield from general_fusion_iterator(tiling, fusion_class=FusionWithPointReq)
