@@ -1,6 +1,7 @@
 """An inferral function that tries to separate cells in rows and columns."""
 from collections import defaultdict
-from comb_spec_searcher import InferralStrategy
+
+from comb_spec_searcher import InferralRule
 from tilings import Tiling
 
 
@@ -267,4 +268,4 @@ def row_and_column_separation(tiling, **kwargs):
                       if (cell_map(c) in fwd_map and
                           fwd_map[cell_map(c)] in
                           separated_tiling.active_cells)}])
-        return InferralStrategy(formal_step, separated_tiling)
+        return InferralRule(formal_step, separated_tiling)

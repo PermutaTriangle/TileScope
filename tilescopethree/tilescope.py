@@ -6,11 +6,12 @@
                           |
                           '
 """
+from logzero import logger
+
 from comb_spec_searcher import CombinatorialSpecificationSearcher
-from tilings import Obstruction, Tiling
 from permuta import Perm
 from permuta.descriptors import Basis
-from logzero import logger
+from tilings import Obstruction, Tiling
 
 
 class TileScopeTHREE(CombinatorialSpecificationSearcher):

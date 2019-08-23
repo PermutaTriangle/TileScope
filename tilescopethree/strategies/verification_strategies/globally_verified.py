@@ -1,4 +1,5 @@
-from comb_spec_searcher import VerificationStrategy
+from comb_spec_searcher import VerificationRule
+
 from .subset_verified import subset_verified
 
 
@@ -13,7 +14,7 @@ def globally_verified(tiling, **kwargs):
             if (all(all(not r.is_interleaving() for r in req)
                     for req in tiling.requirements) and
                     not possible_tautology(tiling)):
-                return VerificationStrategy(formal_step="Globally verified.")
+                return VerificationRule(formal_step="Globally verified.")
     else:
         return subset_verified(tiling, **kwargs)
 

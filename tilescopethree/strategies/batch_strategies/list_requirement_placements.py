@@ -1,10 +1,9 @@
-from comb_spec_searcher import Strategy
-from permuta.misc import DIR_EAST, DIR_NORTH, DIR_SOUTH, DIR_WEST, DIR_NONE
-
-from tilings import Obstruction, Requirement, Tiling
-
 from itertools import chain
+
+from comb_spec_searcher import Rule
 from permuta import Perm
+from permuta.misc import DIR_EAST, DIR_NONE, DIR_NORTH, DIR_SOUTH, DIR_WEST
+from tilings import Obstruction, Requirement, Tiling
 
 
 def requirement_list_placement(tiling, **kwargs):
@@ -14,7 +13,7 @@ def requirement_list_placement(tiling, **kwargs):
             tilings = place_requirement_list(tiling, req, direction)
             if tilings is None:
                 continue
-            yield Strategy(
+            yield Rule(
                         formal_step=("Place requirement {} in direction {}."
                                      "".format(req, direction)),
                         comb_classes=tilings,
@@ -103,8 +102,8 @@ def row_placements(tiling, row=True, positive=True, regions=False, **kwargs):
                                                          direction)
                     if not positive:
                         tilings = [empty_row_tiling] + tilings
-                    yield Strategy(
-                        formal_step=("Placing {} {} in direction {}.|{}|{}|{}|"
+                    yield Rule(
+                        formal_step=("Placing {} {} in direction {}."
                                      "".format("row" if row else "col",
                                                i, direction,
                                                i, direction, int(positive))),

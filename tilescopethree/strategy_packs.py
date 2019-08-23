@@ -1,6 +1,7 @@
-from comb_spec_searcher import StrategyPack as Pack
 from functools import partial
-from tilescopethree.strategies import (all_cell_insertions,
+
+from comb_spec_searcher import StrategyPack as Pack
+from tilescopethree.strategies import (all_cell_insertions, all_col_insertions,
                                        all_point_insertions,
                                        all_requirement_extensions,
                                        root_requirement_insertion,
@@ -11,8 +12,8 @@ from tilescopethree.strategies import (all_cell_insertions,
                                        globally_verified,
                                        elementary_verified,
                                        obstruction_transitivity,
-                                       point_placement, requirement_placement,
-                                       verify_points,
+                                       partial_requirement_placement,
+                                       point_placement,
                                        requirement_corroboration,
                                        row_and_column_separation,
                                        subset_verified, insertion_encoding,

@@ -1,7 +1,8 @@
 from collections import defaultdict
-from comb_spec_searcher import InferralStrategy
+
+from comb_spec_searcher import InferralRule
 from permuta import Perm
-from tilings import Tiling, Obstruction
+from tilings import Obstruction, Tiling
 
 
 def compute_new_ineqs(pos, ineqs):
@@ -99,7 +100,7 @@ def obstruction_transitivity(tiling, **kwargs):
             newineqs.append(((left, row), (right, row)))
 
     if newineqs:
-        return InferralStrategy(
+        return InferralRule(
             "Computing transitivity of inequalities.",
             Tiling(obstructions=(tiling.obstructions + tuple(
                    compute_ineq_ob(left, right) for left, right in newineqs)),

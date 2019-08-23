@@ -1,10 +1,10 @@
 from itertools import chain
 
-from comb_spec_searcher import EquivalenceStrategy
-from tilings import Obstruction, Requirement, Tiling
+from comb_spec_searcher import EquivalenceRule
 from permuta import Perm
 from permuta.misc import (DIR_EAST, DIR_NONE, DIR_NORTH, DIR_SOUTH, DIR_WEST,
                           DIRS)
+from tilings import Obstruction, Requirement, Tiling
 
 
 def opposite_dir(DIR):
@@ -110,7 +110,7 @@ def partial_requirement_placement(tiling, **kwargs):
             for DIR in directions:
                 placedtiling = partial_place_point_of_requirement(
                                                         tiling, ri, i, DIR)
-                yield EquivalenceStrategy(
+                yield EquivalenceRule(
                     formal_step=("Partially placing point {} of requirement {}"
                                  " with force {}").format(
                                      (i, reqs[0].patt[i]), str(reqs[0]), DIR),

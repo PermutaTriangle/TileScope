@@ -1,3 +1,6 @@
+import importlib
+from functools import partial
+
 from comb_spec_searcher import StrategyPack
 from comb_spec_searcher.utils import get_func_name
 from tilings import Tiling

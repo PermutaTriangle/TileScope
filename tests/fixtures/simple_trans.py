@@ -1,6 +1,6 @@
 import pytest
-from tilings import Obstruction, Requirement, Tiling
 from permuta import Perm
+from tilings import Obstruction, Requirement, Tiling
 
 
 @pytest.fixture
