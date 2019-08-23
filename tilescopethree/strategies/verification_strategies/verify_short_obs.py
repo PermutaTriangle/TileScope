@@ -1,6 +1,6 @@
 """A strategy for checking if a tiling only has obstructions of length at most two."""
 
-from comb_spec_searcher import VerificationStrategy
+from comb_spec_searcher import VerificationRule
 
 def verify_short_obstructions(tiling, **kwargs):
     """
@@ -10,4 +10,4 @@ def verify_short_obstructions(tiling, **kwargs):
         return None
     else:
         if all(len(obs)<3 for obs in tiling.obstructions):
-            return VerificationStrategy(formal_step=("The tiling only has obstructions of length at most two."))
+            return VerificationRule(formal_step=("The tiling only has obstructions of length at most two."))

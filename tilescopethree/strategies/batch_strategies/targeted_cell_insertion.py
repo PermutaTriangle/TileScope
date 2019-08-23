@@ -1,4 +1,4 @@
-from comb_spec_searcher import Strategy
+from comb_spec_searcher import Rule
 from permuta.misc import UnionFind
 
 def targeted_cell_insertion(tiling, **kwargs):
@@ -7,13 +7,13 @@ def targeted_cell_insertion(tiling, **kwargs):
     if not factors:
         return
     for f in factors:
-        yield Strategy("Insert {}.".format(repr(f)),
-                       [tiling.add_obstruction(f.patt, f.pos),
-                        tiling.add_requirement(f.patt, f.pos)],
-                       inferable=[True, True],
-                       workable=[True, True],
-                       ignore_parent=True,
-                       constructor='disjoint')
+        yield Rule("Insert {}.".format(repr(f)),
+                   [tiling.add_obstruction(f.patt, f.pos),
+                    tiling.add_requirement(f.patt, f.pos)],
+                   inferable=[True, True],
+                   workable=[True, True],
+                   ignore_parent=True,
+                   constructor='disjoint')
 
 
 def components(tiling):

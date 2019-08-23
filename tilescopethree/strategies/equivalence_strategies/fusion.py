@@ -1,6 +1,6 @@
 """The fusion strategy."""
 from collections import defaultdict
-from comb_spec_searcher import Strategy
+from comb_spec_searcher import Rule
 from tilings import Tiling
 
 
@@ -8,18 +8,18 @@ def fusion(tiling, **kwargs):
     """Yield rules found by fusing rows and columns of a tiling."""
     for row_index in range(tiling.dimensions[1] - 1):
         if fusable(tiling, row_index, True):
-            yield Strategy(("Fuse rows {} and {}|{}|."
-                            "").format(row_index, row_index + 1, row_index),
-                           [fuse_tiling(tiling, row_index, True)],
-                           inferable=[True], workable=[True],
-                           possibly_empty=[False], constructor='other')
+            yield Rule(("Fuse rows {} and {}|{}|."
+                        "").format(row_index, row_index + 1, row_index),
+                       [fuse_tiling(tiling, row_index, True)],
+                       inferable=[True], workable=[True],
+                       possibly_empty=[False], constructor='other')
     for col_index in range(tiling.dimensions[0] - 1):
         if fusable(tiling, col_index, False):
-            yield Strategy(("Fuse columns {} and {}|{}|."
-                            "").format(col_index, col_index + 1, col_index),
-                           [fuse_tiling(tiling, col_index, False)],
-                           inferable=[True], workable=[True],
-                           possibly_empty=[False], constructor='other')
+            yield Rule(("Fuse columns {} and {}|{}|."
+                        "").format(col_index, col_index + 1, col_index),
+                       [fuse_tiling(tiling, col_index, False)],
+                       inferable=[True], workable=[True],
+                       possibly_empty=[False], constructor='other')
 
 def fusable(tiling, row_index, row):
     """Return True if rows 'row_index' and 'row_index + 1' can be fused."""

@@ -1,7 +1,7 @@
 """The deflation strategy."""
 from permuta import Perm
 from tilings import Obstruction, Tiling
-from comb_spec_searcher import Strategy
+from comb_spec_searcher import Rule
 
 def deflation(tiling, **kwargs):
     """Yield all deflation strategies.
@@ -11,20 +11,20 @@ def deflation(tiling, **kwargs):
     bases = tiling.cell_basis()
     for cell in tiling.possibly_empty:
         cell_basis = bases[cell][0]
-        if sum_closed(cell_basis): 
+        if sum_closed(cell_basis):
             if can_deflate(tiling, cell, True):
-                yield Strategy("Sum deflate cell {}.".format(cell),
-                            [deflated_tiling(tiling, cell, sum_decomp=True)],
-                             inferable=[True], workable=[True], 
-                             possibly_empty=[False], ignore_parent=False, 
-                             constructor="other")
+                yield Rule("Sum deflate cell {}.".format(cell),
+                           [deflated_tiling(tiling, cell, sum_decomp=True)],
+                           inferable=[True], workable=[True],
+                           possibly_empty=[False], ignore_parent=False,
+                           constructor="other")
         if skew_closed(cell_basis):
             if can_deflate(tiling, cell, False):
-                yield Strategy("Skew deflate cell {}.".format(cell),
-                            [deflated_tiling(tiling, cell, sum_decomp=False)],
-                            inferable=[True], workable=[True], 
-                            possibly_empty=[False], ignore_parent=False, 
-                            constructor="other")
+                yield Rule("Skew deflate cell {}.".format(cell),
+                           [deflated_tiling(tiling, cell, sum_decomp=False)],
+                           inferable=[True], workable=[True],
+                           possibly_empty=[False], ignore_parent=False,
+                           constructor="other")
 
 def sum_closed(basis):
     return all(not p.is_sum_decomposable() for p in basis)
@@ -38,14 +38,14 @@ def can_deflate(tiling, cell, sum_decomp):
 
     if alone_in_row and alone_in_col:
         return False
-    
+
     deflate_patt = Obstruction.single_cell(Perm((1, 0)) if sum_decomp
                                            else Perm((0, 1)), cell)
 
-    # we must be sure that no cell in a row or column can interleave 
+    # we must be sure that no cell in a row or column can interleave
     # with any reinflated components, so collect cells that do not.
     cells_not_interleaving = set([cell])
-    
+
     for ob in tiling.obstructions:
         if ob == deflate_patt:
             return False
@@ -54,7 +54,7 @@ def can_deflate(tiling, cell, sum_decomp):
         number_points_in_cell = sum(1 for c in ob.pos if c == cell)
         if number_points_in_cell == 1:
             if len(ob) == 2:
-                # not interleaving with cell as separating if 
+                # not interleaving with cell as separating if
                 # in same row or column
                 other_cell = [c for c in ob.pos if c != cell][0]
                 cells_not_interleaving.add(other_cell)
@@ -65,10 +65,10 @@ def can_deflate(tiling, cell, sum_decomp):
             if patt_in_cell != deflate_patt:
                 # you can interleave with components
                 return False
-            # we need the other cell to be in between the intended deflate 
+            # we need the other cell to be in between the intended deflate
             # patt in either the row or column
             other_cell = [c for c in ob.pos if c != cell][0]
-            if (point_in_between(ob, True, cell, other_cell) or 
+            if (point_in_between(ob, True, cell, other_cell) or
                 point_in_between(ob, False, cell, other_cell)):
                 # this cell does not interleave with inflated components
                 cells_not_interleaving.add(other_cell)
@@ -80,7 +80,7 @@ def can_deflate(tiling, cell, sum_decomp):
     # check that do not interleave with any cells in row or column.
     return (cells_not_interleaving >= tiling.cells_in_row(cell[1]) and
             cells_not_interleaving >= tiling.cells_in_col(cell[0]))
-            
+
 
 
 
@@ -120,7 +120,7 @@ def can_deflate(tiling, cell, sum_decomp):
 #                 (not sum_decomp and patt_in_cell == Perm((0, 1)))):
 #             if point_in_between(ob, row, cell, other_cell):
 #                 deflating.add(other_cell)
-#     return ((not col or deflating >= set(tiling.cells_in_col(cell[0]))) 
+#     return ((not col or deflating >= set(tiling.cells_in_col(cell[0])))
 #             and (not row or deflating >= set(tiling.cells_in_row(cell[1]))))
 
 def point_in_between(ob, row, cell, other_cell):

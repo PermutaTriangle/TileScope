@@ -1,5 +1,5 @@
 from permuta import Perm
-from comb_spec_searcher import VerificationStrategy
+from comb_spec_searcher import VerificationRule
 from .subset_verified import subset_verified
 from .globally_verified import possible_tautology
 
@@ -27,6 +27,6 @@ def slicing_verified(tiling, **kwargs):
             if (all(all((r.is_single_row() or len(r) <= 2) for r in req)
                     for req in tiling.requirements) and
                     not possible_tautology(tiling)):
-                return VerificationStrategy(formal_step="Slicing verified.")
+                return VerificationRule(formal_step="Slicing verified.")
     else:
         return subset_verified(tiling, **kwargs)

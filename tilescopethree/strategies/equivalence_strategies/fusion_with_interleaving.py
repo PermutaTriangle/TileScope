@@ -1,7 +1,7 @@
 """The more general fusion strategy. Fuse two rows if actually one row where
 you can draw a line somewhere."""
 from collections import defaultdict
-from comb_spec_searcher import Strategy
+from comb_spec_searcher import Rule
 from tilings import Tiling, Obstruction
 from tilescopethree.strategies.equivalence_strategies.fusion import fuse_gridded_perm
 # from tilescopethree.strategies.equivalence_strategies.fusion import fusable as original_fusable # for print statements
@@ -18,11 +18,11 @@ def fusion_with_interleaving(tiling, **kwargs):
     bases = tiling.cell_basis()
     for row_index in range(tiling.dimensions[1] - 1):
         if fusable(tiling, row_index, bases, True, **kwargs):
-            yield Strategy(("Fuse rows fancily {} and {}|{}|."
-                            "").format(row_index, row_index + 1, row_index),
-                           [fuse_tiling(tiling, row_index, True)],
-                           inferable=[True], workable=[True],
-                           possibly_empty=[False], constructor='other')
+            yield Rule(("Fuse rows fancily {} and {}|{}|."
+                        "").format(row_index, row_index + 1, row_index),
+                       [fuse_tiling(tiling, row_index, True)],
+                       inferable=[True], workable=[True],
+                       possibly_empty=[False], constructor='other')
     for col_index in range(tiling.dimensions[0] - 1):
         if fusable(tiling, col_index, bases, False, **kwargs):
             # if not original_fusable(tiling, col_index, False):
@@ -30,11 +30,11 @@ def fusion_with_interleaving(tiling, **kwargs):
             #     print("On the tiling:")
             #     print(tiling)
             #     print("Column {} is fancy fusable but not ordinary fusable. Explain.".format(col_index))
-            yield Strategy(("Fuse columns fancily {} and {}|{}|."
-                            "").format(col_index, col_index + 1, col_index),
-                           [fuse_tiling(tiling, col_index, False)],
-                           inferable=[True], workable=[True],
-                           possibly_empty=[False], constructor='other')
+            yield Rule(("Fuse columns fancily {} and {}|{}|."
+                        "").format(col_index, col_index + 1, col_index),
+                       [fuse_tiling(tiling, col_index, False)],
+                       inferable=[True], workable=[True],
+                       possibly_empty=[False], constructor='other')
         # elif original_fusable(tiling, col_index, False):
         #     print("================================")
         #     print("On the tiling:")
