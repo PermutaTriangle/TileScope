@@ -13,10 +13,10 @@ from tilescopethree.strategies import (all_cell_insertions, all_col_insertions,
                                        elementary_verified,
                                        obstruction_transitivity,
                                        partial_requirement_placement,
-                                       point_placement,
+                                       point_placement, requirement_placement,
                                        requirement_corroboration,
                                        row_and_column_separation,
-                                       subset_verified, insertion_encoding,
+                                       subset_verified,
                                        subclass_verified, all_row_insertions,
                                        all_col_insertions, col_placements,
                                        row_placements, deflation,
@@ -984,27 +984,6 @@ elementary_length_3_requirement_with_pattern_placement = Pack(
          forward_equivalence=True,
          name="elementary_length_3_requirement_with_pattern_placement")
 
-elementary_row_placements_symmetries = Pack(
-        initial_strats=[],
-        ver_strats=[partial(elementary_verified, symmetry=True)],
-        inferral_strats=[obstruction_transitivity, row_and_column_separation],
-        expansion_strats=[[factor],
-                          [partial(insertion_encoding, symmetry=True)]],
-        iterative=True,
-        forward_equivalence=True,
-        name="elementary_row_placements_symmetries")
-
-elementary_row_placements_symmetries_top_and_bottom = Pack(
-        initial_strats=[],
-        ver_strats=[partial(elementary_verified, symmetry=True)],
-        inferral_strats=[obstruction_transitivity, row_and_column_separation],
-        expansion_strats=[[factor],
-                          [partial(insertion_encoding, symmetry=True,
-                                   top_and_bottom=True)]],
-        iterative=True,
-        forward_equivalence=True,
-        name="elementary_row_placements_symmetries_top_and_bottom")
-
 elementary_point_placement_no_factors = Pack(
          initial_strats=[point_placement],
          ver_strats=[elementary_verified],
@@ -1057,119 +1036,6 @@ elementary_length_3_requirement_with_pattern_placement_no_factors = Pack(
          iterative=True,
          name=("elementary_length_3_requirement_with_pattern_placement_"
                "no_factors"))
-
-elementary_row_placements_symmetries_no_factors = Pack(
-        initial_strats=[],
-        ver_strats=[partial(elementary_verified, symmetry=True)],
-        inferral_strats=[row_and_column_separation, obstruction_transitivity],
-        expansion_strats=[[partial(insertion_encoding, symmetry=True)]],
-        iterative=True,
-        name="elementary_row_placements_symmetries_no_factors")
-
-elementary_row_placements_symmetries_top_and_bottom_no_factors = Pack(
-        initial_strats=[],
-        ver_strats=[partial(elementary_verified, symmetry=True)],
-        inferral_strats=[row_and_column_separation, obstruction_transitivity],
-        expansion_strats=[[partial(insertion_encoding, symmetry=True,
-                                   top_and_bottom=True)]],
-        iterative=True,
-        name="elementary_row_placements_symmetries_top_and_bottom_no_factors")
-
-regular_insertion_encoding = Pack(
-        initial_strats=[],
-        ver_strats=[verify_points],
-        inferral_strats=[],
-        expansion_strats=[[factor], [insertion_encoding]],
-        name="regular_insertion_encoding")
-
-regular_insertion_encoding_symmetries = Pack(
-        initial_strats=[],
-        ver_strats=[verify_points],
-        inferral_strats=[],
-        expansion_strats=[[factor],
-                          [partial(insertion_encoding, symmetry=True)]],
-        name="regular_insertion_encoding_symmetries")
-
-regular_insertion_encoding_top_and_bottom = Pack(
-        initial_strats=[],
-        ver_strats=[verify_points],
-        inferral_strats=[],
-        expansion_strats=[[factor],
-                          [partial(insertion_encoding, top_and_bottom=True)]],
-        name="regular_insertion_encoding_top_and_bottom")
-
-regular_insertion_encoding_symmetries_top_and_bottom = Pack(
-        initial_strats=[],
-        ver_strats=[verify_points],
-        inferral_strats=[],
-        expansion_strats=[[factor],
-                          [partial(insertion_encoding, symmetry=True,
-                                   top_and_bottom=True)]],
-        name="regular_insertion_encoding_symmetries_top_and_bottom")
-
-better_insertion_encoding = Pack(
-        initial_strats=[],
-        ver_strats=[verify_points],
-        inferral_strats=[row_and_column_separation, obstruction_transitivity],
-        expansion_strats=[[factor], [insertion_encoding]],
-        name="better_insertion_encoding")
-
-better_insertion_encoding_symmetries = Pack(
-        initial_strats=[],
-        ver_strats=[verify_points],
-        inferral_strats=[row_and_column_separation, obstruction_transitivity],
-        expansion_strats=[[factor],
-                          [partial(insertion_encoding, symmetry=True)]],
-        name="better_insertion_encoding_symmetries")
-
-better_insertion_encoding_top_and_bottom = Pack(
-        initial_strats=[],
-        ver_strats=[verify_points],
-        inferral_strats=[row_and_column_separation, obstruction_transitivity],
-        expansion_strats=[[factor],
-                          [partial(insertion_encoding, top_and_bottom=True)]],
-        name="better_insertion_encoding_top_and_bottom")
-
-better_insertion_encoding_symmetries_top_and_bottom = Pack(
-        initial_strats=[],
-        ver_strats=[verify_points],
-        inferral_strats=[row_and_column_separation, obstruction_transitivity],
-        expansion_strats=[[factor],
-                          [partial(insertion_encoding, symmetry=True,
-                                   top_and_bottom=True)]],
-        name="better_insertion_encoding_symmetries_top_and_bottom")
-
-super_insertion_encoding = Pack(
-        initial_strats=[],
-        ver_strats=[globally_verified],
-        inferral_strats=[row_and_column_separation, obstruction_transitivity],
-        expansion_strats=[[factor], [insertion_encoding]],
-        name="super_insertion_encoding")
-
-super_insertion_encoding_sym = Pack(
-        initial_strats=[],
-        ver_strats=[partial(globally_verified, symmetry=True)],
-        inferral_strats=[row_and_column_separation, obstruction_transitivity],
-        expansion_strats=[[factor],
-                          [partial(insertion_encoding, symmetry=True)]],
-        name="super_insertion_encoding_sym")
-
-super_insertion_encoding_tab = Pack(
-        initial_strats=[],
-        ver_strats=[partial(globally_verified, symmetry=True)],
-        inferral_strats=[row_and_column_separation, obstruction_transitivity],
-        expansion_strats=[[factor],
-                          [partial(insertion_encoding, top_and_bottom=True)]],
-        name="super_insertion_encoding_tab")
-
-super_insertion_encoding_sym_tab = Pack(
-        initial_strats=[],
-        ver_strats=[partial(globally_verified, symmetry=True)],
-        inferral_strats=[row_and_column_separation, obstruction_transitivity],
-        expansion_strats=[[factor],
-                          [partial(insertion_encoding, symmetry=True,
-                                   top_and_bottom=True)]],
-        name="super_insertion_encoding_sym_tab")
 
 natural_point_placement_no_database_only = Pack(
          initial_strats=[requirement_placement],
