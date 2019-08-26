@@ -260,4 +260,12 @@ def row_and_column_separation(tiling, **kwargs):
         formal_step = "Separated rows [{}] and columns [{}]".format(
             ", ".join(map(str, separated_rows)),
             ", ".join(map(str, separated_cols)))
+        if kwargs.get('regions', False):
+            fwd_map = separated_tiling.forward_map
+            return ([separated_tiling],
+                    [{c: set([fwd_map[cell_map(c)]])
+                      for c in tiling.active_cells
+                      if (cell_map(c) in fwd_map and
+                          fwd_map[cell_map(c)] in
+                          separated_tiling.active_cells)}])
         return InferralRule(formal_step, separated_tiling)

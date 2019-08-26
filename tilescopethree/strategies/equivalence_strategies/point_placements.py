@@ -19,7 +19,8 @@ def opposite_dir(DIR):
     return DIR_NONE
 
 
-def place_point_of_requirement(tiling, req_index, point_index, force_dir):
+def place_point_of_requirement(tiling, req_index, point_index, force_dir,
+                               **kwargs):
     """
     Places the point at point_index in requirement at req_index into tiling.
     """
@@ -56,7 +57,30 @@ def place_point_of_requirement(tiling, req_index, point_index, force_dir):
                                         for req in reqs))
                for reqs in other_reqs] + [new_req] + [
                        [Requirement.single_cell(Perm((0,)), point_cell)]]
-    return Tiling(obstructions=newobs, requirements=newreqs)
+
+    placed_tiling = Tiling(obstructions=newobs, requirements=newreqs)
+    if kwargs.get('regions', False):
+        def cell_map(c):
+            mindex, minval = c
+            maxdex = mindex + 1
+            maxval = minval + 1
+            if mindex >= cell[0]:
+                maxdex += 2
+            if minval >= cell[1]:
+                maxval += 2
+            if mindex > cell[0]:
+                mindex += 2
+            if minval > cell[1]:
+                minval += 2
+            return set([placed_tiling.forward_map[(x, y)]
+                        for x in range(mindex, maxdex)
+                        for y in range(minval, maxval)
+                        if ((x, y) in placed_tiling.forward_map and
+                            placed_tiling.forward_map[(x, y)] in
+                            placed_tiling.active_cells)])
+        return [placed_tiling], [{c: cell_map(c) for c in tiling.active_cells}]
+
+    return placed_tiling
 
 
 def requirement_placement(tiling, **kwargs):

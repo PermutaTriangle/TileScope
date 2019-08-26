@@ -32,7 +32,6 @@ def possible_tautology(tiling):
             return False
     return True
 
-
 def elementary_verified(tiling, **kwargs):
     """A tiling is elementary verified if it is globally verified and has no
     interleaving cells."""

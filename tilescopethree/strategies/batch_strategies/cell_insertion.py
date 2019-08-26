@@ -59,6 +59,19 @@ def all_cell_insertions(tiling, **kwargs):
                             workable=[True for _ in range(2)],
                             constructor='disjoint')
 
+def cell_insertion(tiling, patt, cell, regions=False):
+    """Return a tuple, the first avoids pattern in the cell, and the second
+    contains it."""
+    if regions:
+        return ([tiling.add_single_cell_obstruction(patt, cell),
+                 tiling.add_single_cell_requirement(patt, cell)],
+                [{c: frozenset([c]) for c in tiling.active_cells},
+                 {c: frozenset([c]) for c in tiling.active_cells}])
+    else:
+        return [tiling.add_single_cell_obstruction(patt, cell),
+                tiling.add_single_cell_requirement(patt, cell)]
+
+
 
 def cell_insertion(tiling, patt, cell, regions=False):
     """Return a tuple, the first avoids pattern in the cell, and the second
