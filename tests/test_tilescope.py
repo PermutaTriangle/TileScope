@@ -12,9 +12,10 @@ def test_132():
     searcher = TileScopeTHREE('132', row_and_col_placements)
     t = searcher.auto_search()
     assert isinstance(t, ProofTree)
+    gf = sympy.series(t.get_genf(), n=15)
     x = sympy.Symbol('x')
-    expected_gf = (1 - sympy.sqrt(1 - 4*x))/(2*x)
-    assert t.get_genf() == expected_gf
+    assert ([gf.coeff(x, n) for n in range(13)] ==
+            [1, 1, 2, 5, 14, 42, 132, 429, 1430, 4862, 16796, 58786, 208012])
 
 
 @pytest.mark.timeout(20)
