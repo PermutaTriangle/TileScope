@@ -1,11 +1,15 @@
-from tilings import Tiling, Requirement
+from tilescopethree import TileScopeTHREE
+from tilescopethree.strategies.batch_strategies.cell_insertion import \
+    all_cell_insertions
+from tilescopethree.strategies.equivalence_strategies.fusion_with_interleaving import (
+    fusable, fuse_tiling)
+from tilescopethree.strategies.equivalence_strategies.point_placements import \
+    place_point_of_requirement
+from tilescopethree.strategy_packs import point_placements
+
 from permuta import Perm
 from permuta.descriptors import Basis
-from tilescopethree import TileScopeTHREE
-from tilescopethree.strategy_packs import point_placements
-from tilescopethree.strategies.equivalence_strategies.point_placements import place_point_of_requirement
-from tilescopethree.strategies.batch_strategies.cell_insertion import all_cell_insertions
-from tilescopethree.strategies.equivalence_strategies.fusion_with_interleaving import fusable, fuse_tiling
+from tilings import Requirement, Tiling
 
 basis = input("Insert basis (in the form 123_132): ")
 
@@ -276,4 +280,3 @@ while True:
 
     old_tasks.append(curr_task)
     curr_task = tilings
-            

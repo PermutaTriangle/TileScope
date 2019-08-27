@@ -1,7 +1,8 @@
-from permuta import Perm
 from comb_spec_searcher import VerificationRule
-from .subset_verified import subset_verified
+from permuta import Perm
+
 from .globally_verified import possible_tautology
+from .subset_verified import subset_verified
 
 
 def slicing_verified(tiling, **kwargs):

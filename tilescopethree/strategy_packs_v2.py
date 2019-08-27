@@ -1,15 +1,11 @@
 import importlib
 from functools import partial
 
-from comb_spec_searcher import StrategyPack
-from comb_spec_searcher.utils import get_func_name
-from tilings import Tiling
-from functools import partial
-from tilescopethree.strategies import (all_cell_insertions,
+from tilescopethree.strategies import (all_cell_insertions, all_col_insertions,
                                        all_requirement_insertions,
-                                       all_col_insertions, all_row_insertions,
-                                       col_placements as col_placements_strat,
-                                       database_verified, elementary_verified,
+                                       all_row_insertions)
+from tilescopethree.strategies import col_placements as col_placements_strat
+from tilescopethree.strategies import (database_verified, elementary_verified,
                                        factor, fusion,
                                        fusion_with_interleaving,
                                        globally_verified,
@@ -20,13 +16,16 @@ from tilescopethree.strategies import (all_cell_insertions,
                                        requirement_list_placement,
                                        requirement_placement,
                                        root_requirement_insertion,
-                                       row_and_column_separation,
-                                       row_placements as row_placements_strat,
+                                       row_and_column_separation)
+from tilescopethree.strategies import row_placements as row_placements_strat
+from tilescopethree.strategies import (subclass_verified,
                                        subobstruction_inferral,
-                                       subclass_verified,
                                        subset_verified, verify_points)
 
-import importlib
+from comb_spec_searcher import StrategyPack
+from comb_spec_searcher.utils import get_func_name
+from tilings import Tiling
+
 
 class TileScopePack(StrategyPack):
 

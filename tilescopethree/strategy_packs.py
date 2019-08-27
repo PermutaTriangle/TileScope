@@ -1,29 +1,28 @@
 from functools import partial
 
-from comb_spec_searcher import StrategyPack as Pack
 from tilescopethree.strategies import (all_cell_insertions, all_col_insertions,
                                        all_point_insertions,
                                        all_requirement_extensions,
-                                       root_requirement_insertion,
-                                       database_verified,
+                                       all_row_insertions, col_placements,
+                                       database_verified, deflation,
+                                       elementary_verified,
                                        empty_cell_inferral, factor, fusion,
                                        fusion_with_interleaving,
-                                       factor, one_by_one_verification,
                                        globally_verified,
-                                       elementary_verified,
                                        obstruction_transitivity,
+                                       one_by_one_verification,
                                        partial_requirement_placement,
-                                       point_placement, requirement_placement,
+                                       point_placement,
                                        requirement_corroboration,
-                                       row_and_column_separation,
-                                       subset_verified,
-                                       subclass_verified, all_row_insertions,
-                                       all_col_insertions, col_placements,
-                                       row_placements, deflation,
                                        requirement_list_placement,
-                                       partial_requirement_placement,
+                                       requirement_placement,
+                                       root_requirement_insertion,
+                                       row_and_column_separation,
+                                       row_placements, subclass_verified,
                                        subobstruction_inferral,
-                                       subclass_verified, deflation)
+                                       subset_verified)
+
+from comb_spec_searcher import StrategyPack as Pack
 
 all_the_strategies = Pack(
         initial_strats=[partial(factor, unions=True), fusion],

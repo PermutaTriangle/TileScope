@@ -1,13 +1,17 @@
 """The more general fusion strategy. Fuse two rows if actually one row where
 you can draw a line somewhere."""
 from collections import defaultdict
+
+from tilescopethree.strategies.equivalence_strategies.fusion import \
+    fuse_gridded_perm
+
 from comb_spec_searcher import Rule
-from tilings import Tiling, Obstruction
-from tilescopethree.strategies.equivalence_strategies.fusion import fuse_gridded_perm
+from permuta import Perm
+from tilings import Obstruction, Tiling
+
 # from tilescopethree.strategies.equivalence_strategies.fusion import fusable as original_fusable # for print statements
 
 
-from permuta import Perm
 
 def fusion_with_interleaving(tiling, **kwargs):
     """Yield rules found by fusing rows and columns of a tiling, where the
@@ -146,5 +150,3 @@ def fuse_tiling(tiling, row_index, row=True, **kwargs):
             cell_to_region[cell] = set([(x, y)])
         return ([fused_tiling], [cell_to_region])
     return fused_tiling
-
-

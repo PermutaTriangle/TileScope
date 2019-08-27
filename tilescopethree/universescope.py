@@ -1,14 +1,20 @@
-from comb_spec_searcher import CombinatorialSpecificationSearcher, ProofTree
-from tilings import Tiling, Obstruction
-from permuta import PermSet
+import json
+import time
 from itertools import combinations
-from tilescopethree.strategies import verify_points
-from comb_spec_searcher.tree_searcher import (proof_tree_generator_bfs, proof_tree_generator_dfs,
-                            prune, iterative_prune, random_proof_tree,
-                            iterative_proof_tree_finder)
 
-from tilescopethree.strategy_packs_v2 import row_placements, row_and_col_placements
-import json, time
+from tilescopethree.strategies import verify_points
+from tilescopethree.strategy_packs_v2 import (row_and_col_placements,
+                                              row_placements)
+
+from comb_spec_searcher import CombinatorialSpecificationSearcher, ProofTree
+from comb_spec_searcher.tree_searcher import (iterative_proof_tree_finder,
+                                              iterative_prune,
+                                              proof_tree_generator_bfs,
+                                              proof_tree_generator_dfs, prune,
+                                              random_proof_tree)
+from permuta import PermSet
+from tilings import Obstruction, Tiling
+
 
 class UniveralScope(CombinatorialSpecificationSearcher):
     def __init__(self, n=None, k=None, strategy_pack=None, flogger_kwargs={'processname': 'runner'},**kwargs):

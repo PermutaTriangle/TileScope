@@ -13,17 +13,16 @@ and have a unique function/variable assigneb to it.
 """
 
 from collections import deque
-from itertools import chain, product
 from functools import reduce
+from itertools import chain, product
 from operator import add, mul
 
-from tilings import Tiling
+import sympy
 from regions import get_fuse_region, parse_formal_step
 
-import sympy
-
-from tilings import Obstruction, Requirement
 from permuta import Perm
+from tilings import Obstruction, Requirement, Tiling
+
 
 class Rule:
     """A class for a combinatorial rule of tilings. It keeps track of how the
@@ -671,4 +670,3 @@ if __name__ == "__main__":
     #                 print(colourspec.pretty_print_equations())
     #             except (AssertionError, ValueError, NotImplementedError, RecursionError) as e:
     #                 print(e)
-

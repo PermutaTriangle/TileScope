@@ -1,7 +1,8 @@
 """The deflation strategy."""
+from comb_spec_searcher import Rule
 from permuta import Perm
 from tilings import Obstruction, Tiling
-from comb_spec_searcher import Rule
+
 
 def deflation(tiling, **kwargs):
     """Yield all deflation strategies.

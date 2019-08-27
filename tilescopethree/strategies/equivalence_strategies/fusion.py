@@ -1,5 +1,6 @@
 """The fusion strategy."""
 from collections import defaultdict
+
 from comb_spec_searcher import Rule
 from tilings import Tiling
 

@@ -2,16 +2,22 @@
 specific strategies."""
 from functools import partial
 
+from tilescopethree.strategies.batch_strategies.cell_insertion import (
+    cell_insertion, col_insertion_helper, row_insertion_helper)
+from tilescopethree.strategies.batch_strategies.list_requirement_placements import \
+    row_placements
+from tilescopethree.strategies.batch_strategies.requirement_corroboration import \
+    gp_insertion
+from tilescopethree.strategies.equivalence_strategies.fusion import fuse_tiling
+from tilescopethree.strategies.equivalence_strategies.fusion_with_interleaving import \
+    fuse_tiling as fancy_fuse_tiling
+from tilescopethree.strategies.equivalence_strategies.point_placements import \
+    place_point_of_requirement
+from tilescopethree.strategies.inferral_strategies.row_and_column_separation import \
+    row_and_column_separation
+
 from permuta import Perm
 from tilings import GriddedPerm, Tiling
-from tilescopethree.strategies.equivalence_strategies.point_placements import place_point_of_requirement
-from tilescopethree.strategies.inferral_strategies.row_and_column_separation import row_and_column_separation
-from tilescopethree.strategies.equivalence_strategies.fusion import fuse_tiling
-from tilescopethree.strategies.batch_strategies.list_requirement_placements import row_placements
-from tilescopethree.strategies.batch_strategies.cell_insertion import cell_insertion
-from tilescopethree.strategies.batch_strategies.cell_insertion import col_insertion_helper, row_insertion_helper
-from tilescopethree.strategies.batch_strategies.requirement_corroboration import gp_insertion
-from tilescopethree.strategies.equivalence_strategies.fusion_with_interleaving import fuse_tiling as fancy_fuse_tiling
 
 
 def mapping_after_initialise(start_tiling, end_tilings, forward_maps):

@@ -2,6 +2,7 @@
 
 from comb_spec_searcher import VerificationRule
 
+
 def verify_short_obstructions(tiling, **kwargs):
     """
     A tiling is verified if it only has obstructions of length at most two.

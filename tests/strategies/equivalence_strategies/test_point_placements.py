@@ -1,8 +1,9 @@
-from permuta import Perm
-from permuta.misc import DIR_EAST, DIR_NORTH, DIR_SOUTH, DIR_WEST, DIRS
 from tilescopethree.strategies import point_placement, requirement_placement
 from tilescopethree.strategies.equivalence_strategies.point_placements import \
     place_point_of_requirement
+
+from permuta import Perm
+from permuta.misc import DIR_EAST, DIR_NORTH, DIR_SOUTH, DIR_WEST, DIRS
 from tilings import Obstruction, Requirement, Tiling
 
 pytest_plugins = [

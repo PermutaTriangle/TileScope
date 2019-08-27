@@ -1,12 +1,14 @@
-from comb_spec_searcher import *
-from tilings import *
-from permuta import *
-from tilescopethree import *
-from tilescopethree.strategy_packs import point_placements_db
+import json
 import sys
 from queue import Queue
-import json
+
+from tilescopethree import *
 from tilescopethree.strategies import one_by_one_verification
+from tilescopethree.strategy_packs import point_placements_db
+
+from comb_spec_searcher import *
+from permuta import *
+from tilings import *
 
 pack = point_placements_db
 pack.ver_strats = [one_by_one_verification]

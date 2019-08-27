@@ -1,6 +1,7 @@
-from tilings import Obstruction, Requirement, Tiling
-from permuta import Perm
 from tilescopethree.strategies import requirement_corroboration
+
+from permuta import Perm
+from tilings import Obstruction, Requirement, Tiling
 
 pytest_plugins = [
     'tests.fixtures.obstructions_requirements'

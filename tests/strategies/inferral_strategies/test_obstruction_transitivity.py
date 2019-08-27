@@ -1,5 +1,6 @@
-from permuta import Perm
 from tilescopethree.strategies import obstruction_transitivity
+
+from permuta import Perm
 from tilings import Obstruction, Requirement, Tiling
 
 pytest_plugins = [

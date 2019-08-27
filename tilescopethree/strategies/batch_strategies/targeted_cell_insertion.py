@@ -1,6 +1,7 @@
 from comb_spec_searcher import Rule
 from permuta.misc import UnionFind
 
+
 def targeted_cell_insertion(tiling, **kwargs):
     """Return combintorial rules formed by inserting """
     factors = factors_of_gridded_perm(tiling)

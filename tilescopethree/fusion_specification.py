@@ -2,21 +2,23 @@
 equivalence."""
 
 from collections import defaultdict
-from itertools import combinations
-from comb_spec_searcher import ProofTree
 from functools import partial, reduce
-from permuta import Perm
-from tilings import Tiling, Obstruction, Requirement
-from tilings.misc import union_reduce
+from itertools import combinations
 from operator import add, mul
-from sympy import Function, Eq, var
+
+from sympy import Eq, Function, var
 from sympy.abc import x
-
-from tilescopethree.strategies.equivalence_strategies.point_placements import place_point_of_requirement
-from tilescopethree.strategies.equivalence_strategies.fusion import fuse_tiling
 from tilescopethree.strategies import row_and_column_separation
-from tilescopethree.strategies.batch_strategies.list_requirement_placements import row_placements
+from tilescopethree.strategies.batch_strategies.list_requirement_placements import \
+    row_placements
+from tilescopethree.strategies.equivalence_strategies.fusion import fuse_tiling
+from tilescopethree.strategies.equivalence_strategies.point_placements import \
+    place_point_of_requirement
 
+from comb_spec_searcher import ProofTree
+from permuta import Perm
+from tilings import Obstruction, Requirement, Tiling
+from tilings.misc import union_reduce
 
 
 class Rule(object):
