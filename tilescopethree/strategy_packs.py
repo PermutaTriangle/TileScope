@@ -1,5 +1,6 @@
 from functools import partial
 
+from comb_spec_searcher import StrategyPack as Pack
 from tilescopethree.strategies import (all_cell_insertions, all_col_insertions,
                                        all_point_insertions,
                                        all_requirement_extensions,
@@ -21,8 +22,6 @@ from tilescopethree.strategies import (all_cell_insertions, all_col_insertions,
                                        row_placements, subclass_verified,
                                        subobstruction_inferral,
                                        subset_verified)
-
-from comb_spec_searcher import StrategyPack as Pack
 
 all_the_strategies = Pack(
     initial_strats=[partial(factor, unions=True), fusion],

@@ -1,6 +1,5 @@
-from tilescopethree.strategies import factor
-
 from permuta import Perm
+from tilescopethree.strategies import factor
 from tilings import Obstruction, Requirement, Tiling
 
 pytest_plugins = [

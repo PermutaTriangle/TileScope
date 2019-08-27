@@ -1,8 +1,7 @@
-from tilescopethree.strategies.batch_strategies.point_placements import \
-    place_point_of_requirement
-
 from comb_spec_searcher import EquivalenceRule
 from permuta.misc import DIR_WEST
+from tilescopethree.strategies.batch_strategies.point_placements import \
+    place_point_of_requirement
 
 
 def point_isolations(tiling, **kwargs):

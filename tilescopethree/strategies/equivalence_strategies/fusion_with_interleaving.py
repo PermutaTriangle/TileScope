@@ -2,11 +2,10 @@
 you can draw a line somewhere."""
 from collections import defaultdict
 
-from tilescopethree.strategies.equivalence_strategies.fusion import \
-    fuse_gridded_perm
-
 from comb_spec_searcher import Rule
 from permuta import Perm
+from tilescopethree.strategies.equivalence_strategies.fusion import \
+    fuse_gridded_perm
 from tilings import Obstruction, Tiling
 
 

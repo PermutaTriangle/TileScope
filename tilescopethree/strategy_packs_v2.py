@@ -1,6 +1,8 @@
 import importlib
 from functools import partial
 
+from comb_spec_searcher import StrategyPack
+from comb_spec_searcher.utils import get_func_name
 from tilescopethree.strategies import (all_cell_insertions, all_col_insertions,
                                        all_requirement_insertions,
                                        all_row_insertions)
@@ -21,9 +23,6 @@ from tilescopethree.strategies import row_placements as row_placements_strat
 from tilescopethree.strategies import (subclass_verified,
                                        subobstruction_inferral,
                                        subset_verified, verify_points)
-
-from comb_spec_searcher import StrategyPack
-from comb_spec_searcher.utils import get_func_name
 from tilings import Tiling
 
 

@@ -2,10 +2,6 @@ import json
 import time
 from itertools import combinations
 
-from tilescopethree.strategies import verify_points
-from tilescopethree.strategy_packs_v2 import (row_and_col_placements,
-                                              row_placements)
-
 from comb_spec_searcher import CombinatorialSpecificationSearcher, ProofTree
 from comb_spec_searcher.tree_searcher import (iterative_proof_tree_finder,
                                               iterative_prune,
@@ -13,6 +9,9 @@ from comb_spec_searcher.tree_searcher import (iterative_proof_tree_finder,
                                               proof_tree_generator_dfs, prune,
                                               random_proof_tree)
 from permuta import PermSet
+from tilescopethree.strategies import verify_points
+from tilescopethree.strategy_packs_v2 import (row_and_col_placements,
+                                              row_placements)
 from tilings import Obstruction, Tiling
 
 

@@ -1,6 +1,5 @@
-from tilescopethree.strategies import all_requirement_extensions
-
 from permuta import Perm
+from tilescopethree.strategies import all_requirement_extensions
 from tilings import Obstruction, Requirement, Tiling
 
 pytest_plugins = [
