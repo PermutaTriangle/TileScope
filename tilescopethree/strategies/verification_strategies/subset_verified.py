@@ -42,6 +42,7 @@ def one_by_one_verified(tiling, basis, **kwargs):
         return False
     return True
 
+
 def one_by_one_verification(tiling, basis, **kwargs):
     """Return a verification if one-by-one verified."""
     if one_by_one_verified(tiling, basis, **kwargs):

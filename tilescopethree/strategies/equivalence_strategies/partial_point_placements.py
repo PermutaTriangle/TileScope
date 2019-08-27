@@ -41,7 +41,7 @@ def partial_place_point_of_requirement(tiling, req_index, point_index,
                   if i != req_index]
     # Placing the forced occurrence of the point in the requirement
     new_req, forced_obstructions = requirement.partial_place_forced_point(
-                                                    point_index, force_dir)
+        point_index, force_dir)
     assert len(new_req) == 1
     # New indices of the point.
     point_cell = (cell[0] if row else cell[0] + 1,
@@ -50,25 +50,25 @@ def partial_place_point_of_requirement(tiling, req_index, point_index,
     # obstructions where the point placement has been taken into account and
     # the 12, 21 in the cell.
     newobs = forced_obstructions + list(chain.from_iterable(
-                    ob.place_point(cell, DIR_NONE, partial=True, row=row)
-                    for ob in tiling.obstructions)) + [
-            Obstruction.single_cell(Perm((0, 1)), point_cell),
-            Obstruction.single_cell(Perm((1, 0)), point_cell)]
+        ob.place_point(cell, DIR_NONE, partial=True, row=row)
+        for ob in tiling.obstructions)) + [
+        Obstruction.single_cell(Perm((0, 1)), point_cell),
+        Obstruction.single_cell(Perm((1, 0)), point_cell)]
     # If a point cell, make sure neighbouring cells are empty by adding the
     # point obstructions.
     if cell in tiling.point_cells:
         if force_dir == DIR_EAST or force_dir == DIR_WEST:
             newobs = (newobs +
                       [Obstruction.single_cell(
-                            Perm((0,)), (point_cell[0] + 1, point_cell[1])),
+                          Perm((0,)), (point_cell[0] + 1, point_cell[1])),
                        Obstruction.single_cell(
-                            Perm((0,)), (point_cell[0] - 1, point_cell[1]))])
+                          Perm((0,)), (point_cell[0] - 1, point_cell[1]))])
         elif force_dir == DIR_NORTH or force_dir == DIR_SOUTH:
             newobs = (newobs +
                       [Obstruction.single_cell(
-                            Perm((0,)), (point_cell[0], point_cell[1] + 1)),
+                          Perm((0,)), (point_cell[0], point_cell[1] + 1)),
                        Obstruction.single_cell(
-                            Perm((0,)), (point_cell[0], point_cell[1] - 1))])
+                          Perm((0,)), (point_cell[0], point_cell[1] - 1))])
     # The new requirements, consisting of the requirement with the point
     # placed, other requirements where point placement has been taken into
     # account and the point requirement in the cell.
@@ -76,7 +76,7 @@ def partial_place_point_of_requirement(tiling, req_index, point_index,
                                                         partial=True, row=row)
                                         for req in reqs))
                for reqs in other_reqs] + [new_req] + [
-                       [Requirement.single_cell(Perm((0,)), point_cell)]]
+        [Requirement.single_cell(Perm((0,)), point_cell)]]
     return Tiling(obstructions=newobs, requirements=newreqs)
 
 
@@ -109,7 +109,7 @@ def partial_requirement_placement(tiling, **kwargs):
         for i in range(len(reqs[0])):
             for DIR in directions:
                 placedtiling = partial_place_point_of_requirement(
-                                                        tiling, ri, i, DIR)
+                    tiling, ri, i, DIR)
                 yield EquivalenceRule(
                     formal_step=("Partially placing point {} of requirement {}"
                                  " with force {}").format(

@@ -24,18 +24,18 @@ try:
     tree = ProofTree.from_json(Tiling, tree_json)
 except FileNotFoundError:
     t = TileScopeTHREE(inp, pack)
-    tree = t.auto_search(verbose=True,status_update=30)
+    tree = t.auto_search(verbose=True, status_update=30)
 
 queue = Queue()
 
-funcs = dict() # Dictionary from function names to function bodies
+funcs = dict()  # Dictionary from function names to function bodies
 
 
 def prog_header():
     '''
         Creates a header for the recurrence relation program
         with necessary imports and dictionaries required
-        by the program. 
+        by the program.
     '''
     return ("from collections import defaultdict\n"
             "mem = defaultdict(dict)\n\n"
@@ -109,7 +109,6 @@ def base_case(pnode):
             "\treturn 0\n")
 
 
-
 def get_rec(pnode):
     func = get_func(pnode)
 
@@ -118,40 +117,43 @@ def get_rec(pnode):
 
     if pnode.disjoint_union:
         body += ("ans = " +
-                 " + ".join([get_func(child)+"(n)"
-                            for child in pnode.children])+"\n")
+                 " + ".join([get_func(child) + "(n)"
+                             for child in pnode.children]) + "\n")
         for child in pnode.children:
             queue.put(child)
     elif pnode.decomposition:
-        atoms = 0 # Number of children that are just the atom
-        pos_children = 0 # Number of children that are positive (do not contain epsilon)
-        children = [] # A list of children that are not atoms
+        atoms = 0  # Number of children that are just the atom
+        # Number of children that are positive (do not contain epsilon)
+        pos_children = 0
+        children = []  # A list of children that are not atoms
         for child in pnode.children:
             '''
                 Disjoint union will just return the sum of all
                 the children with the correct function signatures.
-            ''' 
+            '''
             if child.eqv_path_objects[-1].is_atom():
                 atoms += 1
             else:
                 if child.eqv_path_objects[-1].is_positive():
                     pos_children += 1
                 children.append(child)
-        ind = 0 # index variable
-        rem = "n+1" # the remainder (how many points we have left to distribute)
+        ind = 0  # index variable
+        # the remainder (how many points we have left to distribute)
+        rem = "n+1"
         body += "ans = 0\n"
         for i, child in enumerate(children[:-1]):
             if child.eqv_path_objects[-1].is_positive():
-                start = 1 # If the child is positive then it contains no length 0 objects
-                          # so we start with length 1 objects
+                start = 1  # If the child is positive then it contains no length 0 objects
+                # so we start with length 1 objects
                 pos_children -= 1
             else:
                 start = 0
-            tabs = '\t'*i
-            body += "{}for {} in range({},{}-{}):\n".format(tabs, "i"+str(ind), start, rem,
-                                                                atoms+pos_children)
-            rem += "-{}".format("i"+str(ind)) # We chose i{ind} points for this child so we subtract
-                                              # that many points
+            tabs = '\t' * i
+            body += "{}for {} in range({},{}-{}):\n".format(tabs,
+                                                            "i" + str(ind), start, rem, atoms + pos_children)
+            # We chose i{ind} points for this child so we subtract
+            rem += "-{}".format("i" + str(ind))
+            # that many points
             ind += 1
 
         ind = 0
@@ -160,12 +162,12 @@ def get_rec(pnode):
         else:
             rem = "n-{}".format(atoms)
 
-        tabs = '\t'*(len(children)-1)
+        tabs = '\t' * (len(children) - 1)
         body += "{}ans += ".format(tabs)
 
         for child in children[:-1]:
-            body += "{}({}) * ".format(get_func(child), "i"+str(ind))
-            rem += "-{}".format("i"+str(ind))
+            body += "{}({}) * ".format(get_func(child), "i" + str(ind))
+            rem += "-{}".format("i" + str(ind))
             ind += 1
 
         body += "{}({})\n".format(get_func(children[-1]), rem)
@@ -176,7 +178,7 @@ def get_rec(pnode):
     elif pnode.recursion:
         return
     elif pnode.strategy_verified:  # call database
-        if  pnode.eqv_path_objects[-1].is_epsilon():
+        if pnode.eqv_path_objects[-1].is_epsilon():
             body += ("if n == 0:\n"
                      "\tans = 1\n"
                      "else:\n"
@@ -194,6 +196,7 @@ def get_rec(pnode):
 
     funcs[func] = body
 
+
 if tree:
     queue.put(tree.root)
     while not queue.empty():
@@ -203,7 +206,7 @@ if tree:
         for func, body in funcs.items():
             print(func_header(func), file=f)
             for line in body.split('\n'):
-                print("\t"+line, file=f)
+                print("\t" + line, file=f)
 
     from temp import F_0
     for i in range(100):

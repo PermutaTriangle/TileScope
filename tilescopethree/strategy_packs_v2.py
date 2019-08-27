@@ -119,23 +119,23 @@ class TileScopePack(StrategyPack):
     @classmethod
     def all_the_strategies(cls, length=1):
         return TileScopePack(
-                initial_strats=[partial(factor, unions=True),
-                                requirement_corroboration],
-                ver_strats=[subset_verified, globally_verified],
-                inferral_strats=[row_and_column_separation,
-                                 obstruction_transitivity],
-                expansion_strats=[[partial(all_cell_insertions,
-                                           maxreqlen=length),
-                                   all_row_insertions,
-                                   all_col_insertions,
-                                   all_requirement_insertions],
-                                  [partial(row_placements_strat,
-                                           positive=False),
-                                   partial(col_placements_strat,
-                                           positive=False),
-                                   partial_requirement_placement,
-                                   requirement_placement]],
-                name="all_the_strategies")
+            initial_strats=[partial(factor, unions=True),
+                            requirement_corroboration],
+            ver_strats=[subset_verified, globally_verified],
+            inferral_strats=[row_and_column_separation,
+                             obstruction_transitivity],
+            expansion_strats=[[partial(all_cell_insertions,
+                                       maxreqlen=length),
+                               all_row_insertions,
+                               all_col_insertions,
+                               all_requirement_insertions],
+                              [partial(row_placements_strat,
+                                       positive=False),
+                               partial(col_placements_strat,
+                                       positive=False),
+                               partial_requirement_placement,
+                               requirement_placement]],
+            name="all_the_strategies")
 
     @classmethod
     def pattern_placements(cls, length=1, partial_placements=False):
@@ -144,18 +144,18 @@ class TileScopePack(StrategyPack):
         placement = (partial_requirement_placement
                      if partial_placements else requirement_placement)
         return TileScopePack(
-                initial_strats=[placement],
-                ver_strats=[subset_verified, globally_verified],
-                inferral_strats=[row_and_column_separation,
-                                 obstruction_transitivity],
-                expansion_strats=[[partial(factor, unions=True)],
-                                  [partial(all_cell_insertions,
-                                           maxreqlen=length)],
-                                  [requirement_corroboration]],
-                name="{}{}{}_placements".format(
-                            "length_{}_".format(length) if length > 1 else "",
-                            "partial_" if partial_placements else "",
-                            "pattern" if length > 1 else "point"))
+            initial_strats=[placement],
+            ver_strats=[subset_verified, globally_verified],
+            inferral_strats=[row_and_column_separation,
+                             obstruction_transitivity],
+            expansion_strats=[[partial(factor, unions=True)],
+                              [partial(all_cell_insertions,
+                                       maxreqlen=length)],
+                              [requirement_corroboration]],
+            name="{}{}{}_placements".format(
+                "length_{}_".format(length) if length > 1 else "",
+                "partial_" if partial_placements else "",
+                "pattern" if length > 1 else "point"))
 
     @classmethod
     def point_placements(cls, length=1, partial_placements=False):
@@ -164,32 +164,32 @@ class TileScopePack(StrategyPack):
         placement = (partial_requirement_placement
                      if partial_placements else requirement_placement)
         return TileScopePack(
-                initial_strats=[factor, requirement_corroboration],
-                ver_strats=[subset_verified, globally_verified],
-                inferral_strats=[row_and_column_separation,
-                                 obstruction_transitivity],
-                expansion_strats=[[partial(all_cell_insertions,
-                                           maxreqlen=length)],
-                                  [placement]],
-                name="{}{}point_placements".format(
-                            "length_{}_".format(length) if length > 1 else "",
-                            "partial_" if partial_placements else ""))
+            initial_strats=[factor, requirement_corroboration],
+            ver_strats=[subset_verified, globally_verified],
+            inferral_strats=[row_and_column_separation,
+                             obstruction_transitivity],
+            expansion_strats=[[partial(all_cell_insertions,
+                                       maxreqlen=length)],
+                              [placement]],
+            name="{}{}point_placements".format(
+                "length_{}_".format(length) if length > 1 else "",
+                "partial_" if partial_placements else ""))
 
     @classmethod
     def insertion_point_placements(cls, length=1):
         if not isinstance(length, int) or length < 1:
             raise ValueError("The length {} makes no sense".format(length))
         return TileScopePack(
-                initial_strats=[factor, requirement_corroboration,
-                                partial(all_cell_insertions, maxreqlen=length,
-                                        ignore_parent=True)],
-                ver_strats=[subset_verified, globally_verified],
-                inferral_strats=[row_and_column_separation,
-                                 obstruction_transitivity],
-                expansion_strats=[[requirement_placement]],
-                name=("insertion_{}point_placements"
-                      "".format("length_{}_".format(length)
-                                if length > 1 else "")))
+            initial_strats=[factor, requirement_corroboration,
+                            partial(all_cell_insertions, maxreqlen=length,
+                                    ignore_parent=True)],
+            ver_strats=[subset_verified, globally_verified],
+            inferral_strats=[row_and_column_separation,
+                             obstruction_transitivity],
+            expansion_strats=[[requirement_placement]],
+            name=("insertion_{}point_placements"
+                  "".format("length_{}_".format(length)
+                            if length > 1 else "")))
 
     @classmethod
     def regular_insertion_encoding(cls, direction=None):
@@ -205,17 +205,17 @@ class TileScopePack(StrategyPack):
         else:
             raise ValueError("Must be direction in {0, 1, 2, 3}.")
         return TileScopePack(
-                initial_strats=[factor, requirement_corroboration,
-                                partial(all_cell_insertions,
-                                        ignore_parent=True)],
-                ver_strats=[verify_points],
-                inferral_strats=[],
-                expansion_strats=[expansion_strats],
-                name="regular_insertion_encoding_{}".format(
-                                                "left" if direction == 0 else
-                                                "bottom" if direction == 1 else
-                                                "right" if direction == 2 else
-                                                "top"))
+            initial_strats=[factor, requirement_corroboration,
+                            partial(all_cell_insertions,
+                                    ignore_parent=True)],
+            ver_strats=[verify_points],
+            inferral_strats=[],
+            expansion_strats=[expansion_strats],
+            name="regular_insertion_encoding_{}".format(
+                "left" if direction == 0 else
+                "bottom" if direction == 1 else
+                "right" if direction == 2 else
+                "top"))
 
     @classmethod
     def row_and_col_placements(cls, row_only=False, col_only=False):
@@ -230,14 +230,14 @@ class TileScopePack(StrategyPack):
             expansion_strats.append(partial(col_placements_strat,
                                             positive=False))
         return TileScopePack(
-                initial_strats=[factor, requirement_corroboration],
-                ver_strats=[subset_verified, globally_verified],
-                inferral_strats=[row_and_column_separation,
-                                 obstruction_transitivity],
-                expansion_strats=[expansion_strats],
-                name="{}{}{}_placements".format("row" if not col_only else "",
-                                                "_and_" if both else "",
-                                                "col" if not row_only else ""))
+            initial_strats=[factor, requirement_corroboration],
+            ver_strats=[subset_verified, globally_verified],
+            inferral_strats=[row_and_column_separation,
+                             obstruction_transitivity],
+            expansion_strats=[expansion_strats],
+            name="{}{}{}_placements".format("row" if not col_only else "",
+                                            "_and_" if both else "",
+                                            "col" if not row_only else ""))
 
     @classmethod
     def insertion_row_and_col_placements(cls, row_only=False, col_only=False):
@@ -252,17 +252,17 @@ class TileScopePack(StrategyPack):
             expansion_strats.append(partial(col_placements_strat,
                                             positive=True))
         return TileScopePack(
-                initial_strats=[factor, requirement_corroboration,
-                                partial(all_cell_insertions,
-                                        ignore_parent=True)],
-                ver_strats=[subset_verified, globally_verified],
-                inferral_strats=[row_and_column_separation,
-                                 obstruction_transitivity],
-                expansion_strats=[expansion_strats],
-                name="insertion_{}{}{}_placements".format(
-                                                "row" if not col_only else "",
-                                                "_and_" if both else "",
-                                                "col" if not row_only else ""))
+            initial_strats=[factor, requirement_corroboration,
+                            partial(all_cell_insertions,
+                                    ignore_parent=True)],
+            ver_strats=[subset_verified, globally_verified],
+            inferral_strats=[row_and_column_separation,
+                             obstruction_transitivity],
+            expansion_strats=[expansion_strats],
+            name="insertion_{}{}{}_placements".format(
+                "row" if not col_only else "",
+                "_and_" if both else "",
+                "col" if not row_only else ""))
 
     @classmethod
     def only_root_placements(cls, length=1):
@@ -287,16 +287,16 @@ class TileScopePack(StrategyPack):
         placement = (partial_requirement_placement
                      if partial_placements else requirement_placement)
         return TileScopePack(
-                initial_strats=[factor, requirement_corroboration],
-                ver_strats=[subset_verified, globally_verified],
-                inferral_strats=[row_and_column_separation,
-                                 obstruction_transitivity],
-                expansion_strats=[[partial(all_requirement_insertions,
-                                           maxlen=length)],
-                                  [placement]],
-                name="{}{}requirement_placements".format(
-                            "length_{}_".format(length) if length != 2 else "",
-                            "partial_" if partial_placements else ""))
+            initial_strats=[factor, requirement_corroboration],
+            ver_strats=[subset_verified, globally_verified],
+            inferral_strats=[row_and_column_separation,
+                             obstruction_transitivity],
+            expansion_strats=[[partial(all_requirement_insertions,
+                                       maxlen=length)],
+                              [placement]],
+            name="{}{}requirement_placements".format(
+                "length_{}_".format(length) if length != 2 else "",
+                "partial_" if partial_placements else ""))
 
 
 basepacks = [
@@ -331,27 +331,27 @@ basepacks = [
 ]
 
 length_3_root_placements_pp = TileScopePack.point_placements().add_initial(
-                            partial(root_requirement_insertion, maxreqlen=3))
+    partial(root_requirement_insertion, maxreqlen=3))
 length_4_root_placements_pp = TileScopePack.point_placements().add_initial(
-                            partial(root_requirement_insertion, maxreqlen=4))
+    partial(root_requirement_insertion, maxreqlen=4))
 length_3_root_placements_pp.name = "length_3_root_placements_pp"
 length_4_root_placements_pp.name = "length_4_root_placements_pp"
 basepacks.append(length_3_root_placements_pp)
 basepacks.append(length_4_root_placements_pp)
 
 length_3_root_placements_pp = TileScopePack.pattern_placements().add_initial(
-                            partial(root_requirement_insertion, maxreqlen=3))
+    partial(root_requirement_insertion, maxreqlen=3))
 length_4_root_placements_pp = TileScopePack.pattern_placements().add_initial(
-                            partial(root_requirement_insertion, maxreqlen=4))
+    partial(root_requirement_insertion, maxreqlen=4))
 length_3_root_placements_pp.name = "length_3_root_pattern_pp"
 length_4_root_placements_pp.name = "length_4_root_pattern_pp"
 basepacks.append(length_3_root_placements_pp)
 basepacks.append(length_4_root_placements_pp)
 
-length_3_root_placements_rc = TileScopePack.row_and_col_placements().add_initial(
-                            partial(root_requirement_insertion, maxreqlen=3))
-length_4_root_placements_rc = TileScopePack.row_and_col_placements().add_initial(
-                            partial(root_requirement_insertion, maxreqlen=4))
+length_3_root_placements_rc = TileScopePack.row_and_col_placements(
+).add_initial(partial(root_requirement_insertion, maxreqlen=3))
+length_4_root_placements_rc = TileScopePack.row_and_col_placements(
+).add_initial(partial(root_requirement_insertion, maxreqlen=4))
 length_3_root_placements_rc.name = "length_3_root_placements_rc"
 length_4_root_placements_rc.name = "length_4_root_placements_rc"
 basepacks.append(length_3_root_placements_rc)
@@ -393,11 +393,11 @@ delattr(module, 'pack')
 delattr(module, 'new_pack')
 
 restricted_fusion = TileScopePack(
-                initial_strats=[factor, fusion, requirement_placement],
-                inferral_strats=[row_and_column_separation],
-                expansion_strats=[[all_cell_insertions,
-                                   partial(row_placements_strat, positive=False),
-                                   partial(col_placements_strat, positive=False)]],
-                ver_strats=[one_by_one_verification],
-                forward_equivalence=True,
-                name="restricted_fusion")
+    initial_strats=[factor, fusion, requirement_placement],
+    inferral_strats=[row_and_column_separation],
+    expansion_strats=[[all_cell_insertions,
+                       partial(row_placements_strat, positive=False),
+                       partial(col_placements_strat, positive=False)]],
+    ver_strats=[one_by_one_verification],
+    forward_equivalence=True,
+    name="restricted_fusion")
