@@ -10,46 +10,44 @@ pytest_plugins = [
 
 
 def test_all_cell_insertions_points(simple_tiling):
-    strats = [s.comb_classes
-              for s in all_cell_insertions(simple_tiling, maxreqlen=1)]
+    strats = set([tuple(s.comb_classes)
+                  for s in all_cell_insertions(simple_tiling, maxreqlen=1)])
     assert all(len(s) == 2 for s in strats)
-    s = strats[0]
-    assert s[0] == Tiling(
+    actual = set()
+    actual.add((Tiling(
         obstructions=[Obstruction(Perm((0,)), [(0, 1)])],
         requirements=[[Requirement(Perm((0, 1)), [(0, 0), (1, 0)]),
-                       Requirement(Perm((0, 1)), [(0, 0), (1, 1)])]])
-    assert s[1] == Tiling(
+                       Requirement(Perm((0, 1)), [(0, 0), (1, 1)])]]),
+                Tiling(
         obstructions=[Obstruction(Perm((0,)), [(1, 0)])],
         requirements=[[Requirement(Perm((0,)), [(0, 1)])],
-                      [Requirement(Perm((0, 1)), [(0, 0), (1, 1)])]])
+                      [Requirement(Perm((0, 1)), [(0, 0), (1, 1)])]])))
 
-    s = strats[1]
-    assert s[0] == Tiling(
+    actual.add((Tiling(
         obstructions=[Obstruction(Perm((0,)), ((0, 1),)),
                       Obstruction(Perm((0,)), ((1, 0),))],
-        requirements=[[Requirement(Perm((0, 1)), ((0, 0), (1, 1)))]])
-    assert s[1] == Tiling(
+        requirements=[[Requirement(Perm((0, 1)), ((0, 0), (1, 1)))]]),
+                Tiling(
         obstructions=[Obstruction(Perm((0,)), ((0, 1),))],
         requirements=[[Requirement(Perm((0,)), ((1, 0),))],
                       [Requirement(Perm((0, 1)), ((0, 0), (1, 0))),
-                       Requirement(Perm((0, 1)), ((0, 0), (1, 1)))]])
+                       Requirement(Perm((0, 1)), ((0, 0), (1, 1)))]])))
 
-    s = strats[2]
-    assert s[0] == Tiling(obstructions=[Obstruction(Perm(tuple()), tuple())])
-    assert s[1] == Tiling(
+    actual.add((Tiling(obstructions=[Obstruction(Perm(tuple()), tuple())]),
+                Tiling(
         obstructions=[Obstruction(Perm((1, 0)), ((0, 1), (1, 0)))],
         requirements=[[Requirement(Perm((0,)), ((0, 0),))],
                       [Requirement(Perm((0, 1)), ((0, 0), (1, 0))),
-                       Requirement(Perm((0, 1)), ((0, 0), (1, 1)))]])
+                       Requirement(Perm((0, 1)), ((0, 0), (1, 1)))]])))
 
-    s = strats[3]
-    assert s[0] == Tiling(
-        requirements=[[Requirement(Perm((0, 1)), ((0, 0), (1, 0)))]])
-    assert s[1] == Tiling(
+    actual.add((Tiling(
+        requirements=[[Requirement(Perm((0, 1)), ((0, 0), (1, 0)))]]),
+                Tiling(
         obstructions=[Obstruction(Perm((1, 0)), ((0, 1), (1, 0)))],
         requirements=[[Requirement(Perm((0,)), ((1, 1),))],
                       [Requirement(Perm((0, 1)), ((0, 0), (1, 0))),
-                       Requirement(Perm((0, 1)), ((0, 0), (1, 1)))]])
+                       Requirement(Perm((0, 1)), ((0, 0), (1, 1)))]])))
+    assert strats == actual
 
 
 def test_all_cell_insertions(typical_redundant_requirements,
