@@ -16,7 +16,17 @@ setup(
     maintainer="Christian Nathaniel Bean",
     maintainer_email="christianbean@ru.is",
     url="https://github.com/PermutaTriangle/tilescope_three",
-    install_requires=read("requirements.txt").splitlines(),
     packages=find_packages(),
     long_description=read("README.md"),
+    install_requires=[
+        'permuta==1.1.0',
+        'comb_spec_searcher==0.2.1',
+        'logzero==1.5.0',
+        'tilings==1.0.1',
+        'sympy==1.4',
+    ],
+    setup_requires=['pytest-runner==5.1'],
+    tests_require=[
+        'pytest==5.1.1',
+    ],
 )
