@@ -30,6 +30,7 @@ options = ("1: insert a point\n"
 curr_task = [start_tiling]
 old_tasks = []
 
+
 def infer(tiling):
     """Repeatedly apply inferral strategies until no change."""
     inferred = tiling
@@ -45,13 +46,14 @@ def infer(tiling):
         return inferred
     return infer(inferred)
 
+
 def insert_point(tiling):
     """Inserts a point into the cell given by the user."""
     if len(tiling.active_cells) == len(tiling.positive_cells):
         print("All cells already positive. Try some other strategy.")
         return None
     if len(tiling.active_cells) == 1:
-        cell = (0,0)
+        cell = (0, 0)
     else:
         print("Which cell do you want to insert into?")
         cell = get_coordinate(tiling)
@@ -60,13 +62,14 @@ def insert_point(tiling):
     non_empty = tiling.empty_cell(cell)
     return [empty, non_empty]
 
+
 def insert_req(tiling):
     """Inserts a req into the cell given by the user."""
     if len(tiling.active_cells) == len(tiling.positive_cells):
         print("All cells already positive. Try some other strategy.")
         return None
     if len(tiling.active_cells) == 1:
-        cell = (0,0)
+        cell = (0, 0)
     else:
         print("Which cell do you want to insert into?")
         cell = get_coordinate(tiling)
@@ -78,9 +81,9 @@ def insert_req(tiling):
     return [empty, non_empty]
 
 # def place_point(tiling):
-#     """Place a point, by asking the user to select a requirement, 
+#     """Place a point, by asking the user to select a requirement,
 #     a point and a direction."""
-#     placeable = [(i, r[0]) for i, r in enumerate(tiling.requirements) 
+#     placeable = [(i, r[0]) for i, r in enumerate(tiling.requirements)
 #                  if len(r) == 1]
 #     if not placeable:
 #         print("Can only place into length 1 requirements.")
@@ -88,7 +91,7 @@ def insert_req(tiling):
 #     print("Which point would you like to place?")
 #     for i, (_, r) in enumerate(placeable):
 #         print("{}: {}".format(i, repr(r)))
-    
+
 #     i = -1
 #     while i not in range(len(placeable)):
 #         try:
@@ -110,10 +113,11 @@ def insert_req(tiling):
 #     d = int(input("Insert number: "))
 #     return [place_point_of_requirement(tiling, idx, point_idx, d)]
 
+
 def place_point(tiling):
-    """Place a point, by asking the user to select a requirement, 
+    """Place a point, by asking the user to select a requirement,
     a point and a direction."""
-    placeable = [(i, r[0]) for i, r in enumerate(tiling.requirements) 
+    placeable = [(i, r[0]) for i, r in enumerate(tiling.requirements)
                  if len(r) == 1]
     if not placeable:
         print("Can only place into length 1 requirements.")
@@ -125,16 +129,18 @@ def place_point(tiling):
         print("Which point would you like to place?")
         for i, (_, r) in enumerate(placeable):
             print("{}: {}".format(i, repr(r)))
-        
+
         i = -1
         while i not in range(len(placeable)):
             try:
                 i = int(input("Insert number: "))
-            except:
+            except BaseException:
                 print("Invalid output, try again")
                 continue
             if i not in range(len(placeable)):
-                print("Pick a number between 0 and {}.".format(len(placeable) - 1))
+                print(
+                    "Pick a number between 0 and {}.".format(
+                        len(placeable) - 1))
         idx = placeable[i][0]
         r = placeable[i][1]
     if len(r) == 1:
@@ -148,6 +154,7 @@ def place_point(tiling):
     d = int(input("Insert number: "))
     return [place_point_of_requirement(tiling, idx, point_idx, d)]
 
+
 def factors(tiling):
     """Return the factors of a tiling."""
     factor_list = tiling.find_factors()
@@ -156,8 +163,9 @@ def factors(tiling):
         return None
     return factor_list
 
+
 def fuse(tiling, basis=basis):
-    """Determines rows and columns that can be fuse and ask the user to choose 
+    """Determines rows and columns that can be fuse and ask the user to choose
     which to fuse"""
     if tiling.requirements:
         print("Can't fuse tilings with requirements.")
@@ -175,8 +183,8 @@ def fuse(tiling, basis=basis):
         choice = int(input(("You can fuse rows {} and columns {}. Do you want "
                             "to fuse a row or column? Enter 0 for row, or 1 "
                             "for column: ".format(
-                                    ", ".join(str(i) for i in fusable_rows), 
-                                    ", ".join(str(j) for j in fusable_cols)))))
+                                ", ".join(str(i) for i in fusable_rows),
+                                ", ".join(str(j) for j in fusable_cols)))))
         if choice:
             fusable_rows = False
         else:
@@ -185,12 +193,17 @@ def fuse(tiling, basis=basis):
         idx = int(input(("You can fuse the rows {}. Insert the row to fuse: "
                          "".format(", ".join(str(i) for i in fusable_rows)))))
     elif fusable_cols:
-        idx = int(input(("You can fuse the columns {}. Insert the column to fuse:"
-                         " ".format(", ".join(str(i) for i in fusable_cols)))))
+        idx = int(
+            input(
+                ("You can fuse the columns {}. Insert the column to fuse:"
+                 " ".format(
+                     ", ".join(
+                         str(i) for i in fusable_cols)))))
     else:
         print("No rows or columns can be fused.")
         return None
     return [fuse_tiling(tiling, idx, bool(fusable_rows))]
+
 
 def get_coordinate(tiling):
     """Makes the user select a cell in the tiling."""
@@ -200,10 +213,12 @@ def get_coordinate(tiling):
         return get_coordinate(tiling)
     return (x, y)
 
+
 def tiling_print(tiling):
-    """Print the grid of a tiling detailing local obstructions plus all the 
+    """Print the grid of a tiling detailing local obstructions plus all the
     crossing obstructions and requirements."""
     print(tiling)
+
 
 def print_tilings(tilings):
     for i, t in enumerate(tilings):
@@ -221,7 +236,7 @@ def pick_tiling(tilings):
     else:
         try:
             i = int(input("Insert number of tiling to work from next: "))
-        except:
+        except BaseException:
             print("invalid input, try again")
             return pick_tiling(tilings)
         if i not in range(len(tilings)):
@@ -230,6 +245,7 @@ def pick_tiling(tilings):
             return pick_tiling(tilings)
         return tilings[i]
 
+
 def verify(tiling):
     """Return a formal step string if tiling is verified, otherwise None."""
     for strat in point_placements.ver_strats:
@@ -237,13 +253,13 @@ def verify(tiling):
         if s is not None:
             return s.formal_step
 
-    
+
 print("Starting process with tiling: ")
 tiling_print(start_tiling)
 
 while True:
     tiling = pick_tiling(curr_task)
-    next_step = input(("What would you like to do?\n" + options 
+    next_step = input(("What would you like to do?\n" + options
                        + "\nInsert number: "))
     if next_step == "1":
         # insert a point

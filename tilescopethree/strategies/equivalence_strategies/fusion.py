@@ -22,11 +22,18 @@ def fusion(tiling, **kwargs):
                        inferable=[True], workable=[True],
                        possibly_empty=[False], constructor='other')
 
+
 def fusable(tiling, row_index, row):
     """Return True if rows 'row_index' and 'row_index + 1' can be fused."""
-    return (can_fuse_set_of_gridded_perms(tiling.obstructions, row_index, row)
-            and all(can_fuse_set_of_gridded_perms(req_list, row_index, row)
-                    for req_list in tiling.requirements))
+    return (
+        can_fuse_set_of_gridded_perms(
+            tiling.obstructions,
+            row_index,
+            row) and all(
+            can_fuse_set_of_gridded_perms(
+                req_list,
+                row_index,
+                row) for req_list in tiling.requirements))
 
 
 def can_fuse_set_of_gridded_perms(gridded_perms, row_index, row):
@@ -80,4 +87,4 @@ def fuse_gridded_perm(gp, row_index, row=True):
         elif not row and x > row_index:
             x -= 1
         fused_pos.append((x, y))
-    return  gp.__class__(gp.patt, fused_pos)
+    return gp.__class__(gp.patt, fused_pos)

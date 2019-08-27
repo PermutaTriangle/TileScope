@@ -27,11 +27,14 @@ def deflation(tiling, **kwargs):
                            possibly_empty=[False], ignore_parent=False,
                            constructor="other")
 
+
 def sum_closed(basis):
     return all(not p.is_sum_decomposable() for p in basis)
 
+
 def skew_closed(basis):
     return all(not p.is_skew_decomposable() for p in basis)
+
 
 def can_deflate(tiling, cell, sum_decomp):
     alone_in_row = tiling.only_cell_in_row(cell)
@@ -70,7 +73,7 @@ def can_deflate(tiling, cell, sum_decomp):
             # patt in either the row or column
             other_cell = [c for c in ob.pos if c != cell][0]
             if (point_in_between(ob, True, cell, other_cell) or
-                point_in_between(ob, False, cell, other_cell)):
+                    point_in_between(ob, False, cell, other_cell)):
                 # this cell does not interleave with inflated components
                 cells_not_interleaving.add(other_cell)
             else:
@@ -81,8 +84,6 @@ def can_deflate(tiling, cell, sum_decomp):
     # check that do not interleave with any cells in row or column.
     return (cells_not_interleaving >= tiling.cells_in_row(cell[1]) and
             cells_not_interleaving >= tiling.cells_in_col(cell[0]))
-
-
 
 
 # def can_deflate(tiling, cell, sum_decomp):

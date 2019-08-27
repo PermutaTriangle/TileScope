@@ -31,7 +31,7 @@ def components(tiling):
     cells = list(tiling.active_cells)
     uf = UnionFind(n * m)
     for i in range(len(cells)):
-        for j in range(i+1, len(cells)):
+        for j in range(i + 1, len(cells)):
             c1, c2 = cells[i], cells[j]
             if c1[0] == c2[0] or c1[1] == c2[1]:
                 uf.unite(cell_to_int(c1), cell_to_int(c2))
