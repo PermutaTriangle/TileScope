@@ -54,12 +54,9 @@ def test_all_cell_insertions(typical_redundant_requirements,
                              typical_redundant_obstructions):
     tiling = Tiling(obstructions=typical_redundant_obstructions,
                     requirements=typical_redundant_requirements)
-    print(tiling)
     strats = set([tuple(s.comb_classes)
                   for s in all_cell_insertions(tiling, maxreqlen=3)])
-    print(len(strats))
     assert all(len(s) == 2 for s in strats)
-    actual = set()
     assert ((Tiling(
         obstructions=typical_redundant_obstructions + [
             Obstruction(Perm((0, 1, 2)), [(0, 1), (0, 1), (0, 1)])],
