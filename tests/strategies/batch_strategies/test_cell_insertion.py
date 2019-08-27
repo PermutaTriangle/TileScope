@@ -54,18 +54,18 @@ def test_all_cell_insertions(typical_redundant_requirements,
                              typical_redundant_obstructions):
     tiling = Tiling(obstructions=typical_redundant_obstructions,
                     requirements=typical_redundant_requirements)
-    strats = list(all_cell_insertions(tiling, maxreqlen=3))
-    assert all(len(s.comb_classes) == 2 for s in strats)
-    s = strats[-1]
     print(tiling)
-    print(s.formal_step)
-    print(s.comb_classes[0])
-    print(s.comb_classes[1])
-    assert s.comb_classes[0] == Tiling(
+    strats = set([tuple(s.comb_classes)
+                  for s in all_cell_insertions(tiling, maxreqlen=3)])
+    print(len(strats))
+    assert all(len(s) == 2 for s in strats)
+    actual = set()
+    assert ((Tiling(
         obstructions=typical_redundant_obstructions + [
             Obstruction(Perm((0, 1, 2)), [(0, 1), (0, 1), (0, 1)])],
-        requirements=typical_redundant_requirements)
-    assert s.comb_classes[1] == Tiling(
+        requirements=typical_redundant_requirements),
+                Tiling(
         obstructions=typical_redundant_obstructions,
         requirements=typical_redundant_requirements + [
             [Requirement(Perm((0, 1, 2)), [(0, 1), (0, 1), (0, 1)])]])
+        ) in strats)
