@@ -4,8 +4,6 @@ from collections import defaultdict
 
 from comb_spec_searcher import Rule
 from permuta import Perm
-from tilescopethree.strategies.equivalence_strategies.fusion import \
-    fuse_gridded_perm
 from tilings import Obstruction, Tiling
 
 
@@ -149,3 +147,16 @@ def fuse_tiling(tiling, row_index, row=True, **kwargs):
             cell_to_region[cell] = set([(x, y)])
         return ([fused_tiling], [cell_to_region])
     return fused_tiling
+
+
+def fuse_gridded_perm(gp, row_index, row=True):
+    """Fuses rows 'row_index' and 'row_index + 1'."""
+    fused_pos = []
+    for cell in gp.pos:
+        x, y = cell
+        if row and y > row_index:
+            y -= 1
+        elif not row and x > row_index:
+            x -= 1
+        fused_pos.append((x, y))
+    return gp.__class__(gp.patt, fused_pos)
