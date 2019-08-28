@@ -3,14 +3,14 @@ import sympy
 
 from comb_spec_searcher import ProofTree
 from tilescopethree import TileScopeTHREE
-from tilescopethree.strategy_packs_v2 import (row_and_col_placements,
-                                              row_and_col_placements_fusion)
+from tilescopethree.strategy_packs_v2 import (point_placements,
+                                              point_placements_fusion)
 
 
 @pytest.mark.timeout(20)
 def test_132():
-    searcher = TileScopeTHREE('132', row_and_col_placements)
-    t = searcher.auto_search()
+    searcher = TileScopeTHREE('132', point_placements)
+    t = searcher.auto_search(smallest=True)
     assert isinstance(t, ProofTree)
     gf = sympy.series(t.get_genf(), n=15)
     x = sympy.Symbol('x')
@@ -20,6 +20,6 @@ def test_132():
 
 @pytest.mark.timeout(20)
 def test_123():
-    searcher = TileScopeTHREE('123', row_and_col_placements_fusion)
-    t = searcher.auto_search()
+    searcher = TileScopeTHREE('123', point_placements_fusion)
+    t = searcher.auto_search(smallest=True)
     assert isinstance(t, ProofTree)
