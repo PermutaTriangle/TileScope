@@ -1,6 +1,6 @@
-from tilings import Obstruction, Requirement, Tiling
 from permuta import Perm
 from tilescopethree.strategies import requirement_corroboration
+from tilings import Obstruction, Requirement, Tiling
 
 pytest_plugins = [
     'tests.fixtures.obstructions_requirements'
@@ -38,20 +38,21 @@ def test_requirement_corroboration(typical_redundant_requirements,
                               if len(reqs) > 1)
     til1, til2 = reqins[0]
     assert (set([til1, til2]) == set([
-            Tiling(requirements=[
-                   [Requirement(Perm((0, 1)), ((2, 0), (3, 1)))],
-                   [Requirement(Perm((1, 0)), ((3, 2), (3, 1)))],
-                   [Requirement(Perm((0, 1, 2)), ((0, 0), (1, 0), (2, 2)))],
-                   [Requirement(Perm((0, 1, 2)), ((2, 2), (2, 2), (2, 2))),
-                    Requirement(Perm((1, 0, 2)), ((0, 0), (0, 0), (0, 0)))]],
-                   obstructions=typical_redundant_obstructions),
-            Tiling(requirements=[
-                   [Requirement(Perm((0, 1)), ((2, 0), (3, 1)))],
-                   [Requirement(Perm((1, 0)), ((3, 2), (3, 1)))],
-                   [Requirement(Perm((0, 1, 2)), ((0, 0), (1, 0), (2, 3))),
-                    Requirement(Perm((1, 0, 2)), ((0, 0), (1, 0), (2, 2))),
-                    Requirement(Perm((1, 0, 2)), ((0, 1), (1, 0), (2, 2)))],
-                   [Requirement(Perm((0, 1, 2)), ((2, 2), (2, 2), (2, 2))),
-                    Requirement(Perm((1, 0, 2)), ((0, 0), (0, 0), (0, 0)))]],
-                   obstructions=(typical_redundant_obstructions +
-                [Obstruction(Perm((0, 1, 2)), ((0, 0), (1, 0), (2, 2)))]))]))
+        Tiling(requirements=[
+            [Requirement(Perm((0, 1)), ((2, 0), (3, 1)))],
+            [Requirement(Perm((1, 0)), ((3, 2), (3, 1)))],
+            [Requirement(Perm((0, 1, 2)), ((0, 0), (1, 0), (2, 2)))],
+            [Requirement(Perm((0, 1, 2)), ((2, 2), (2, 2), (2, 2))),
+             Requirement(Perm((1, 0, 2)), ((0, 0), (0, 0), (0, 0)))]],
+            obstructions=typical_redundant_obstructions),
+        Tiling(requirements=[
+            [Requirement(Perm((0, 1)), ((2, 0), (3, 1)))],
+            [Requirement(Perm((1, 0)), ((3, 2), (3, 1)))],
+            [Requirement(Perm((0, 1, 2)), ((0, 0), (1, 0), (2, 3))),
+             Requirement(Perm((1, 0, 2)), ((0, 0), (1, 0), (2, 2))),
+             Requirement(Perm((1, 0, 2)), ((0, 1), (1, 0), (2, 2)))],
+            [Requirement(Perm((0, 1, 2)), ((2, 2), (2, 2), (2, 2))),
+             Requirement(Perm((1, 0, 2)), ((0, 0), (0, 0), (0, 0)))]],
+            obstructions=(typical_redundant_obstructions +
+                          [Obstruction(Perm((0, 1, 2)),
+                                       ((0, 0), (1, 0), (2, 2)))]))]))

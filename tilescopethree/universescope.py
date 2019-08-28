@@ -1,20 +1,32 @@
-from comb_spec_searcher import CombinatorialSpecificationSearcher, ProofTree
-from tilings import Tiling, Obstruction
-from permuta import PermSet
+import json
+import time
 from itertools import combinations
-from tilescopethree.strategies import verify_points
-from comb_spec_searcher.tree_searcher import (proof_tree_generator_bfs, proof_tree_generator_dfs,
-                            prune, iterative_prune, random_proof_tree,
-                            iterative_proof_tree_finder)
 
-from tilescopethree.strategy_packs_v2 import row_placements, row_and_col_placements
-import json, time
+from comb_spec_searcher import CombinatorialSpecificationSearcher, ProofTree
+from comb_spec_searcher.tree_searcher import (iterative_proof_tree_finder,
+                                              iterative_prune,
+                                              proof_tree_generator_bfs,
+                                              proof_tree_generator_dfs, prune,
+                                              random_proof_tree)
+from permuta import PermSet
+from tilescopethree.strategies import verify_points
+from tilescopethree.strategy_packs_v2 import (row_and_col_placements,
+                                              row_placements)
+from tilings import Obstruction, Tiling
+
 
 class UniveralScope(CombinatorialSpecificationSearcher):
-    def __init__(self, n=None, k=None, strategy_pack=None, flogger_kwargs={'processname': 'runner'},**kwargs):
+    def __init__(
+            self,
+            n=None,
+            k=None,
+            strategy_pack=None,
+            flogger_kwargs={
+                'processname': 'runner'},
+            **kwargs):
         self.start_tilings = []
         if filename is not None:
-            assert n == None and k == None
+            assert n is None and k is None
             f = open(filename, 'r')
             for line in f:
                 line = line.strip()
@@ -22,7 +34,9 @@ class UniveralScope(CombinatorialSpecificationSearcher):
             f.close()
         else:
             for basis in combinations(PermSet(n), k):
-                self.start_tilings.append(Tiling([Obstruction.single_cell(patt, (0, 0)) for patt in basis]))
+                self.start_tilings.append(
+                    Tiling([Obstruction.single_cell(patt, (0, 0))
+                            for patt in basis]))
 
         strategy_pack.ver_strats = [verify_points]
 
@@ -55,7 +69,7 @@ class UniveralScope(CombinatorialSpecificationSearcher):
         # Prune all unverified labels (recursively)
         if self.iterative:
             rules_dict = iterative_prune(rules_dict,
-                                            root=self.equivdb[self.start_label])
+                                         root=self.equivdb[self.start_label])
         else:
             rules_dict = prune(rules_dict)
 
@@ -68,12 +82,12 @@ class UniveralScope(CombinatorialSpecificationSearcher):
             if label in rules_dict:
                 if self.iterative:
                     proof_tree = iterative_proof_tree_finder(
-                                            rules_dict,
-                                            root=self.equivdb[label])
+                        rules_dict,
+                        root=self.equivdb[label])
                 else:
                     proof_tree = random_proof_tree(
-                                            rules_dict,
-                                            root=self.equivdb[label])
+                        rules_dict,
+                        root=self.equivdb[label])
             else:
                 proof_tree = None
 
@@ -102,7 +116,8 @@ class UniveralScope(CombinatorialSpecificationSearcher):
         trees = None
         time = 0
         while trees is None:
-            trees = CombinatorialSpecificationSearcher.auto_search(self, **kwargs)
+            trees = CombinatorialSpecificationSearcher.auto_search(
+                self, **kwargs)
             time += self._time_taken
             if max_time is not None and max_time > time:
                 break
@@ -117,14 +132,13 @@ class UniveralScope(CombinatorialSpecificationSearcher):
                 print(start_tiling)
                 print(json.dumps(tree.to_jsonable()))
 
-
     def get_proof_tree(self):
         proof_tree_nodes = self.find_trees()
         if all(node is not None for node in proof_tree_nodes):
             proof_trees = []
             for proof_tree_node in proof_tree_nodes:
                 proof_tree = ProofTree.from_comb_spec_searcher(proof_tree_node,
-                                                            self)
+                                                               self)
                 proof_trees.append(proof_tree)
                 assert proof_tree is not None
             return proof_trees
@@ -138,7 +152,9 @@ if __name__ == '__main__':
     import sys
     filename = sys.argv[1]
 
-    scope = UniveralScope(filename=filename, strategy_pack=row_and_col_placements)
+    scope = UniveralScope(
+        filename=filename,
+        strategy_pack=row_and_col_placements)
     trees = scope.auto_search(verbose=True, status_update=30)
     trees = scope.auto_search()
     print(scope.status())

@@ -6,5 +6,5 @@ from .cell_insertion import (all_cell_insertions, all_col_insertions,
 from .list_requirement_placements import (col_placements,
                                           requirement_list_placement,
                                           row_placements)
-from .targeted_cell_insertion import targeted_cell_insertion
 from .requirement_corroboration import requirement_corroboration
+from .targeted_cell_insertion import targeted_cell_insertion

@@ -34,8 +34,10 @@ def requirement_corroboration(tiling, basis, **kwargs):
                 inferable=[True for _ in range(2)],
                 constructor='disjoint')
 
+
 def pos_str(pos):
     return "/".join("{},{}".format(c[0], c[1]) for c in pos)
+
 
 def gp_insertion(tiling, gp, regions=False):
     """Return a list of size 2, where the first tiling avoids the gridded perm

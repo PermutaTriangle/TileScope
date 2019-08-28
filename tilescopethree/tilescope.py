@@ -19,6 +19,7 @@ class TileScopeTHREE(CombinatorialSpecificationSearcher):
     An instance of TileScope is used to build up knowledge about tilings with
     respect to the given basis.
     """
+
     def __init__(self,
                  start_class,
                  strategy_pack,
@@ -41,14 +42,14 @@ class TileScopeTHREE(CombinatorialSpecificationSearcher):
 
         if not isinstance(start_class, Tiling):
             start_tiling = Tiling(
-                            obstructions=[Obstruction.single_cell(patt, (0, 0))
-                                          for patt in basis])
-        if strategy_pack.symmetries==True:
+                obstructions=[Obstruction.single_cell(patt, (0, 0))
+                              for patt in basis])
+        if strategy_pack.symmetries:
             symmetries = [Tiling.inverse, Tiling.reverse, Tiling.complement,
                           Tiling.antidiagonal, Tiling.rotate90,
                           Tiling.rotate180, Tiling.rotate270]
             # symmetries = [sym for sym in symmetries
-                          # if sym(start_tiling) == start_tiling]
+            # if sym(start_tiling) == start_tiling]
             strategy_pack.symmetries = symmetries
         else:
             symmetries = []

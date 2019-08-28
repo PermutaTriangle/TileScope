@@ -56,7 +56,7 @@ def place_point_of_requirement(tiling, req_index, point_index, force_dir,
     newreqs = [list(chain.from_iterable(req.place_point(cell, DIR_NONE)
                                         for req in reqs))
                for reqs in other_reqs] + [new_req] + [
-                       [Requirement.single_cell(Perm((0,)), point_cell)]]
+        [Requirement.single_cell(Perm((0,)), point_cell)]]
 
     placed_tiling = Tiling(obstructions=newobs, requirements=newreqs)
     if kwargs.get('regions', False):
@@ -109,7 +109,7 @@ def requirement_placement(tiling, **kwargs):
                 yield Rule(
                     formal_step=("Placing point {} of requirement {} "
                                  "with force {}").format(
-                                    (i, reqs[0].patt[i]), str(reqs[0]), DIR),
+                        (i, reqs[0].patt[i]), str(reqs[0]), DIR),
                     comb_classes=[placedtiling],
                     ignore_parent=ignore_parent,
                     inferable=[True],

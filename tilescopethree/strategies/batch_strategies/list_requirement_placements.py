@@ -14,14 +14,14 @@ def requirement_list_placement(tiling, **kwargs):
             if tilings is None:
                 continue
             yield Rule(
-                        formal_step=("Place requirement {} in direction {}."
-                                     "".format(req, direction)),
-                        comb_classes=tilings,
-                        ignore_parent=False,
-                        possibly_empty=[True for _ in tilings],
-                        inferable=[True for _ in tilings],
-                        workable=[True for _ in tilings],
-                        constructor='disjoint')
+                formal_step=("Place requirement {} in direction {}."
+                             "".format(req, direction)),
+                comb_classes=tilings,
+                ignore_parent=False,
+                possibly_empty=[True for _ in tilings],
+                inferable=[True for _ in tilings],
+                workable=[True for _ in tilings],
+                constructor='disjoint')
 
 
 def row_placements(tiling, row=True, positive=True, regions=False, **kwargs):
@@ -91,8 +91,8 @@ def row_placements(tiling, row=True, positive=True, regions=False, **kwargs):
                 for direction in directions:
                     if regions:
                         tilings, placed_maps = place_requirement_list(
-                                                   tiling, req_list, direction,
-                                                   regions=regions)
+                            tiling, req_list, direction,
+                            regions=regions)
                         if not positive:
                             tilings = [empty_row_tiling] + tilings
                         forward_maps.extend(placed_maps)
@@ -142,7 +142,7 @@ def place_requirement_list(tiling, req_list, direction, regions=False):
         # further in that direction.
         forced_obstructions = (forced_obstructions +
                                list(chain.from_iterable(
-                                     r.other_req_forced_point(cell, direction)
+                                   r.other_req_forced_point(cell, direction)
                                     for r in req_list if r != req)))
         # New indices of the point
         point_cell = (cell[0] + 1, cell[1] + 1)
@@ -161,7 +161,7 @@ def place_requirement_list(tiling, req_list, direction, regions=False):
         newreqs = [list(chain.from_iterable(r.place_point(cell, DIR_NONE)
                                             for r in reqs))
                    for reqs in other_reqs] + [new_req] + [
-                        [Requirement.single_cell(Perm((0,)), point_cell)]]
+            [Requirement.single_cell(Perm((0,)), point_cell)]]
         placed_tiling = Tiling(newobs, newreqs)
         res.append(placed_tiling)
         if regions:
@@ -169,10 +169,14 @@ def place_requirement_list(tiling, req_list, direction, regions=False):
                 mindex, minval = c
                 maxdex = mindex + 1
                 maxval = minval + 1
-                if mindex >= cell[0]: maxdex += 2
-                if minval >= cell[1]: maxval += 2
-                if mindex > cell[0]: mindex += 2
-                if minval > cell[1]: minval += 2
+                if mindex >= cell[0]:
+                    maxdex += 2
+                if minval >= cell[1]:
+                    maxval += 2
+                if mindex > cell[0]:
+                    mindex += 2
+                if minval > cell[1]:
+                    minval += 2
                 return frozenset([(x, y) for x in range(mindex, maxdex)
                                   for y in range(minval, maxval)])
             forward_maps.append({c: cell_map(c) for c in tiling.active_cells})

@@ -59,6 +59,7 @@ def all_cell_insertions(tiling, **kwargs):
                             workable=[True for _ in range(2)],
                             constructor='disjoint')
 
+
 def cell_insertion(tiling, patt, cell, regions=False):
     """Return a tuple, the first avoids pattern in the cell, and the second
     contains it."""
@@ -70,7 +71,6 @@ def cell_insertion(tiling, patt, cell, regions=False):
     else:
         return [tiling.add_single_cell_obstruction(patt, cell),
                 tiling.add_single_cell_requirement(patt, cell)]
-
 
 
 def cell_insertion(tiling, patt, cell, regions=False):
@@ -144,14 +144,14 @@ def all_row_insertions(tiling, **kwargs):
         if any(c in positive_cells for c in row_cells):
             continue
         yield Rule(
-                    formal_step="Either row {} is empty or not.".format(row),
-                    comb_classes=row_insertion_helper(tiling, row, row_cells),
-                    ignore_parent=False,
-                    inferable=[True for _ in range(2)],
-                    possibly_empty=[True,
-                                    True],
-                    workable=[True for _ in range(2)],
-                    constructor='disjoint')
+            formal_step="Either row {} is empty or not.".format(row),
+            comb_classes=row_insertion_helper(tiling, row, row_cells),
+            ignore_parent=False,
+            inferable=[True for _ in range(2)],
+            possibly_empty=[True,
+                            True],
+            workable=[True for _ in range(2)],
+            constructor='disjoint')
 
 
 def row_insertion_helper(tiling, row, row_cells, regions=False):
@@ -162,10 +162,13 @@ def row_insertion_helper(tiling, row, row_cells, regions=False):
     row_obs = tuple(Obstruction.single_cell(Perm((0, )), c)
                     for c in row_cells)
     if regions:
-        return ([Tiling(tiling.obstructions + row_obs, tiling.requirements),
-                Tiling(tiling.obstructions, tiling.requirements + (row_req,))],
-                [{c: frozenset([c]) for c in tiling.active_cells},
-                 {c: frozenset([c]) for c in tiling.active_cells}])
+        return ([
+            Tiling(tiling.obstructions + row_obs, tiling.requirements),
+            Tiling(tiling.obstructions, tiling.requirements + (row_req,))
+        ], [
+            {c: frozenset([c]) for c in tiling.active_cells},
+            {c: frozenset([c]) for c in tiling.active_cells}
+        ])
     else:
         return [Tiling(tiling.obstructions + row_obs, tiling.requirements),
                 Tiling(tiling.obstructions, tiling.requirements + (row_req,))]
@@ -179,14 +182,14 @@ def all_col_insertions(tiling, **kwargs):
         if any(c in positive_cells for c in col_cells):
             continue
         yield Rule(
-                    formal_step="Either col {} is empty or not.".format(col),
-                    comb_classes=col_insertion_helper(tiling, col, col_cells),
-                    ignore_parent=False,
-                    inferable=[True for _ in range(2)],
-                    possibly_empty=[True,
-                                    True],
-                    workable=[True for _ in range(2)],
-                    constructor='disjoint')
+            formal_step="Either col {} is empty or not.".format(col),
+            comb_classes=col_insertion_helper(tiling, col, col_cells),
+            ignore_parent=False,
+            inferable=[True for _ in range(2)],
+            possibly_empty=[True,
+                            True],
+            workable=[True for _ in range(2)],
+            constructor='disjoint')
 
 
 def col_insertion_helper(tiling, col, col_cells, regions=False):
@@ -223,7 +226,7 @@ def all_requirement_insertions(tiling, **kwargs):
         for gp in obs_tiling.gridded_perms_of_length(length):
             if len(gp.factors()) == 1:
                 av = Tiling((tiling.obstructions +
-                            (Obstruction(gp.patt, gp.pos),)),
+                             (Obstruction(gp.patt, gp.pos),)),
                             tiling.requirements)
                 co = Tiling(tiling.obstructions,
                             (tiling.requirements) +
@@ -244,7 +247,7 @@ def all_factor_insertions(tiling, **kwargs):
         if len(factors) != 1:
             for gp in factors:
                 av = Tiling((tiling.obstructions +
-                            (Obstruction(gp.patt, gp.pos),)),
+                             (Obstruction(gp.patt, gp.pos),)),
                             tiling.requirements)
                 co = Tiling(tiling.obstructions,
                             (tiling.requirements) +

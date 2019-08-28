@@ -1,13 +1,13 @@
 """The more general fusion strategy. Fuse two rows if actually one row where
 you can draw a line somewhere."""
 from collections import defaultdict
+
 from comb_spec_searcher import Rule
-from tilings import Tiling, Obstruction
-from tilescopethree.strategies.equivalence_strategies.fusion import fuse_gridded_perm
-# from tilescopethree.strategies.equivalence_strategies.fusion import fusable as original_fusable # for print statements
-
-
 from permuta import Perm
+from tilescopethree.strategies.equivalence_strategies.fusion import \
+    fuse_gridded_perm
+from tilings import Obstruction, Tiling
+
 
 def fusion_with_interleaving(tiling, **kwargs):
     """Yield rules found by fusing rows and columns of a tiling, where the
@@ -29,7 +29,8 @@ def fusion_with_interleaving(tiling, **kwargs):
             #     print("================================")
             #     print("On the tiling:")
             #     print(tiling)
-            #     print("Column {} is fancy fusable but not ordinary fusable. Explain.".format(col_index))
+            #     print("Column {} is fancy fusable but not ordinary fusable.
+            #           Explain.".format(col_index))
             yield Rule(("Fuse columns fancily {} and {}|{}|."
                         "").format(col_index, col_index + 1, col_index),
                        [fuse_tiling(tiling, col_index, False)],
@@ -39,7 +40,9 @@ def fusion_with_interleaving(tiling, **kwargs):
         #     print("================================")
         #     print("On the tiling:")
         #     print(tiling)
-        #     print("Column {} is ordinary fusable but not fancy fusable. Explain.".format(col_index))
+        #    print("Column {} is ordinary fusable but not fancy fusable.
+        #          Explain.".format(col_index))
+
 
 def fusable(tiling, row_index, bases, row=True, **kwargs):
     """Return true if adjacent rows can be viewed as one row where you draw a
@@ -67,7 +70,7 @@ def fusable(tiling, row_index, bases, row=True, **kwargs):
     for ob in tiling.obstructions:
         # for each obstruction that occupies the first cell, draw a line
         # through it in every way so that it crosses to the secoond cell
-        #TODO: Should we be worried about obstruction going only to the
+        # TODO: Should we be worried about obstruction going only to the
         #      second cell?
         if ob.occupies(first_cell):
             # ignore the obstructions that imply skew or sum components
@@ -83,7 +86,7 @@ def fusable(tiling, row_index, bases, row=True, **kwargs):
             for i in range(len(in_cell)):
                 maxdex = [point[0] for point in in_cell[i:]]
                 pos = [special_cell if i in maxdex else c
-                    for i, c in enumerate(ob.pos)]
+                       for i, c in enumerate(ob.pos)]
                 obstructions_to_add.append(Obstruction(ob.patt, pos))
         if ob.occupies(second_cell):
             in_cell = [(idx, val) for idx, val in enumerate(ob.patt)
@@ -97,14 +100,14 @@ def fusable(tiling, row_index, bases, row=True, **kwargs):
             for i in range(len(in_cell)):
                 maxdex = [point[0] for point in in_cell[i:]]
                 pos = [special_cell if i in maxdex else c
-                    for i, c in enumerate(ob.pos)]
+                       for i, c in enumerate(ob.pos)]
                 obstructions_to_add.append(Obstruction(ob.patt, pos))
 
     # if the tiling is unchanged, then the previous obstruction imply all those
     #  obstructions that needed to be added, and therefore we can think of this
     #  as one row with a line drawn through it
     if tiling == Tiling(list(tiling.obstructions) + obstructions_to_add,
-                            tiling.requirements):
+                        tiling.requirements):
         # return True
         if (Obstruction(Perm((0, 1)),
                         (first_cell, second_cell)) in tiling.obstructions or
@@ -146,5 +149,3 @@ def fuse_tiling(tiling, row_index, row=True, **kwargs):
             cell_to_region[cell] = set([(x, y)])
         return ([fused_tiling], [cell_to_region])
     return fused_tiling
-
-
