@@ -25,6 +25,9 @@ setup(
         'tilings==1.0.1',
         'sympy==1.4',
     ],
+    dependency_links = [
+        'https://github.com/PermutaTriangle/Tilings/tarball/develop#egg=tilings-1.0.1',
+    ],
     setup_requires=['pytest-runner==5.1'],
     tests_require=[
         'pytest==5.1.1',
