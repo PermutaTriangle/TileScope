@@ -8,7 +8,7 @@ from comb_spec_searcher import VerificationRule
 from tilings import Tiling
 
 dir_path = os.path.dirname(os.path.realpath(__file__))
-filenames = ["012_depth_5_database_twisted.txt"]
+filenames = ["012_depth_5_database_twisted.txt", "1302_depth_5_database_twisted.txt"]
 database = set()
 
 
