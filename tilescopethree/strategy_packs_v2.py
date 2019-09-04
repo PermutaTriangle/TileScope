@@ -335,12 +335,6 @@ class TileScopePack(StrategyPack):
             raise ValueError("The length {} makes no sense".format(length))
         initial_strats = []
         expansion_strats=[]
-        if initial_factors:
-            initial_strats.append(partial(factor, unions=unions,
-                                          interleaving=interleaving))
-        else:
-            expansion_strats.append([partial(factor, unions=unions,
-                                             interleaving=interleaving)])
         if root_only:
             initial_strats.append(partial(root_requirement_insertion,
                                           maxlen=length))
@@ -350,6 +344,13 @@ class TileScopePack(StrategyPack):
         expansion_strats.append([requirement_placement, row_placements_strat,
                                  col_placements_strat,
                                  partial_requirement_placement])
+        if initial_factors:
+            initial_strats.append(partial(factor, unions=unions,
+                                          interleaving=interleaving))
+        else:
+            expansion_strats.append([partial(factor, unions=unions,
+                                             interleaving=interleaving)])
+
         initial_strats.append(requirement_corroboration)
         return TileScopePack(
             initial_strats=initial_strats,
