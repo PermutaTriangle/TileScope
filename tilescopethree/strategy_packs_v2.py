@@ -494,6 +494,9 @@ class TileScopePack(StrategyPack):
 #     forward_equivalence=True,
 #     name="restricted_fusion")
 
+row_placements_strat = partial(row_placements_strat, positive=False)
+col_placements_strat = partial(col_placements_strat, positive=False)
+
 run_packs = [
     TileScopePack.row_and_column_placements(),
     TileScopePack.row_and_column_placements(unions=True),
@@ -519,6 +522,10 @@ run_packs = [
     TileScopePack.requirement_insertions(length=4, unions=True),
     TileScopePack.requirement_insertions(length=4, initial_factors=True),
     TileScopePack.requirement_insertions(length=4, initial_factors=True, unions=True),
+    TileScopePack.requirement_insertions(length=5),
+    TileScopePack.requirement_insertions(length=5, unions=True),
+    TileScopePack.requirement_insertions(length=5, initial_factors=True),
+    TileScopePack.requirement_insertions(length=5, initial_factors=True, unions=True),
     TileScopePack.requirement_insertions(interleaving=True, length=1),
     TileScopePack.requirement_insertions(interleaving=True, length=1, unions=True),
     TileScopePack.requirement_insertions(interleaving=True, length=1, initial_factors=True),
@@ -535,6 +542,10 @@ run_packs = [
     TileScopePack.requirement_insertions(interleaving=True, length=4, unions=True),
     TileScopePack.requirement_insertions(interleaving=True, length=4, initial_factors=True),
     TileScopePack.requirement_insertions(interleaving=True, length=4, initial_factors=True, unions=True),
+    TileScopePack.requirement_insertions(interleaving=True, length=5),
+    TileScopePack.requirement_insertions(interleaving=True, length=5, unions=True),
+    TileScopePack.requirement_insertions(interleaving=True, length=5, initial_factors=True),
+    TileScopePack.requirement_insertions(interleaving=True, length=5, initial_factors=True, unions=True),
     TileScopePack.point_row_and_col_placements(length=1),
     TileScopePack.point_row_and_col_placements(length=1, unions=True),
     TileScopePack.point_row_and_col_placements(length=1, initial_factors=True),
@@ -551,6 +562,10 @@ run_packs = [
     TileScopePack.point_row_and_col_placements(length=4, unions=True),
     TileScopePack.point_row_and_col_placements(length=4, initial_factors=True),
     TileScopePack.point_row_and_col_placements(length=4, initial_factors=True, unions=True),
+    TileScopePack.point_row_and_col_placements(length=5),
+    TileScopePack.point_row_and_col_placements(length=5, unions=True),
+    TileScopePack.point_row_and_col_placements(length=5, initial_factors=True),
+    TileScopePack.point_row_and_col_placements(length=5, initial_factors=True, unions=True),
     TileScopePack.point_row_and_col_placements(root_only=True, length=1),
     TileScopePack.point_row_and_col_placements(root_only=True, length=1, unions=True),
     TileScopePack.point_row_and_col_placements(root_only=True, length=1, initial_factors=True),
@@ -567,6 +582,10 @@ run_packs = [
     TileScopePack.point_row_and_col_placements(root_only=True, length=4, unions=True),
     TileScopePack.point_row_and_col_placements(root_only=True, length=4, initial_factors=True),
     TileScopePack.point_row_and_col_placements(root_only=True, length=4, initial_factors=True, unions=True),
+    TileScopePack.point_row_and_col_placements(root_only=True, length=5),
+    TileScopePack.point_row_and_col_placements(root_only=True, length=5, unions=True),
+    TileScopePack.point_row_and_col_placements(root_only=True, length=5, initial_factors=True),
+    TileScopePack.point_row_and_col_placements(root_only=True, length=5, initial_factors=True, unions=True),
     TileScopePack.point_row_and_col_placements(interleaving=True, length=1),
     TileScopePack.point_row_and_col_placements(interleaving=True, length=1, unions=True),
     TileScopePack.point_row_and_col_placements(interleaving=True, length=1, initial_factors=True),
@@ -583,6 +602,10 @@ run_packs = [
     TileScopePack.point_row_and_col_placements(interleaving=True, length=4, unions=True),
     TileScopePack.point_row_and_col_placements(interleaving=True, length=4, initial_factors=True),
     TileScopePack.point_row_and_col_placements(interleaving=True, length=4, initial_factors=True, unions=True),
+    TileScopePack.point_row_and_col_placements(interleaving=True, length=5),
+    TileScopePack.point_row_and_col_placements(interleaving=True, length=5, unions=True),
+    TileScopePack.point_row_and_col_placements(interleaving=True, length=5, initial_factors=True),
+    TileScopePack.point_row_and_col_placements(interleaving=True, length=5, initial_factors=True, unions=True),
     TileScopePack.point_row_and_col_placements(interleaving=True, root_only=True, length=1),
     TileScopePack.point_row_and_col_placements(interleaving=True, root_only=True, length=1, unions=True),
     TileScopePack.point_row_and_col_placements(interleaving=True, root_only=True, length=1, initial_factors=True),
@@ -599,6 +622,10 @@ run_packs = [
     TileScopePack.point_row_and_col_placements(interleaving=True, root_only=True, length=4, unions=True),
     TileScopePack.point_row_and_col_placements(interleaving=True, root_only=True, length=4, initial_factors=True),
     TileScopePack.point_row_and_col_placements(interleaving=True, root_only=True, length=4, initial_factors=True, unions=True),
+    TileScopePack.point_row_and_col_placements(interleaving=True, root_only=True, length=5),
+    TileScopePack.point_row_and_col_placements(interleaving=True, root_only=True, length=5, unions=True),
+    TileScopePack.point_row_and_col_placements(interleaving=True, root_only=True, length=5, initial_factors=True),
+    TileScopePack.point_row_and_col_placements(interleaving=True, root_only=True, length=5, initial_factors=True, unions=True),
 ]
 
 
