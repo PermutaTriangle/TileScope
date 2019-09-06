@@ -1,12 +1,44 @@
 from itertools import chain
 
 from comb_spec_searcher import Rule
-from permuta.misc import UnionFind
-from tilings import Tiling
-from tilings.misc import union_reduce
+from tilings.algorithms import (Factor, FactorWithInterleaving,
+                                FactorWithMonotoneInterleaving)
+
+
+def general_factor(tiling, factor_class, constructor, **kwargs):
+    factor = factor_class(tiling)
+    if factor.factorable():
+        if kwargs.get("workable", True):
+            workable = [True for _ in strategy]
+        else:
+            workable = [False for _ in strategy]
+        yield Rule("The factors of the tiling.",
+                   factor.factors(),
+                   inferable=[False for _ in strategy],
+                   workable=work,
+                   possibly_empty=[False for _ in strategy],
+                   ignore_parent=kwargs.get("workable", True),
+                   constructor=constructor)
 
 
 def factor(tiling, **kwargs):
+    return general_factor(tiling, Factor, 'cartesian')
+
+
+def factor_with_monotone_interleaving(tiling, **kwargs):
+    return general_factor(tiling, FactorWithMonotoneInterleaving, 'other')
+
+
+def factor_with_interleaving(tiling, **kwargs):
+    return general_factor(tiling, FactorWithInterleaving, 'other')
+
+# -----------------------------------------------------------------
+#       The old stuff
+# -----------------------------------------------------------------
+
+
+
+def factor_old(tiling, **kwargs):
     """
     The factor strategy that decomposes a tiling into its connected factors.
 
@@ -90,6 +122,12 @@ def factor(tiling, **kwargs):
         work = [True for _ in strategy]
     else:
         work = [False for _ in strategy]
+
+    new_algo_factor = Factor(tiling).factors()
+    if (len(new_algo_factor) != len(strategy) or set(new_algo_factor) !=
+        set(strategy)):
+        print(tiling)
+        print(tiling.__repr__())
 
     yield Rule("The factors of the tiling.", strategy,
                inferable=[False for _ in strategy], workable=work,
