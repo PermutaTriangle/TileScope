@@ -1,5 +1,5 @@
 from permuta import Perm
-from tilescopethree.strategies import factor
+from tilescopethree.strategies import factor, factor_with_interleaving
 from tilings import Obstruction, Requirement, Tiling
 
 pytest_plugins = [
@@ -26,7 +26,7 @@ def test_factor_no_unions(simple_tiling,
         Tiling(obstructions=[Obstruction(Perm((0, 1)), [(0, 0), (0, 0)])])])
 
     strats = [s.comb_classes
-              for s in factor(diverse_tiling, interleaving=True)]
+              for s in factor_with_interleaving(diverse_tiling)]
     assert len(strats) == 1
     factors = strats[0]
     assert len(factors) == 4

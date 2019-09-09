@@ -5,32 +5,28 @@ from tilings.algorithms import (Factor, FactorWithInterleaving,
                                 FactorWithMonotoneInterleaving)
 
 
-def general_factor(tiling, factor_class, constructor, **kwargs):
+def general_factor(tiling, factor_class, workable=True, union=False):
+    """
+    Iterator of factor strategy.
+    """
     factor = factor_class(tiling)
     if factor.factorable():
-        if kwargs.get("workable", True):
-            workable = [True for _ in strategy]
-        else:
-            workable = [False for _ in strategy]
-        yield Rule("The factors of the tiling.",
-                   factor.factors(),
-                   inferable=[False for _ in strategy],
-                   workable=work,
-                   possibly_empty=[False for _ in strategy],
-                   ignore_parent=kwargs.get("workable", True),
-                   constructor=constructor)
+        yield factor.rule(workable=workable)
+        if union:
+            yield from factor.all_union_rules(workable=workable)
 
 
 def factor(tiling, **kwargs):
-    return general_factor(tiling, Factor, 'cartesian')
+    workable = kwargs.get('workable', True)
+    return general_factor(tiling, Factor)
 
 
 def factor_with_monotone_interleaving(tiling, **kwargs):
-    return general_factor(tiling, FactorWithMonotoneInterleaving, 'other')
+    return general_factor(tiling, FactorWithMonotoneInterleaving)
 
 
 def factor_with_interleaving(tiling, **kwargs):
-    return general_factor(tiling, FactorWithInterleaving, 'other')
+    return general_factor(tiling, FactorWithInterleaving)
 
 # -----------------------------------------------------------------
 #       The old stuff
@@ -83,8 +79,8 @@ def factor_old(tiling, **kwargs):
             for j in range(i+1, len(cells)):
                 c1, c2 = cells[i], cells[j]
                 if (point_interleaving and
-                        (c1 in tiling.point_cells or
-                         c2 in tiling.point_cells)):
+                    (c1 in tiling.point_cells or
+                     c2 in tiling.point_cells)):
                     continue
                 if c1[0] == c2[0] or c1[1] == c2[1]:
                     uf.unite(cell_to_int(c1), cell_to_int(c2))
@@ -97,7 +93,7 @@ def factor_old(tiling, **kwargs):
             all_components[i].append(cell)
         else:
             all_components[i] = [cell]
-    component_cells = list(set(cells) for cells in all_components.values())
+            component_cells = list(set(cells) for cells in all_components.values())
 
     # If the tiling is a single connected component
     if len(component_cells) <= 1:
@@ -143,12 +139,12 @@ def factor_old(tiling, **kwargs):
                 strategy.append(Tiling(obstructions=chain(*obstructions),
                                        requirements=chain(*requirements),
                                        minimize=False))
-            yield Rule("The union of factors of the tiling",
-                       strategy,
-                       possibly_empty=[False for _ in strategy],
-                       inferable=[False for _ in strategy],
-                       workable=[False for _ in strategy],
-                       constructor='cartesian')
+                yield Rule("The union of factors of the tiling",
+                           strategy,
+                           possibly_empty=[False for _ in strategy],
+                           inferable=[False for _ in strategy],
+                           workable=[False for _ in strategy],
+                           constructor='cartesian')
 
 
 # The code below is magical and comes from
@@ -166,7 +162,7 @@ def algorithm_u(ns, m):
         ps = [[] for i in range(m)]
         for j in range(n):
             ps[a[j + 1]].append(ns[j])
-        return ps
+            return ps
 
     def f(mu, nu, sigma, n, a):
         if mu == 2:
@@ -174,39 +170,39 @@ def algorithm_u(ns, m):
         else:
             for v in f(mu - 1, nu - 1, (mu + sigma) % 2, n, a):
                 yield v
-        if nu == mu + 1:
-            a[mu] = mu - 1
-            yield visit(n, a)
-            while a[nu] > 0:
-                a[nu] = a[nu] - 1
-                yield visit(n, a)
-        elif nu > mu + 1:
-            if (mu + sigma) % 2 == 1:
-                a[nu - 1] = mu - 1
-            else:
-                a[mu] = mu - 1
-            if (a[nu] + sigma) % 2 == 1:
-                for v in b(mu, nu - 1, 0, n, a):
-                    yield v
-            else:
-                for v in f(mu, nu - 1, 0, n, a):
-                    yield v
-            while a[nu] > 0:
-                a[nu] = a[nu] - 1
-                if (a[nu] + sigma) % 2 == 1:
-                    for v in b(mu, nu - 1, 0, n, a):
-                        yield v
-                else:
-                    for v in f(mu, nu - 1, 0, n, a):
-                        yield v
+                if nu == mu + 1:
+                    a[mu] = mu - 1
+                    yield visit(n, a)
+                    while a[nu] > 0:
+                        a[nu] = a[nu] - 1
+                        yield visit(n, a)
+                elif nu > mu + 1:
+                    if (mu + sigma) % 2 == 1:
+                        a[nu - 1] = mu - 1
+                    else:
+                        a[mu] = mu - 1
+                        if (a[nu] + sigma) % 2 == 1:
+                            for v in b(mu, nu - 1, 0, n, a):
+                                yield v
+                        else:
+                            for v in f(mu, nu - 1, 0, n, a):
+                                yield v
+                                while a[nu] > 0:
+                                    a[nu] = a[nu] - 1
+                                    if (a[nu] + sigma) % 2 == 1:
+                                        for v in b(mu, nu - 1, 0, n, a):
+                                            yield v
+                                    else:
+                                        for v in f(mu, nu - 1, 0, n, a):
+                                            yield v
 
     def b(mu, nu, sigma, n, a):
         if nu == mu + 1:
             while a[nu] < mu - 1:
                 yield visit(n, a)
                 a[nu] = a[nu] + 1
-            yield visit(n, a)
-            a[mu] = 0
+                yield visit(n, a)
+                a[mu] = 0
         elif nu > mu + 1:
             if (a[nu] + sigma) % 2 == 1:
                 for v in f(mu, nu - 1, 0, n, a):
@@ -214,26 +210,26 @@ def algorithm_u(ns, m):
             else:
                 for v in b(mu, nu - 1, 0, n, a):
                     yield v
-            while a[nu] < mu - 1:
-                a[nu] = a[nu] + 1
-                if (a[nu] + sigma) % 2 == 1:
-                    for v in f(mu, nu - 1, 0, n, a):
-                        yield v
-                else:
-                    for v in b(mu, nu - 1, 0, n, a):
-                        yield v
-            if (mu + sigma) % 2 == 1:
-                a[nu - 1] = 0
-            else:
-                a[mu] = 0
-        if mu == 2:
-            yield visit(n, a)
-        else:
-            for v in b(mu - 1, nu - 1, (mu + sigma) % 2, n, a):
-                yield v
+                    while a[nu] < mu - 1:
+                        a[nu] = a[nu] + 1
+                        if (a[nu] + sigma) % 2 == 1:
+                            for v in f(mu, nu - 1, 0, n, a):
+                                yield v
+                        else:
+                            for v in b(mu, nu - 1, 0, n, a):
+                                yield v
+                                if (mu + sigma) % 2 == 1:
+                                    a[nu - 1] = 0
+                                else:
+                                    a[mu] = 0
+                                    if mu == 2:
+                                        yield visit(n, a)
+                                    else:
+                                        for v in b(mu - 1, nu - 1, (mu + sigma) % 2, n, a):
+                                            yield v
 
     n = len(ns)
     a = [0] * (n + 1)
     for j in range(1, m + 1):
         a[n - m + j] = j - 1
-    return f(m, n, 0, n, a)
+        return f(m, n, 0, n, a)
