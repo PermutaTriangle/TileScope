@@ -20,7 +20,7 @@ setup(
     long_description=read("README.md"),
     install_requires=[
         'permuta==1.2.1',
-        'comb_spec_searcher==0.2.1',
+        'comb_spec_searcher==0.2.2',
         'logzero==1.5.0',
         'tilings==1.0.1',
         'sympy==1.4',
