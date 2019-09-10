@@ -9,6 +9,8 @@ def general_factor(tiling, factor_class, union=False, **kwargs):
     """
     Iterator of factor strategy.
     """
+    assert factor_class in [Factor, FactorWithMonotoneInterleaving,
+                            FactorWithInterleaving]
     workable = kwargs.get('workable', True)
     factor = factor_class(tiling)
     if factor.factorable():

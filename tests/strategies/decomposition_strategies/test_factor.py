@@ -1,11 +1,51 @@
 from permuta import Perm
-from tilescopethree.strategies import factor, factor_with_interleaving
+from tilescopethree.strategies import (
+    factor, factor_with_interleaving, factor_with_monotone_interleaving,
+    unions_of_factor, unions_of_factor_with_interleaving,
+    unions_of_factor_with_monotone_interleaving)
+from tilescopethree.strategies.decomposition_strategies.factor import \
+    general_factor
 from tilings import Obstruction, Requirement, Tiling
+from tilings.algorithms import (Factor, FactorWithInterleaving,
+                                FactorWithMonotoneInterleaving)
 
 pytest_plugins = [
     'tests.fixtures.simple_tiling',
     'tests.fixtures.diverse_tiling',
+    'tests.fixtures.no_point_tiling',
 ]
+
+
+def test_general_factor(simple_tiling, diverse_tiling):
+    assert len(list(general_factor(simple_tiling, Factor))) == 0
+    assert (len(list(general_factor(simple_tiling,
+                                    FactorWithMonotoneInterleaving))) == 0)
+    assert (len(list(general_factor(simple_tiling,
+                                    FactorWithInterleaving))) == 0)
+    assert (len(list(general_factor(diverse_tiling,
+                                    FactorWithInterleaving))) == 1)
+    # Test union param
+    strats = list(general_factor(diverse_tiling,
+                                 FactorWithInterleaving,
+                                 union=True))
+    assert len(strats) == 14
+    assert sum(1 for s in strats if 'unions' in s.formal_step) == 13
+    assert sum(1 for s in strats if all(s.workable)) == 1
+    assert sum(1 for s in strats if not any(s.workable)) == 13
+    # Test union param with workable to False
+    strats = list(general_factor(diverse_tiling,
+                                 FactorWithInterleaving,
+                                 union=True,
+                                 workable=False))
+    assert sum(1 for s in strats if all(s.workable)) == 0
+    assert sum(1 for s in strats if not any(s.workable)) == 14
+    # Test union param with workable to True
+    strats = list(general_factor(diverse_tiling,
+                                 FactorWithInterleaving,
+                                 union=True,
+                                 workable=True))
+    assert sum(1 for s in strats if all(s.workable)) == 1
+    assert sum(1 for s in strats if not any(s.workable)) == 13
 
 
 def test_factor_no_unions(simple_tiling,
