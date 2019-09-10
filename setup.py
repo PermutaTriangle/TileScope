@@ -19,7 +19,7 @@ setup(
     packages=find_packages(),
     long_description=read("README.md"),
     install_requires=[
-        'permuta==1.1.0',
+        'permuta==1.2.1',
         'comb_spec_searcher==0.2.1',
         'logzero==1.5.0',
         'tilings==1.0.1',
