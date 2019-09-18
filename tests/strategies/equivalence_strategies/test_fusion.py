@@ -54,16 +54,6 @@ def big_tiling():
     return t
 
 
-@pytest.fixture
-def row_fusion(small_tiling):
-    return Fusion(small_tiling, row_idx=0)
-
-
-@pytest.fixture
-def col_fusion(small_tiling):
-    return Fusion(small_tiling, col_idx=0)
-
-
 def test_fusion(small_tiling, big_tiling):
     assert len(list(fusion(big_tiling))) == 0
     small_tiling_rules = list(fusion(small_tiling))
