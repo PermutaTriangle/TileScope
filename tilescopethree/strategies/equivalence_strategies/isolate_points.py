@@ -1,19 +1,12 @@
 from comb_spec_searcher import EquivalenceRule
 from permuta.misc import DIR_WEST
-from tilescopethree.strategies.batch_strategies.point_placements import \
-    place_point_of_requirement
+from tilings.algorithms import RequirementPlacement
 
 
 def point_isolations(tiling, **kwargs):
-    point_cells = tiling.point_cells
-    for ri, reqs in enumerate(tiling.requirements):
-        if len(reqs) > 1:
-            continue
-        cell = reqs[0].is_point_perm()
-        if cell is None or cell not in point_cells:
-            continue
-        yield EquivalenceRule(
-            formal_step=("Isolating point at {} into its own row and "
-                         "column").format(cell),
-            # Direction does not matter
-            comb_class=place_point_of_requirement(tiling, ri, 0, DIR_WEST))
+    req_placement = RequirementPlacement(tiling)
+    for cell in tiling.point_cells:
+        if not tiling.only_cell_in_row_and_col():
+            isolated_tiling = req_placement.place_point_in_cell(cell, DIR_WEST)
+            yield EquivalenceRule("Isolate point at cell {}.".format(cell),
+                                isolated_tiling)
