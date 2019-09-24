@@ -9,4 +9,4 @@ def point_isolations(tiling, **kwargs):
         if not tiling.only_cell_in_row_and_col():
             isolated_tiling = req_placement.place_point_in_cell(cell, DIR_WEST)
             yield EquivalenceRule("Isolate point at cell {}.".format(cell),
-                                isolated_tiling)
+                                  isolated_tiling)

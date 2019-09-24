@@ -4,11 +4,12 @@ from functools import partial
 from comb_spec_searcher import StrategyPack
 from comb_spec_searcher.utils import get_func_name
 from tilescopethree.strategies import (all_cell_insertions, all_col_insertions,
+                                       all_placements,
                                        all_requirement_insertions,
                                        all_row_insertions)
 from tilescopethree.strategies import col_placements as col_placements_strat
-from tilescopethree.strategies import (all_placements, database_verified, 
-                                       elementary_verified, factor, fusion,
+from tilescopethree.strategies import (database_verified, elementary_verified,
+                                       factor, fusion,
                                        fusion_with_interleaving,
                                        globally_verified,
                                        obstruction_transitivity,

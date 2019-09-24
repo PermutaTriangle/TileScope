@@ -23,6 +23,7 @@ def point_placement(tiling, **kwargs):
     """
     yield from RequirementPlacement(tiling).all_point_placement_rules()
 
+
 def all_placements(tiling, **kwargs):
     req_placements = (RequirementPlacement(tiling),
                       RequirementPlacement(tiling, own_row=False),
