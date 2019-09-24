@@ -7,8 +7,8 @@ from tilescopethree.strategies import (all_cell_insertions, all_col_insertions,
                                        all_requirement_insertions,
                                        all_row_insertions)
 from tilescopethree.strategies import col_placements as col_placements_strat
-from tilescopethree.strategies import (database_verified, elementary_verified,
-                                       factor, fusion,
+from tilescopethree.strategies import (all_placements, database_verified, 
+                                       elementary_verified, factor, fusion,
                                        fusion_with_interleaving,
                                        globally_verified,
                                        obstruction_transitivity,
@@ -125,15 +125,8 @@ class TileScopePack(StrategyPack):
                              obstruction_transitivity],
             expansion_strats=[[partial(all_cell_insertions,
                                        maxreqlen=length),
-                               all_row_insertions,
-                               all_col_insertions,
                                all_requirement_insertions],
-                              [partial(row_placements_strat,
-                                       positive=False),
-                               partial(col_placements_strat,
-                                       positive=False),
-                               partial_requirement_placement,
-                               requirement_placement]],
+                              [all_placements]],
             name="all_the_strategies")
 
     @classmethod
