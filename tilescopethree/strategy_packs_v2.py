@@ -633,7 +633,7 @@ run_packs = [
 module = importlib.import_module(TileScopePack.__module__)
 
 for pack in run_packs:
-    fusion_pack = pack.add_initial(fusion)
+    fusion_pack = pack.make_fusion()
     db_pack = pack.add_verification(database_verified)
     setattr(module, fusion_pack.name, fusion_pack)
     setattr(module, db_pack.name, db_pack)
