@@ -26,5 +26,5 @@ def subobstruction_inferral(tiling, **kwargs):
 def localized_subobstruction_inferral(tiling, **kwargs):
     """Return tiling created by adding all localized subobstructions which can
     be added."""
-    lsoi = SubobstructionInferral(tiling)
+    lsoi = LocalizedSubobstructionInferral(tiling)
     return lsoi.rule()
