@@ -1,7 +1,8 @@
 from comb_spec_searcher import InferralRule
 from permuta import Perm
 from tilings import Obstruction, Tiling
-from tilings.algorithms import EmptyCellInferral, SubobstructionInferral
+from tilings.algorithms import (EmptyCellInferral, SubobstructionInferral,
+                                LocalizedSubobstructionInferral)
 
 
 def empty_cell_inferral(tiling, **kwargs):
@@ -19,3 +20,9 @@ def subobstruction_inferral(tiling, **kwargs):
     added."""
     soi = SubobstructionInferral(tiling)
     return soi.rule()
+
+def localized_subobstruction_inferral(tiling, **kwargs):
+    """Return tiling created by adding all localized subobstructions which can
+    be added."""
+    lsoi = SubobstructionInferral(tiling)
+    return lsoi.rule()
