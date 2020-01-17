@@ -42,7 +42,7 @@ def all_cell_insertions(tiling, **kwargs):
         if len(bdict[cell][1]) >= maxreqnum:
             continue
         for length in range(1, maxreqlen + 1):
-            for patt in Av(bdict[cell][0] + extra_basis).of_length(length):
+            for patt in Av(bdict[cell][0] + extra_basis + [Perm((1, 0))]).of_length(length):
                 if not any(patt in perm for perm in bdict[cell][1]):
                     if (tiling.dimensions != (1, 1) or
                             all(patt > perm for perm in bdict[cell][1])):

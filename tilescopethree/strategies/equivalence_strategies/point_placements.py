@@ -104,7 +104,7 @@ def requirement_placement(tiling, **kwargs):
         if point_only and reqs[0].is_point_perm() is None:
             continue
         for i in range(len(reqs[0])):
-            for DIR in DIRS:
+            for DIR in [DIR_WEST]:
                 placedtiling = place_point_of_requirement(tiling, ri, i, DIR)
                 yield Rule(
                     formal_step=("Placing point {} of requirement {} "
