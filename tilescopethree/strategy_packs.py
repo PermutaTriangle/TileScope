@@ -11,7 +11,7 @@ from tilescopethree.strategies import (all_cell_insertions, all_col_insertions,
                                        fusion_with_interleaving,
                                        globally_verified,
                                        obstruction_transitivity,
-                                       one_by_one_verification,
+                                       one_by_one_verified,
                                        partial_requirement_placement,
                                        point_placement,
                                        requirement_corroboration,
@@ -584,7 +584,7 @@ point_placements_subset_verified = Pack(
 
 point_placements_one_by_one = Pack(
     initial_strats=[requirement_placement],
-    ver_strats=[one_by_one_verification],
+    ver_strats=[one_by_one_verified],
     inferral_strats=[row_and_column_separation, obstruction_transitivity],
     expansion_strats=[[factor], [all_point_insertions],
                       [requirement_corroboration]],

@@ -1,42 +1,20 @@
-from comb_spec_searcher import VerificationRule
-
-from .subset_verified import subset_verified
+from tilings.algorithms.enumeration import (ElementaryEnumeration,
+                                            LocallyFactorableEnumeration)
 
 
 def globally_verified(tiling, **kwargs):
-    """The globally verified strategy.
+    """
+    The globally verified strategy.
 
     A tiling is globally verified if every requirement and obstruction is
     non-interleaving.
     """
-    if not tiling.dimensions == (1, 1):
-        if all(not ob.is_interleaving() for ob in tiling.obstructions):
-            if (all(all(not r.is_interleaving() for r in req)
-                    for req in tiling.requirements) and
-                    not possible_tautology(tiling)):
-                return VerificationRule(formal_step="Globally verified.")
-    else:
-        return subset_verified(tiling, **kwargs)
-
-
-def possible_tautology(tiling):
-    """Return True if possibly equivalent to a 1x1 tiling through empty cell
-    inferral. (It just checks if two cells are non-empty - nothing exciting)"""
-    if len(tiling.positive_cells) > 1:
-        return False
-    cells = set()
-    maxlen = max(tiling.maximum_length_of_minimum_gridded_perm(), 1) + 1
-    for gp in tiling.gridded_perms(maxlen=maxlen):
-        cells.update(gp.pos)
-        if len(cells) > 1:
-            return False
-    return True
+    return LocallyFactorableEnumeration(tiling).verification_rule()
 
 
 def elementary_verified(tiling, **kwargs):
-    """A tiling is elementary verified if it is globally verified and has no
-    interleaving cells."""
-    if tiling.fully_isolated():
-        if tiling.dimensions == (1, 1):
-            return subset_verified(tiling, **kwargs)
-        return globally_verified(tiling, **kwargs)
+    """
+    A tiling is elementary verified if it is globally verified and has no
+    interleaving cells.
+    """
+    return ElementaryEnumeration(tiling).verification_rule()
