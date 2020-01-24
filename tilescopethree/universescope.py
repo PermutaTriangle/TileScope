@@ -9,7 +9,7 @@ from comb_spec_searcher.tree_searcher import (iterative_proof_tree_finder,
                                               proof_tree_generator_dfs, prune,
                                               random_proof_tree)
 from permuta import PermSet
-from tilescopethree.strategies import verify_points
+from tilescopethree.strategies import verify_atoms
 from tilescopethree.strategy_packs_v2 import (row_and_col_placements,
                                               row_placements)
 from tilings import Obstruction, Tiling
@@ -38,7 +38,7 @@ class UniveralScope(CombinatorialSpecificationSearcher):
                     Tiling([Obstruction.single_cell(patt, (0, 0))
                             for patt in basis]))
 
-        strategy_pack.ver_strats = [verify_points]
+        strategy_pack.ver_strats = [verify_atoms]
 
         function_kwargs = {"basis": []}
         function_kwargs.update(kwargs.get('kwargs', dict()))

@@ -1,50 +1,17 @@
-"""A strategy for checking if a tiling is a subset of the class."""
-
-from comb_spec_searcher import VerificationRule
-from permuta.descriptors import Basis
-from permuta.permutils import all_symmetry_sets
+from tilings.algorithms.enumeration import (LocalEnumeration,
+                                            OneByOneEnumeration)
 
 
-def subset_verified(tiling, basis, **kwargs):
-    """The subset verified strategy.
+def subset_verified(tiling, no_reqs=False, **kwargs):
+    """
+    The subset verified strategy.
 
     A tiling is subset verified if every obstruction and every requirement is
-    localized.
+    localized and the tiling is not 1x1.
     """
-    if kwargs.get("no_factors", False):
-        if len(tiling.find_factors()) > 1:
-            return
-    if kwargs.get("no_reqs", False):
-        if tiling.requirements:
-            return
-    if tiling.dimensions == (1, 1):
-        if one_by_one_verified(tiling, basis, **kwargs):
-            return VerificationRule(
-                formal_step="The tiling is a subset of the class.")
-    elif (all(ob.is_single_cell() for ob in tiling.obstructions) and
-          all(all(r.is_single_cell() for r in req)
-              for req in tiling.requirements)):
-            return VerificationRule(
-                formal_step="The tiling is a subset of the class.")
+    return LocalEnumeration(tiling, no_reqs).verification_rule()
 
 
 def one_by_one_verified(tiling, basis, **kwargs):
-    """Return true if tiling is a subset of the Av(basis)."""
-    if basis is None or tiling.dimensions != (1, 1):
-        return False
-    rootbasis = [ob.patt for ob in tiling.obstructions]
-    if kwargs.get('symmetry'):
-        all_patts = [Basis(sym_set)
-                     for sym_set in all_symmetry_sets(rootbasis)]
-    else:
-        all_patts = [Basis(rootbasis)]
-    if any(basis == patts for patts in all_patts):
-        return False
-    return True
-
-
-def one_by_one_verification(tiling, basis, **kwargs):
     """Return a verification if one-by-one verified."""
-    if one_by_one_verified(tiling, basis, **kwargs):
-        return VerificationRule(
-                        formal_step="The tiling is a subclass of the class.")
+    return OneByOneEnumeration(tiling, basis).verification_rule()
