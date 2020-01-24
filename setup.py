@@ -35,4 +35,9 @@ setup(
         'pytest-pep8==1.0.6',
         'pytest-isort==0.3.1',
     ],
+    entry_points={
+        'console_scripts': [
+            'permscope=tilescopethree.cli:main',
+        ]
+    }
 )
