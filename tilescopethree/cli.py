@@ -1,9 +1,8 @@
 import argparse
 
-from tilescopethree import StrategyPacks
-from tilescopethree import TileScopeTHREE
-from tilings import Tiling
 from comb_spec_searcher import StrategyPack
+from tilescopethree import StrategyPacks, TileScopeTHREE
+from tilings import Tiling
 
 
 def list_stratpacks(args):
@@ -14,6 +13,7 @@ def list_stratpacks(args):
         if isinstance(getattr(StrategyPacks, pack), StrategyPack):
             print(pack)
     return 0
+
 
 def search_tree(args):
     """
@@ -30,26 +30,27 @@ def search_tree(args):
     css.auto_search(status_update=30)
     return 0
 
+
 def main():
     parser = argparse.ArgumentParser(
         description='A command line tool for the Periscope algorithm.'
     )
     subparsers = parser.add_subparsers(title='subcommands')
-    #List command
+    # List command
     parser_list = subparsers.add_parser('list', help='List all the strategy '
                                         'packs available.')
     parser_list.set_defaults(func=list_stratpacks)
-    #Tree command
+    # Tree command
     parser_tree = subparsers.add_parser('tree', help='Search for a tree with '
                                         'for a given permutation class with a '
                                         'given strategy pack.')
-    parser_tree.add_argument('basis', type=str, help='The basis of the permutation '
-                        'class. The permutation can be 1 or 0-based and are '
-                        'separated by an underscore')
-    parser_tree.add_argument('strategy_pack', type=str, help='The strategy pack to '
-                        'run. The strategy defines the set of strategy that '
-                        'will be used to  expand the universe of combinatorial'
-                        ' classes.')
+    parser_tree.add_argument('basis', type=str, help='The basis of the '
+                             'permutation class. The permutation can be 1 or '
+                             '0-based and are separated by an underscore')
+    parser_tree.add_argument('strategy_pack', type=str, help='The strategy '
+                             'pack to run. The strategy defines the set of '
+                             'strategy that will be used to  expand the '
+                             'universe of combinatorial classes.')
     parser_tree.set_defaults(func=search_tree)
     # Running the parsers
     args = parser.parse_args()

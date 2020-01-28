@@ -5,12 +5,12 @@ from queue import Queue
 from comb_spec_searcher import *
 from permuta import *
 from tilescopethree import *
-from tilescopethree.strategies import one_by_one_verification
+from tilescopethree.strategies import one_by_one_verified
 from tilescopethree.strategy_packs import point_placements_db
 from tilings import *
 
 pack = point_placements_db
-pack.ver_strats = [one_by_one_verification]
+pack.ver_strats = [one_by_one_verified]
 
 if len(sys.argv) > 1:
     inp = sys.argv[1]
