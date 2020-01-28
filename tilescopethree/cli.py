@@ -37,13 +37,15 @@ def main():
     )
     subparsers = parser.add_subparsers(title='subcommands')
     # List command
-    parser_list = subparsers.add_parser('list', help='List all the strategy '
-                                        'packs available.')
+    helpstr = 'List all the strategy pack available'
+    parser_list = subparsers.add_parser('list', help=helpstr,
+                                        description=helpstr)
     parser_list.set_defaults(func=list_stratpacks)
     # Tree command
-    parser_tree = subparsers.add_parser('tree', help='Search for a tree with '
-                                        'for a given permutation class with a '
-                                        'given strategy pack.')
+    helpstr = ('Search for a tree with for a given permutation class with a '
+               'given strategy pack.')
+    parser_tree = subparsers.add_parser('tree', help=helpstr,
+                                        description=helpstr)
     parser_tree.add_argument('basis', type=str, help='The basis of the '
                              'permutation class. The permutation can be 1 or '
                              '0-based and are separated by an underscore')
