@@ -4,6 +4,7 @@ from functools import partial
 from comb_spec_searcher import StrategyPack
 from comb_spec_searcher.utils import get_func_name
 from tilescopethree.strategies import (all_cell_insertions, all_col_insertions,
+                                       all_placements,
                                        all_requirement_insertions,
                                        all_row_insertions)
 from tilescopethree.strategies import col_placements as col_placements_strat
@@ -125,15 +126,8 @@ class TileScopePack(StrategyPack):
                              obstruction_transitivity],
             expansion_strats=[[partial(all_cell_insertions,
                                        maxreqlen=length),
-                               all_row_insertions,
-                               all_col_insertions,
                                all_requirement_insertions],
-                              [partial(row_placements_strat,
-                                       positive=False),
-                               partial(col_placements_strat,
-                                       positive=False),
-                               partial_requirement_placement,
-                               requirement_placement]],
+                              [all_placements]],
             name="all_the_strategies")
 
     @classmethod
