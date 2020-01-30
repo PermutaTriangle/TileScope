@@ -36,4 +36,9 @@ setup(
         'pytest-isort==0.3.1',
         'pytest-timeout==1.3.4',
     ],
+    entry_points={
+        'console_scripts': [
+            'permscope=tilescopethree.cli:main',
+        ]
+    }
 )
