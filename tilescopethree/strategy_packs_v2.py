@@ -405,8 +405,7 @@ forest_pack = TileScopePack(
     initial_strats=[factor, requirement_placement],
     inferral_strats=[row_and_column_separation],
     expansion_strats=[[partial(root_requirement_insertion, maxreqlen=3),
-                       partial(all_cell_insertions, maxreqlen=2)
-                      ]],
+                       partial(all_requirement_insertions, maxreqlen=2)]],
     ver_strats=[globally_verified, subset_verified, one_by_one_verification,
                 database_verified],
     forward_equivalence=False,
