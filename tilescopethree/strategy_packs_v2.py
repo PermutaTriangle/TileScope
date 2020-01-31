@@ -8,12 +8,9 @@ from tilescopethree.strategies import (all_cell_insertions, all_col_insertions,
                                        all_requirement_insertions,
                                        all_row_insertions)
 from tilescopethree.strategies import col_placements as col_placements_strat
-from tilescopethree.strategies import (database_verified, elementary_verified,
-                                       factor, fusion,
+from tilescopethree.strategies import (factor, fusion,
                                        fusion_with_interleaving,
-                                       globally_verified,
                                        obstruction_transitivity,
-                                       one_by_one_verified,
                                        partial_requirement_placement,
                                        requirement_corroboration,
                                        requirement_list_placement,
@@ -21,8 +18,10 @@ from tilescopethree.strategies import (database_verified, elementary_verified,
                                        root_requirement_insertion,
                                        row_and_column_separation)
 from tilescopethree.strategies import row_placements as row_placements_strat
-from tilescopethree.strategies import (subobstruction_inferral,
-                                       subset_verified, verify_atoms)
+from tilescopethree.strategies import (subobstruction_inferral, verify_basic,
+                                       verify_database, verify_elementary,
+                                       verify_local, verify_locally_factorable,
+                                       verify_one_by_one)
 from tilings import Tiling
 
 
@@ -90,14 +89,14 @@ class TileScopePack(StrategyPack):
                               iterative=self.iterative)
 
     def make_elementary(self):
-        if ([elementary_verified] == self.ver_strats and
+        if ([verify_elementary] == self.ver_strats and
                 self.forward_equivalence and self.iterative):
             raise ValueError("The pack is already elementary.")
         name = "elementary_" + self.name
         return self.__class__(self.initial_strats,
                               self.inferral_strats,
                               self.expansion_strats,
-                              [elementary_verified], name,
+                              [verify_elementary], name,
                               symmetries=self.symmetries,
                               forward_equivalence=True,
                               iterative=True)
@@ -120,8 +119,8 @@ class TileScopePack(StrategyPack):
         return TileScopePack(
             initial_strats=[partial(factor, unions=True),
                             requirement_corroboration],
-            ver_strats=[subset_verified,
-                        globally_verified, one_by_one_verified],
+            ver_strats=[verify_local,
+                        verify_locally_factorable, verify_one_by_one],
             inferral_strats=[row_and_column_separation,
                              obstruction_transitivity],
             expansion_strats=[[partial(all_cell_insertions,
@@ -138,8 +137,8 @@ class TileScopePack(StrategyPack):
                      if partial_placements else requirement_placement)
         return TileScopePack(
             initial_strats=[placement],
-            ver_strats=[subset_verified,
-                        globally_verified, one_by_one_verified],
+            ver_strats=[verify_local,
+                        verify_locally_factorable, verify_one_by_one],
             inferral_strats=[row_and_column_separation,
                              obstruction_transitivity],
             expansion_strats=[[partial(factor, unions=True)],
@@ -159,8 +158,8 @@ class TileScopePack(StrategyPack):
                      if partial_placements else requirement_placement)
         return TileScopePack(
             initial_strats=[factor, requirement_corroboration],
-            ver_strats=[subset_verified,
-                        globally_verified, one_by_one_verified],
+            ver_strats=[verify_local,
+                        verify_locally_factorable, verify_one_by_one],
             inferral_strats=[row_and_column_separation,
                              obstruction_transitivity],
             expansion_strats=[[partial(all_cell_insertions,
@@ -178,8 +177,8 @@ class TileScopePack(StrategyPack):
             initial_strats=[factor, requirement_corroboration,
                             partial(all_cell_insertions, maxreqlen=length,
                                     ignore_parent=True)],
-            ver_strats=[subset_verified,
-                        globally_verified, one_by_one_verified],
+            ver_strats=[verify_local,
+                        verify_locally_factorable, verify_one_by_one],
             inferral_strats=[row_and_column_separation,
                              obstruction_transitivity],
             expansion_strats=[[requirement_placement]],
@@ -204,7 +203,7 @@ class TileScopePack(StrategyPack):
             initial_strats=[factor, requirement_corroboration,
                             partial(all_cell_insertions,
                                     ignore_parent=True)],
-            ver_strats=[verify_atoms],
+            ver_strats=[verify_basic],
             inferral_strats=[],
             expansion_strats=[expansion_strats],
             name="regular_insertion_encoding_{}".format(
@@ -227,8 +226,8 @@ class TileScopePack(StrategyPack):
                                             positive=False))
         return TileScopePack(
             initial_strats=[factor, requirement_corroboration],
-            ver_strats=[subset_verified,
-                        globally_verified, one_by_one_verified],
+            ver_strats=[verify_local,
+                        verify_locally_factorable, verify_one_by_one],
             inferral_strats=[row_and_column_separation,
                              obstruction_transitivity],
             expansion_strats=[expansion_strats],
@@ -252,8 +251,8 @@ class TileScopePack(StrategyPack):
             initial_strats=[factor, requirement_corroboration,
                             partial(all_cell_insertions,
                                     ignore_parent=True)],
-            ver_strats=[subset_verified,
-                        globally_verified, one_by_one_verified],
+            ver_strats=[verify_local,
+                        verify_locally_factorable, verify_one_by_one],
             inferral_strats=[row_and_column_separation,
                              obstruction_transitivity],
             expansion_strats=[expansion_strats],
@@ -268,10 +267,10 @@ class TileScopePack(StrategyPack):
             initial_strats=[partial(requirement_placement,
                                     ignore_parent=True),
                             factor],
-            ver_strats=[verify_atoms,
-                        partial(subset_verified,
+            ver_strats=[verify_basic,
+                        partial(verify_local,
                                 no_factors=True, no_reqs=True),
-                        one_by_one_verified],
+                        verify_one_by_one],
             inferral_strats=[row_and_column_separation,
                              obstruction_transitivity],
             expansion_strats=[[partial(root_requirement_insertion,
@@ -287,8 +286,8 @@ class TileScopePack(StrategyPack):
                      if partial_placements else requirement_placement)
         return TileScopePack(
             initial_strats=[factor, requirement_corroboration],
-            ver_strats=[subset_verified,
-                        globally_verified, one_by_one_verified],
+            ver_strats=[verify_local,
+                        verify_locally_factorable, verify_one_by_one],
             inferral_strats=[row_and_column_separation,
                              obstruction_transitivity],
             expansion_strats=[[partial(all_requirement_insertions,
@@ -361,9 +360,9 @@ module = importlib.import_module(TileScopePack.__module__)
 
 for pack in basepacks:
     fusion_pack = pack.make_fusion()
-    fusion_datab = fusion_pack.add_verification(database_verified)
+    fusion_datab = fusion_pack.add_verification(verify_database)
     other_fusion = pack.make_fusion(interleaving=True)
-    other_fusion_datab = other_fusion.add_verification(database_verified)
+    other_fusion_datab = other_fusion.add_verification(verify_database)
     unreasonable_fusion = other_fusion.make_fusion()
     setattr(module, fusion_pack.name, fusion_pack)
     setattr(module, fusion_datab.name, fusion_datab)
@@ -379,7 +378,7 @@ delattr(module, 'unreasonable_fusion')
 for pack in basepacks:
     new_packs = [pack]
     for new_pack in tuple(new_packs):
-        new_packs.append(new_pack.add_verification(database_verified))
+        new_packs.append(new_pack.add_verification(verify_database))
     for new_pack in tuple(new_packs):
         new_packs.append(new_pack.add_symmetry())
     for new_pack in tuple(new_packs):
@@ -396,6 +395,6 @@ restricted_fusion = TileScopePack(
     expansion_strats=[[all_cell_insertions,
                        partial(row_placements_strat, positive=False),
                        partial(col_placements_strat, positive=False)]],
-    ver_strats=[one_by_one_verified],
+    ver_strats=[verify_one_by_one],
     forward_equivalence=True,
     name="restricted_fusion")

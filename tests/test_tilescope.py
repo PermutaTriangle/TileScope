@@ -4,7 +4,7 @@ import sympy
 from comb_spec_searcher import ProofTree
 from tilescopethree import TileScopeTHREE
 from tilescopethree.strategy_packs_v2 import (
-    all_the_strategies_database_verified, point_placements,
+    all_the_strategies_verify_database, point_placements,
     point_placements_fusion, point_placements_fusion_with_interleaving,
     row_and_col_placements_fusion_with_interleaving_fusion)
 
@@ -28,7 +28,7 @@ def test_132_genf():
 
 @pytest.mark.timeout(20)
 def test_123():
-    searcher = TileScopeTHREE('123', all_the_strategies_database_verified)
+    searcher = TileScopeTHREE('123', all_the_strategies_verify_database)
     t = searcher.auto_search(smallest=True)
     assert isinstance(t, ProofTree)
 
