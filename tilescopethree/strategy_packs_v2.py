@@ -8,8 +8,7 @@ from tilescopethree.strategies import (all_cell_insertions, all_col_insertions,
                                        all_requirement_insertions,
                                        all_row_insertions)
 from tilescopethree.strategies import col_placements as col_placements_strat
-from tilescopethree.strategies import (factor, fusion,
-                                       fusion_with_interleaving,
+from tilescopethree.strategies import (component_fusion, factor, fusion,
                                        obstruction_transitivity,
                                        partial_requirement_placement,
                                        requirement_corroboration,
@@ -104,7 +103,7 @@ class TileScopePack(StrategyPack):
     def make_fusion(self, interleaving=False):
         try:
             if interleaving:
-                with_fuse = self.add_initial(fusion_with_interleaving)
+                with_fuse = self.add_initial(component_fusion)
             else:
                 with_fuse = self.add_initial(fusion)
         except ValueError as e:

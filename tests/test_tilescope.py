@@ -5,8 +5,8 @@ from comb_spec_searcher import ProofTree
 from tilescopethree import TileScopeTHREE
 from tilescopethree.strategy_packs_v2 import (
     all_the_strategies_verify_database, point_placements,
-    point_placements_fusion, point_placements_fusion_with_interleaving,
-    row_and_col_placements_fusion_with_interleaving_fusion)
+    point_placements_component_fusion, point_placements_fusion,
+    row_and_col_placements_component_fusion_fusion)
 
 
 @pytest.mark.timeout(20)
@@ -43,7 +43,7 @@ def test_123_with_db():
 @pytest.mark.timeout(20)
 def test_1342_1423():
     searcher = TileScopeTHREE('1342_1423',
-                              point_placements_fusion_with_interleaving)
+                              point_placements_component_fusion)
     t = searcher.auto_search(smallest=True)
     t.number_of_nodes() == 14
     assert isinstance(t, ProofTree)
@@ -53,7 +53,7 @@ def test_1342_1423():
 def test_1324():
     searcher = TileScopeTHREE(
         '1324',
-        row_and_col_placements_fusion_with_interleaving_fusion
+        row_and_col_placements_component_fusion_fusion
     )
     t = searcher.auto_search(smallest=True)
     t.number_of_nodes() == 14

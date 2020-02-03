@@ -1,7 +1,7 @@
 import pytest
 
 from permuta import Perm
-from tilescopethree.strategies import fusion_with_interleaving
+from tilescopethree.strategies import component_fusion
 from tilings import Obstruction, Tiling
 
 
@@ -37,5 +37,5 @@ def tiling2():
 
 
 def test_fusion_with_interleaving(tiling1, tiling2):
-    assert len(list(fusion_with_interleaving(tiling1))) == 0
-    assert len(list(fusion_with_interleaving(tiling2))) == 1
+    assert len(list(component_fusion(tiling1))) == 0
+    assert len(list(component_fusion(tiling2))) == 1

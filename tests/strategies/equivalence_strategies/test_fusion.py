@@ -2,7 +2,7 @@ import pytest
 
 from comb_spec_searcher import Rule
 from permuta import Perm
-from tilescopethree.strategies.equivalence_strategies.fusion import fusion
+from tilescopethree.strategies.equivalence_strategies import fusion
 from tilings import Obstruction, Tiling
 
 
