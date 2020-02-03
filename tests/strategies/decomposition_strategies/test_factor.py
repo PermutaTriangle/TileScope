@@ -3,11 +3,10 @@ from tilescopethree.strategies import (
     factor, factor_with_interleaving, factor_with_monotone_interleaving,
     unions_of_factor, unions_of_factor_with_interleaving,
     unions_of_factor_with_monotone_interleaving)
-from tilescopethree.strategies.decomposition_strategies.factor import \
-    general_factor
 from tilings import Obstruction, Requirement, Tiling
 from tilings.algorithms import (Factor, FactorWithInterleaving,
                                 FactorWithMonotoneInterleaving)
+from tilings.strategies.decomposition import general_factor
 
 pytest_plugins = [
     'tests.fixtures.simple_tiling',
