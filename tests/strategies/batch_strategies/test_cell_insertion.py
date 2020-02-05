@@ -1,5 +1,9 @@
 from permuta import Perm
-from tilescopethree.strategies import all_cell_insertions
+from tilescopethree.strategies import (all_cell_insertions, all_col_insertions,
+                                       all_factor_insertions,
+                                       all_requirement_extensions,
+                                       all_requirement_insertions,
+                                       all_row_insertions)
 from tilings import Obstruction, Requirement, Tiling
 
 pytest_plugins = [
@@ -26,7 +30,7 @@ def test_all_cell_insertions_points(simple_tiling):
         obstructions=[Obstruction(Perm((0,)), ((0, 1),)),
                       Obstruction(Perm((0,)), ((1, 0),))],
         requirements=[[Requirement(Perm((0, 1)), ((0, 0), (1, 1)))]]),
-                Tiling(
+        Tiling(
         obstructions=[Obstruction(Perm((0,)), ((0, 1),))],
         requirements=[[Requirement(Perm((0,)), ((1, 0),))],
                       [Requirement(Perm((0, 1)), ((0, 0), (1, 0))),
@@ -41,11 +45,12 @@ def test_all_cell_insertions_points(simple_tiling):
 
     actual.add((Tiling(
         requirements=[[Requirement(Perm((0, 1)), ((0, 0), (1, 0)))]]),
-                Tiling(
+        Tiling(
         obstructions=[Obstruction(Perm((1, 0)), ((0, 1), (1, 0)))],
         requirements=[[Requirement(Perm((0,)), ((1, 1),))],
                       [Requirement(Perm((0, 1)), ((0, 0), (1, 0))),
                        Requirement(Perm((0, 1)), ((0, 0), (1, 1)))]])))
+    print(simple_tiling)
     assert strats == actual
 
 
@@ -60,8 +65,96 @@ def test_all_cell_insertions(typical_redundant_requirements,
         obstructions=typical_redundant_obstructions + [
             Obstruction(Perm((0, 1, 2)), [(0, 1), (0, 1), (0, 1)])],
         requirements=typical_redundant_requirements),
-                Tiling(
+        Tiling(
         obstructions=typical_redundant_obstructions,
         requirements=typical_redundant_requirements + [
             [Requirement(Perm((0, 1, 2)), [(0, 1), (0, 1), (0, 1)])]])
-        ) in strats)
+    ) in strats)
+
+
+def test_all_requirement_extension():
+    t = Tiling.from_string('123_132').add_single_cell_requirement(
+        Perm((0, 1)), (0, 0))
+    strats = set([tuple(s.comb_classes)
+                  for s in all_requirement_extensions(t, maxreqlen=3)])
+    actual = set([
+        (t.add_single_cell_obstruction(Perm((2, 0, 1)), (0, 0)),
+         t.add_single_cell_requirement(Perm((2, 0, 1)), (0, 0))),
+        (t.add_single_cell_obstruction(Perm((1, 0, 2)), (0, 0)),
+         t.add_single_cell_requirement(Perm((1, 0, 2)), (0, 0))),
+        (t.add_single_cell_obstruction(Perm((1, 2, 0)), (0, 0)),
+         t.add_single_cell_requirement(Perm((1, 2, 0)), (0, 0))),
+    ])
+    assert actual == strats
+
+
+def test_all_row_insertion():
+    t = Tiling(obstructions=[
+        Obstruction(Perm((0, 1)), ((0, 0),)*2),
+        Obstruction(Perm((0, 1)), ((1, 0),)*2),
+        Obstruction(Perm((0, 1, 2)), ((0, 1),)*3),
+    ], requirements=[
+        [Requirement(Perm((0, 1)), ((0, 1),)*2)]
+    ])
+    strats = set([tuple(s.comb_classes)
+                  for s in all_row_insertions(t)])
+    actual = set([
+        (Tiling(obstructions=[Obstruction(Perm((0, 1, 2)), ((0, 0),)*3)],
+                requirements=[[Requirement(Perm((0, 1)), ((0, 0),)*2)]]),
+         t.add_list_requirement([Requirement(Perm((0,)), ((0, 0),)),
+                                 Requirement(Perm((0,)), ((1, 0),)), ])), ])
+    assert actual == strats
+    assert (next(all_row_insertions(t)).formal_step ==
+            'Either row 0 is empty or not.')
+
+
+def test_all_col_insertion():
+    t = Tiling(obstructions=[
+        Obstruction(Perm((0, 1)), ((0, 0),)*2),
+        Obstruction(Perm((0, 1)), ((1, 0),)*2),
+        Obstruction(Perm((0, 1, 2)), ((0, 1),)*3),
+    ], requirements=[
+        [Requirement(Perm((0, 1)), ((0, 1),)*2)]
+    ])
+    strats = set([tuple(s.comb_classes)
+                  for s in all_col_insertions(t)])
+    actual = set([
+        (t.add_single_cell_obstruction(Perm((0,)), (1, 0)),
+         t.add_single_cell_requirement(Perm((0,)), (1, 0)),)
+    ])
+    assert actual == strats
+    assert (next(all_col_insertions(t)).formal_step ==
+            'Either column 1 is empty or not.')
+
+
+def test_all_requirement_insertion():
+    t = Tiling(obstructions=[
+        Obstruction(Perm((0, 1)), ((0, 0), (0, 0))),
+        Obstruction(Perm((0, 1)), ((1, 0), (1, 0))),
+        Obstruction(Perm((0, 1)), ((0, 0), (1, 0))),
+    ])
+    strats = set(tuple(s.comb_classes)
+                 for s in all_requirement_insertions(t, 2))
+    assert len(strats) == 5
+    strat_formal_steps = (
+        set(s.formal_step for s in all_requirement_insertions(t, 2)))
+    assert 'Insert 0 in cell (1, 0).' in strat_formal_steps
+    assert 'Insert 10: (0, 0), (1, 0).' in strat_formal_steps
+
+
+def test_all_factor_insertions():
+    t = Tiling(obstructions=[
+        Obstruction(Perm((0, 1)), ((0, 0), (0, 0))),
+        Obstruction(Perm((0, 1)), ((1, 0), (1, 0))),
+        Obstruction(Perm((1, 0)), ((1, 1), (1, 1))),
+        Obstruction(Perm((1, 0)), ((1, 2), (1, 2))),
+        Obstruction(Perm((0, 1, 2)), ((0, 0), (1, 1), (1, 2))),
+        Obstruction(Perm((0, 1)), ((0, 0), (1, 0))),
+    ])
+    strats = set(tuple(s.comb_classes)
+                 for s in all_factor_insertions(t))
+    assert len(strats) == 2
+    strat_formal_steps = (
+        set(s.formal_step for s in all_factor_insertions(t)))
+    assert 'Insert 0 in cell (0, 0).' in strat_formal_steps
+    assert 'Insert 01: (1, 1), (1, 2).' in strat_formal_steps
