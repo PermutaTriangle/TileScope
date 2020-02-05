@@ -1,6 +1,6 @@
-from itertools import chain
-from typing import List, Optional
+from typing import Iterable, List, Optional
 
+from comb_spec_searcher import Rule
 from permuta import Perm
 from tilings import Tiling
 from tilings.algorithms import (CellInsertion, ColInsertion, CrossingInsertion,
@@ -11,7 +11,7 @@ from tilings.algorithms import (CellInsertion, ColInsertion, CrossingInsertion,
 def all_cell_insertions(tiling: Tiling, maxreqlen: int = 1, extra_basis:
                         Optional[List[Perm]] = None,
                         ignore_parent: bool = False,
-                        **kwargs):
+                        **kwargs) -> Iterable[Rule]:
     """
     The cell insertion strategy.
 
@@ -25,7 +25,7 @@ def all_cell_insertions(tiling: Tiling, maxreqlen: int = 1, extra_basis:
                              extra_basis).rules(ignore_parent)
 
 
-def root_requirement_insertion(tiling, **kwargs):
+def root_requirement_insertion(tiling, **kwargs) -> Iterable[Rule]:
     """
     The cell insertion strategy performed only on 1 by 1 tilings.
     """
@@ -34,7 +34,7 @@ def root_requirement_insertion(tiling, **kwargs):
     yield from all_cell_insertions(tiling, **kwargs)
 
 
-def all_point_insertions(tiling, **kwargs):
+def all_point_insertions(tiling, **kwargs) -> Iterable[Rule]:
     """
     The cell insertion strategy using only points.
     """
@@ -43,7 +43,8 @@ def all_point_insertions(tiling, **kwargs):
 
 def all_requirement_extensions(tiling: Tiling, maxreqlen: int = 2,
                                extra_basis: Optional[List[Perm]] = None,
-                               ignore_parent: bool = False, **kwargs):
+                               ignore_parent: bool = False,
+                               **kwargs) -> Iterable[Rule]:
     """
     Insert longer requirements in to cells which contain a requirement
     """
@@ -51,12 +52,14 @@ def all_requirement_extensions(tiling: Tiling, maxreqlen: int = 2,
                                     extra_basis).rules(ignore_parent)
 
 
-def all_row_insertions(tiling: Tiling, ignore_parent: bool = False, **kwargs):
+def all_row_insertions(tiling: Tiling, ignore_parent: bool = False,
+                       **kwargs) -> Iterable[Rule]:
     """Insert a list requirement into every possibly empty row."""
     yield from RowInsertion(tiling).rules(ignore_parent)
 
 
-def all_col_insertions(tiling, ignore_parent: bool = False, **kwargs):
+def all_col_insertions(tiling, ignore_parent: bool = False,
+                       **kwargs) -> Iterable[Rule]:
     """Insert a list requirement into every possibly empty column."""
     yield from ColInsertion(tiling).rules(ignore_parent)
 
@@ -64,7 +67,7 @@ def all_col_insertions(tiling, ignore_parent: bool = False, **kwargs):
 def all_requirement_insertions(tiling: Tiling, maxreqlen: int = 1,
                                extra_basis: Optional[List[Perm]] = None,
                                ignore_parent: bool = False,
-                               **kwargs):
+                               **kwargs) -> Iterable[Rule]:
     """
     Insert all possible requirements the obstruction allows if the tiling does
     not have requirements.
@@ -76,7 +79,7 @@ def all_requirement_insertions(tiling: Tiling, maxreqlen: int = 1,
 
 
 def all_factor_insertions(tiling: Tiling, ignore_parent: bool = False,
-                          **kwargs):
+                          **kwargs) -> Iterable[Rule]:
     """
     Insert all proper factor of the requirement or obstructions on the tiling.
     """
