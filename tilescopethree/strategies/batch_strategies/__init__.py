@@ -11,4 +11,3 @@ from .list_requirement_placements import (col_placements,
                                           row_and_col_placements,
                                           row_placements)
 from .requirement_corroboration import requirement_corroboration
-from .targeted_cell_insertion import targeted_cell_insertion
