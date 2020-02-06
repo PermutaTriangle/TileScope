@@ -12,7 +12,6 @@ from tilescopethree.strategies import (component_fusion, factor, fusion,
                                        obstruction_transitivity,
                                        partial_requirement_placement,
                                        requirement_corroboration,
-                                       requirement_list_placement,
                                        requirement_placement,
                                        root_requirement_insertion,
                                        row_and_column_separation)

@@ -8,6 +8,5 @@ from tilings.strategies.batch import (all_cell_insertions, all_col_insertions,
                                       partial_row_and_col_placements,
                                       partial_row_placements,
                                       requirement_corroboration,
-                                      requirement_list_placement,
                                       root_requirement_insertion,
                                       row_and_col_placements, row_placements)
