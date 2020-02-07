@@ -1,5 +1,6 @@
 from tilings.strategies.batch import (all_cell_insertions, all_col_insertions,
                                       all_factor_insertions,
+                                      all_placements,
                                       all_point_insertions,
                                       all_requirement_extensions,
                                       all_requirement_insertions,
